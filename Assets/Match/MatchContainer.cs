@@ -1,7 +1,7 @@
-using LeadroExhumed.SnakeGame.Input;
+using LeandroExhumed.SnakeGame.Input;
 using Zenject;
 
-namespace LeadroExhumed.SnakeGame.Match
+namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchContainer : MonoInstaller
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine.InputSystem;
 
-namespace LeadroExhumed.SnakeGame.Input
+namespace LeandroExhumed.SnakeGame.Input
 {
     public class InputFacade
     {

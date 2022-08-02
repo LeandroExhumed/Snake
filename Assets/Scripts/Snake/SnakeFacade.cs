@@ -12,12 +12,10 @@ namespace LeandroExhumed.SnakeGame.Snake
             remove => model.OnPositionChanged -= value;
         }
 
-        public Vector2Int Position { get => model.Position; set => model.Position = value; }
+        public Vector2Int Position => model.Position;
 
         [SerializeField]
         private Vector2Int initialPosition;
-        [SerializeField]
-        private float size;
 
         private ISnakeModel model;
         private SnakeController controller;
@@ -33,7 +31,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void Start ()
         {
-            Initialize(initialPosition, size);
+            Initialize(initialPosition);
         }
 
         private void Update ()
@@ -41,7 +39,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             model.Tick();
         }
 
-        public void Initialize (Vector2Int initialPosition, float size) => model.Initialize(initialPosition, size);
+        public void Initialize (Vector2Int initialPosition) => model.Initialize(initialPosition);
 
         public void LookTo (Vector2Int direction) => model.LookTo(direction);
 

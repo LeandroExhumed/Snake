@@ -24,14 +24,10 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.controller = controller;
         }
 
-        private void Start ()
-        {
-            Initialize();
-        }
-
-        public void Initialize ()
+        public void Initialize (Vector2Int initialPosition)
         {
             controller.Setup();
+            model.Initialize(initialPosition);
         }
 
         private void OnDestroy ()

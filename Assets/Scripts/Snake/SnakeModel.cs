@@ -8,45 +8,37 @@ namespace LeandroExhumed.SnakeGame.Snake
     {
         public event Action<Vector2Int> OnPositionChanged;
 
-        public Vector2Int Position
-        {
-            get => position;
-            set
-            {
-                position = value;
-                OnPositionChanged?.Invoke(value);
-            }
-        }
+        public Vector2Int Position => bodyParts.Peek().Position;
 
         private Vector2Int direction = Vector2Int.right;
 
-        private readonly List<IBodyPartModel> bodyParts = new();
+        private readonly Stack<IBodyPartModel> bodyParts = new();
 
         private float timer = 0f;
-        private float speed = 0.5f;
-        private float speedDecreaseOnLoad = 0.025f; 
+        private float speed;
+        private float speedDecreaseOnLoad = 0.025f;
+
+        private readonly SnakeData data;
 
         private readonly IBodyPartModel.Factory bodyPartFactory;
 
-        private Vector2Int position;
-
-        public SnakeModel (IBodyPartModel.Factory bodyPartFactory)
+        public SnakeModel (SnakeData data, IBodyPartModel.Factory bodyPartFactory)
         {
+            this.data = data;
             this.bodyPartFactory = bodyPartFactory;
+
+            speed = data.Speed;
         }
 
-        public void Initialize (Vector2Int initialPosition, float size)
+        public void Initialize (Vector2Int initialPosition)
         {
-            Position = initialPosition;
-
-            for (int i = 0; i < size - 1; i++)
+            for (int i = 0; i < data.Size; i++)
             {
-                Vector2Int partPosition = i == 0 ? Position : bodyParts[i - 1].Position - Vector2Int.right;
-                IBodyPartModel bodyPart = bodyPartFactory.Create();
-                bodyPart.Position = partPosition;
-
-                bodyParts.Add(bodyPart);
+                Vector2Int partPosition = initialPosition - new Vector2Int((data.Size - i), 0);
+                AddBodyPart(partPosition);
             }
+
+            bodyParts.Peek().OnPositionChanged += HandleHeadPositionChanged;
         }
 
         public void LookTo (Vector2Int direction)
@@ -86,17 +78,30 @@ namespace LeandroExhumed.SnakeGame.Snake
             timer += Time.deltaTime;
         }
 
+        private void AddBodyPart (Vector2Int partPosition)
+        {
+            IBodyPartModel bodyPart = bodyPartFactory.Create();
+            bodyPart.Initialize(partPosition);
+
+            bodyParts.Push(bodyPart);
+        }
+
         private void Move (Vector2Int direction)
         {
-            Vector2Int lastPosition = bodyParts[0].Position + direction;
-            for (int i = 0; i < bodyParts.Count; i++)
+            Vector2Int lastPosition = bodyParts.Peek().Position + direction;
+            foreach (IBodyPartModel item in bodyParts)
             {
-                Vector2Int temp = bodyParts[i].Position;
-                bodyParts[i].Position = lastPosition;
+                Vector2Int temp = item.Position;
+                item.Position = lastPosition;
                 lastPosition = temp;
             }
 
             timer = 0f;
+        }
+
+        private void HandleHeadPositionChanged (Vector2Int value)
+        {
+            OnPositionChanged?.Invoke(value);
         }
     }
 }

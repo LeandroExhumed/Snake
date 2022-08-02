@@ -10,6 +10,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         Vector2Int Position { get; set; }
 
+        void Initialize (Vector2Int initialPosition);
+
         public class Factory : PlaceholderFactory<IBodyPartModel> { }
     }
 }

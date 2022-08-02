@@ -6,11 +6,15 @@ namespace LeandroExhumed.SnakeGame.Snake
     public class SnakeContainer : MonoInstaller
     {
         [SerializeField]
+        private SnakeData data;
+
+        [SerializeField]
         private BodyPartFacade bodyPartPrefab;
 
         public override void InstallBindings ()
         {
             ResolveMVC();
+            Container.BindInstance(data).AsSingle();
 
             Container.BindFactory<IBodyPartModel, IBodyPartModel.Factory>().FromComponentInNewPrefab(bodyPartPrefab)
                 .AsSingle();

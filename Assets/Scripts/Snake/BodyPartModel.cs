@@ -18,5 +18,10 @@ namespace LeandroExhumed.SnakeGame.Snake
         }
 
         private Vector2Int position;
+
+        public void Initialize (Vector2Int initialPosition)
+        {
+            Position = initialPosition;
+        }
     }
 }

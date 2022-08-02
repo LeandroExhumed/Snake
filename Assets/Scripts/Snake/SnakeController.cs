@@ -1,4 +1,4 @@
-﻿using LeadroExhumed.SnakeGame.Input;
+﻿using LeandroExhumed.SnakeGame.Input;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
