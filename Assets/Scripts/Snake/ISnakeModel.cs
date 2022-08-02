@@ -1,15 +1,15 @@
 ﻿using System;
 using UnityEngine;
-using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    public interface IBodyPartModel
+    public interface ISnakeModel
     {
         event Action<Vector2Int> OnPositionChanged;
-
         Vector2Int Position { get; set; }
 
-        public class Factory : PlaceholderFactory<IBodyPartModel> { }
+        void Initialize (Vector2Int initialPosition, float size);
+        void LookTo (Vector2Int direction);
+        void Tick ();
     }
 }

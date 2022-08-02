@@ -5,10 +5,10 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class BodyPartController : IDisposable
     {
-        private readonly BodyPartModel model;
+        private readonly IBodyPartModel model;
         private readonly BodyPartView view;
 
-        public BodyPartController (BodyPartModel model, BodyPartView view)
+        public BodyPartController (IBodyPartModel model, BodyPartView view)
         {
             this.model = model;
             this.view = view;

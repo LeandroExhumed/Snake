@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
@@ -16,10 +17,16 @@ namespace LeandroExhumed.SnakeGame.Snake
         private IBodyPartModel model;
         private BodyPartController controller;
 
+        [Inject]
         public void Constructor (IBodyPartModel model, BodyPartController controller)
         {
             this.model = model;
             this.controller = controller;
+        }
+
+        private void Start ()
+        {
+            Initialize();
         }
 
         public void Initialize ()

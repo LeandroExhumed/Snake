@@ -1,23 +1,25 @@
 ﻿using UnityEngine;
+using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    public class SnakeContainer : MonoBehaviour
+    public class SnakeContainer : MonoInstaller
     {
-        private BodyPartController controller;
+        [SerializeField]
+        private BodyPartFacade bodyPartPrefab;
 
-        public void Install ()
+        public override void InstallBindings ()
         {
             ResolveMVC();
+
+            Container.BindFactory<IBodyPartModel, IBodyPartModel.Factory>().FromComponentInNewPrefab(bodyPartPrefab)
+                .AsSingle();
         }
 
         private void ResolveMVC ()
         {
-            BodyPartModel model = new();
-            BodyPartView view = GetComponent<BodyPartView>();
-            controller = new BodyPartController(model, view);
-
-            GetComponent<BodyPartFacade>().Constructor(model, controller);
+            Container.Bind<ISnakeModel>().To<SnakeModel>().AsSingle();
+            Container.Bind<SnakeController>().AsSingle();
         }
     }
 }

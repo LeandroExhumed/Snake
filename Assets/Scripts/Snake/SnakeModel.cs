@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    public class SnakeModel
+    public class SnakeModel : ISnakeModel
     {
         public event Action<Vector2Int> OnPositionChanged;
 
@@ -25,9 +25,14 @@ namespace LeandroExhumed.SnakeGame.Snake
         private float timer = 0f;
         private float speed = 0.5f;
 
-        private readonly BodyPartFactory bodyPartFactory;
+        private readonly IBodyPartModel.Factory bodyPartFactory;
 
         private Vector2Int position;
+
+        public SnakeModel (IBodyPartModel.Factory bodyPartFactory)
+        {
+            this.bodyPartFactory = bodyPartFactory;
+        }
 
         public void Initialize (Vector2Int initialPosition, float size)
         {
@@ -35,17 +40,25 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             for (int i = 0; i < size - 1; i++)
             {
-                Vector2Int partPosition = i == 0 ? Position : bodyParts[i -1].Position - Vector2Int.right;
+                Vector2Int partPosition = i == 0 ? Position : bodyParts[i - 1].Position - Vector2Int.right;
                 IBodyPartModel bodyPart = bodyPartFactory.Create();
                 bodyPart.Position = partPosition;
-                
+
                 bodyParts.Add(bodyPart);
             }
         }
 
         public void LookTo (Vector2Int direction)
         {
+            if (this.direction.x == direction.x || this.direction.y == direction.y)
+            {
+                return;
+            }
+
+            Debug.Log("Direction: " + direction);
             Move(direction);
+
+            this.direction = direction;
         }
 
         public void Tick ()
@@ -67,6 +80,8 @@ namespace LeandroExhumed.SnakeGame.Snake
                 bodyParts[i].Position = lastPosition;
                 lastPosition = temp;
             }
+
+            timer = 0f;
         }
     }
 }
