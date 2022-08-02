@@ -45,6 +45,12 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void LookTo (Vector2Int direction) => model.LookTo(direction);
 
+        public void Grow () => model.Grow();
+
+        public void IncreaseSpeed (float speedAddition) => model.IncreaseSpeed(speedAddition);
+
+        public void ApplyBatteringRamEffect () => model.ApplyBatteringRamEffect();
+
         public void Tick () => model.Tick();
 
         private void OnDestroy ()

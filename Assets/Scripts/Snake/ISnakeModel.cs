@@ -10,6 +10,9 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         void Initialize (Vector2Int initialPosition, float size);
         void LookTo (Vector2Int direction);
+        void Grow ();
+        void IncreaseSpeed (float speedAddition);
+        void ApplyBatteringRamEffect ();
         void Tick ();
     }
 }

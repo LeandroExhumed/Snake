@@ -24,6 +24,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private float timer = 0f;
         private float speed = 0.5f;
+        private float speedDecreaseOnLoad = 0.025f; 
 
         private readonly IBodyPartModel.Factory bodyPartFactory;
 
@@ -55,10 +56,24 @@ namespace LeandroExhumed.SnakeGame.Snake
                 return;
             }
 
-            Debug.Log("Direction: " + direction);
-            Move(direction);
-
             this.direction = direction;
+
+            Move(direction);
+        }
+
+        public void Grow ()
+        {
+            speed -= speedDecreaseOnLoad;
+        }
+
+        public void IncreaseSpeed (float speedAddition)
+        {
+            speed += speedAddition;
+        }
+
+        public void ApplyBatteringRamEffect ()
+        {
+            Debug.Log("Battering ram effect applied.");
         }
 
         public void Tick ()
