@@ -5,18 +5,24 @@ namespace LeandroExhumed.SnakeGame.Collectables
 {
     public class CollectableController : IDisposable
     {
-        private readonly CollectableModel model;
+        private readonly ICollectableModel model;
         private readonly CollectableView view;
+
+        public CollectableController (ICollectableModel model, CollectableView view)
+        {
+            this.model = model;
+            this.view = view;
+        }
 
         public void Setup ()
         {
+            model.OnPositionChanged += HandlePositionChanged;
             model.OnCollected += HandleCollected;
-            view.OnCollision += HandleCollision;
         }
 
-        private void HandleCollision (Collider other)
+        private void HandlePositionChanged (Vector2Int value)
         {
-            model.TryBeCollected(other);
+            view.Position = value;
         }
 
         private void HandleCollected ()
@@ -27,7 +33,6 @@ namespace LeandroExhumed.SnakeGame.Collectables
         public void Dispose ()
         {
             model.OnCollected -= HandleCollected;
-            view.OnCollision -= HandleCollision;
         }
     }
 }

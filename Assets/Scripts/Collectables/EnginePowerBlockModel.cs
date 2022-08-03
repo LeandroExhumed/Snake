@@ -6,9 +6,10 @@ namespace LeandroExhumed.SnakeGame.Collectables
     {
         private readonly float speedAddition;
 
-        protected override void BeCollected (ICollector collector)
+        public override void BeCollected (ICollector collector)
         {
             collector.CollectEnginePower(speedAddition);
+            base.BeCollected(collector);
         }
     }
 }

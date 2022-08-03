@@ -6,7 +6,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeFacade : MonoBehaviour, ISnakeModel
     {
-        public event Action<Vector2Int> OnPositionChanged
+        public event Action<ISnakeModel, Vector2Int> OnPositionChanged
         {
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
@@ -45,9 +45,9 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Grow () => model.Grow();
 
-        public void IncreaseSpeed (float speedAddition) => model.IncreaseSpeed(speedAddition);
+        public void CollectEnginePower (float speedAddition) => model.CollectEnginePower(speedAddition);
 
-        public void ApplyBatteringRamEffect () => model.ApplyBatteringRamEffect();
+        public void CollectBatteringRam () => model.CollectBatteringRam();
 
         public void Tick () => model.Tick();
 

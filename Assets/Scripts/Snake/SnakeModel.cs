@@ -6,7 +6,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeModel : ISnakeModel
     {
-        public event Action<Vector2Int> OnPositionChanged;
+        public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
 
         public Vector2Int Position => bodyParts.Peek().Position;
 
@@ -56,16 +56,19 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void Grow ()
         {
             speed -= speedDecreaseOnLoad;
+            AddBodyPart(Position);
         }
 
-        public void IncreaseSpeed (float speedAddition)
+        public void CollectBatteringRam ()
         {
-            speed += speedAddition;
-        }
-
-        public void ApplyBatteringRamEffect ()
-        {
+            Grow();
             Debug.Log("Battering ram effect applied.");
+        }
+
+        public void CollectEnginePower (float speedAddition)
+        {
+            Grow();
+            speed += speedAddition;
         }
 
         public void Tick ()
@@ -101,7 +104,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleHeadPositionChanged (Vector2Int value)
         {
-            OnPositionChanged?.Invoke(value);
+            OnPositionChanged?.Invoke(this, value);
         }
     }
 }

@@ -9,16 +9,15 @@ namespace LeandroExhumed.SnakeGame.Collectables
 {
     public class CollectableView : MonoBehaviour
     {
-        public event Action<Collider> OnCollision;
+        public Vector2 Position
+        {
+            get => transform.position;
+            set => transform.position = value;
+        }
 
         public void Destroy ()
         {
             Destroy(gameObject);
-        }
-
-        private void OnTriggerEnter (Collider other)
-        {
-            OnCollision?.Invoke(other);
         }
     }
 }

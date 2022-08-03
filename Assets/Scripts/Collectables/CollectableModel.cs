@@ -7,17 +7,29 @@ namespace LeandroExhumed.SnakeGame.Collectables
 {
     public abstract class CollectableModel : ICollectableModel
     {
+        public event Action<Vector2Int> OnPositionChanged;
         public event Action OnCollected;
 
-        public void TryBeCollected (Collider other)
+        public Vector2Int Position
         {
-            if (other.CompareTag(GameTags.PLAYER))
+            get => position;
+            set
             {
-                BeCollected(other.GetComponent<ICollector>());
-                OnCollected?.Invoke();
+                position = value;
+                OnPositionChanged?.Invoke(value);
             }
         }
 
-        protected abstract void BeCollected (ICollector collector);
+        private Vector2Int position;
+
+        public void Initialize (Vector2Int startPosition)
+        {
+            Position = startPosition;
+        }
+
+        public virtual void BeCollected (ICollector collector)
+        {
+            OnCollected?.Invoke();
+        }
     }
 }

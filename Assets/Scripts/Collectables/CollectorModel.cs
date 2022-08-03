@@ -12,13 +12,13 @@
         public void CollectBatteringRam ()
         {
             ApplyCommonEffect();
-            snake.ApplyBatteringRamEffect();
+            //snake.ApplyBatteringRamEffect();
         }
 
         public void CollectEnginePower (float speedAddition)
         {
             ApplyCommonEffect();
-            snake.IncreaseSpeed(speedAddition);
+            //snake.IncreaseSpeed(speedAddition);
         }
 
         private void ApplyCommonEffect ()
