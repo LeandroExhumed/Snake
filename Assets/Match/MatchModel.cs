@@ -7,28 +7,53 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchModel
     {
+        private int snakesPerMatch = 2;
+        private readonly Vector2Int[] spawnPositions =
+        {
+            new Vector2Int(3, 1),
+            new Vector2Int(27, 29)
+        };
         private ICollectableModel block;
+        private ISnakeModel[] snakes;
 
         private readonly IGridModel grid;
-        private readonly ISnakeModel[] snakes;
 
+        private readonly ISnakeModel.Factory[] snakeFactories;
         private readonly ICollectableModel.Factory[] collectableFactories;
 
-        public MatchModel (IGridModel grid, ISnakeModel[] snakes, ICollectableModel.Factory[] collectableFactories)
+        public MatchModel (IGridModel grid, ISnakeModel.Factory[] snakeFactories, ICollectableModel.Factory[] collectableFactories)
         {
             this.grid = grid;
-            this.snakes = snakes;
+            this.snakeFactories = snakeFactories;
             this.collectableFactories = collectableFactories;
         }
 
         public void Initialize ()
         {
             grid.Initialize();
-            for (int i = 0; i < snakes.Length; i++)
-            {
-                snakes[i].OnHit += HandleSnakeHit;
-            }
+            GenerateSnake();
             GenerateBlock();
+        }
+
+        private void GenerateSnake ()
+        {
+            for (int i = 0; i < snakesPerMatch; i++)
+            {
+                ISnakeModel snake;
+                Vector2Int startDirection;
+                if (i % 2 == 0)
+                {
+                    snake = snakeFactories[0].Create();
+                    startDirection = Vector2Int.right;
+                }
+                else
+                {
+                    snake = snakeFactories[1].Create();
+                    startDirection = Vector2Int.left;
+                }
+                snake.Initialize(spawnPositions[i], startDirection);
+                snake.OnHit += HandleSnakeHit;
+            }
         }
 
         public void GenerateBlock ()

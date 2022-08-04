@@ -22,10 +22,14 @@ namespace LeandroExhumed.SnakeGame.Match
             Container.Bind<MatchModel>().AsSingle();
 
             Container.Bind<Input.PlayerInput>().AsSingle();
-            Container.Bind<InputFacade>().AsSingle();
 
             Container.Bind<IGridModel>().FromInstance(grid);
-            Container.Bind<ISnakeModel[]>().FromInstance(snakes);
+
+            for (int i = 0; i < snakes.Length; i++)
+            {
+                Container.BindFactory<ISnakeModel, ISnakeModel.Factory>().FromComponentInNewPrefab(snakes[i])
+                    .AsCached();
+            }
             for (int i = 0; i < collectables.Length; i++)
             {
                 Container.BindFactory<ICollectableModel, ICollectableModel.Factory>()

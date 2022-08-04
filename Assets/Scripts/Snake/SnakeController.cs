@@ -1,36 +1,43 @@
-﻿using LeandroExhumed.SnakeGame.Input;
-using System;
+﻿using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeController : IDisposable
     {
         private readonly ISnakeModel model;
+        private readonly SnakeView view;
 
-        private readonly InputFacade input;
+        private readonly IMovementRequester input;
 
-        public SnakeController (ISnakeModel model, InputFacade input)
+        public SnakeController (ISnakeModel model, SnakeView view, IMovementRequester input)
         {
             this.model = model;
+            this.view = view;
             this.input = input;
         }
 
         public void Setup ()
         {
-            input.Movement.performed += HandleMovementInputPerformed;
+            view.OnUpdate += HandleViewUpdate;
+            input.OnMovementRequested += HandleMovementInputPerformed;
         }
 
-        private void HandleMovementInputPerformed (InputAction.CallbackContext obj)
+        private void HandleViewUpdate ()
+        {
+            model.Tick();
+        }
+
+        private void HandleMovementInputPerformed (Vector2Int value)
         {
 
-            model.LookTo(Vector2Int.RoundToInt(obj.ReadValue<Vector2>()));
+            model.LookTo(value);
         }
 
         public void Dispose ()
         {
-            input.Movement.performed -= HandleMovementInputPerformed;
+            view.OnUpdate -= HandleViewUpdate;
+            input.OnMovementRequested -= HandleMovementInputPerformed;
         }
     }
 }

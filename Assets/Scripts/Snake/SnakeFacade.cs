@@ -19,32 +19,25 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public Vector2Int Position => model.Position;
 
-        [SerializeField]
-        private Vector2Int initialPosition;
-
         private ISnakeModel model;
         private SnakeController controller;
+        private IMovementRequester movementRequester;
 
         [Inject]
-        public void Constructor (ISnakeModel model, SnakeController controller)
+        public void Constructor (ISnakeModel model, SnakeController controller, IMovementRequester movementRequester)
         {
             this.model = model;
             this.controller = controller;
+            this.movementRequester = movementRequester;
 
             controller.Setup();
         }
 
-        private void Start ()
+        public void Initialize (Vector2Int startPosition, Vector2Int startDirection)
         {
-            Initialize(initialPosition);
+            model.Initialize(startPosition, startDirection);
+            movementRequester.Initialize();
         }
-
-        private void Update ()
-        {
-            model.Tick();
-        }
-
-        public void Initialize (Vector2Int initialPosition) => model.Initialize(initialPosition);
 
         public void LookTo (Vector2Int direction) => model.LookTo(direction);
 

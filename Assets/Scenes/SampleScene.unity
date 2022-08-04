@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &352771335 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-  m_PrefabInstance: {fileID: 642056085}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db7e5aba99d9b4419d8b6ef48fac504, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,71 +351,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &642056085
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: initialPosition.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: initialPosition.y
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8264877065908896230, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-      propertyPath: m_Name
-      value: Snake
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
 --- !u!1 &1285814409
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +432,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1440177774}
   snakes:
-  - {fileID: 352771335}
+  - {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
+  - {fileID: 2229183097551860550, guid: 3df6c626424f59f40ae4e3b7e8dc4519, type: 3}
   collectables:
   - {fileID: 4193843619912030038, guid: 4548308932c93344793102b148b6bc93, type: 3}
   - {fileID: 7376579263700333441, guid: 6ae22664f229e3346ae20d2b968ff68d, type: 3}

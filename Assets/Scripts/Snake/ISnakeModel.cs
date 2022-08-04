@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
@@ -10,9 +11,11 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         Vector2Int Position { get; }
 
-        void Initialize (Vector2Int initialPosition);
+        void Initialize (Vector2Int startPosition, Vector2Int startDirection);
         void LookTo (Vector2Int direction);
         void Grow ();
         void Tick ();
+
+        public class Factory : PlaceholderFactory<ISnakeModel> { }
     }
 }
