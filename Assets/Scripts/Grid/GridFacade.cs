@@ -4,7 +4,7 @@ using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
-    public class GridFacade : MonoBehaviour, IGridModel
+    public class GridFacade : MonoBehaviour, IGridModel<INode>
     {
         public event Action<INode[,]> OnInitialized
         {
@@ -12,11 +12,11 @@ namespace LeandroExhumed.SnakeGame.Grid
             remove => model.OnInitialized -= value;
         }
 
-        private IGridModel model;
+        private IGridModel<INode> model;
         private GridController controller;
 
         [Inject]
-        public void Constructor (IGridModel model, GridController controller)
+        public void Constructor (IGridModel<INode> model, GridController controller)
         {
             this.model = model;
             this.controller = controller;

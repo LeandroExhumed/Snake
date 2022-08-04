@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
-    public class GridModel : IGridModel
+    public class GridModel<T> : IGridModel<T>
     {
-        public event Action<INode[,]> OnInitialized;
+        public event Action<T[,]> OnInitialized;
 
         private readonly int width;
         private readonly int height;
-        private INode[,] array;
+        private T[,] array;
 
         public GridModel (int width, int height)
         {
             this.width = width;
             this.height = height;
 
-            array = new INode[width, height];
+            array = new T[width, height];
         }
 
         public void Initialize ()
@@ -24,12 +24,12 @@ namespace LeandroExhumed.SnakeGame.Grid
             OnInitialized?.Invoke(array);
         }
 
-        public INode GetNode (int x, int y)
+        public T GetNode (int x, int y)
         {
             return array[x, y];
         }
 
-        public void SetNode (int x, int y, INode node)
+        public void SetNode (int x, int y, T node)
         {
             array[x, y] = node;
         }

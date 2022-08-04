@@ -16,12 +16,12 @@ namespace LeandroExhumed.SnakeGame.Match
         private ICollectableModel block;
         private ISnakeModel[] snakes;
 
-        private readonly IGridModel grid;
+        private readonly IGridModel<INode> grid;
 
         private readonly ISnakeModel.Factory[] snakeFactories;
         private readonly ICollectableModel.Factory[] collectableFactories;
 
-        public MatchModel (IGridModel grid, ISnakeModel.Factory[] snakeFactories, ICollectableModel.Factory[] collectableFactories)
+        public MatchModel (IGridModel<INode> grid, ISnakeModel.Factory[] snakeFactories, ICollectableModel.Factory[] collectableFactories)
         {
             this.grid = grid;
             this.snakeFactories = snakeFactories;

@@ -25,9 +25,9 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly SnakeData data;
 
         private readonly IBodyPartModel.Factory bodyPartFactory;
-        private readonly IGridModel grid;
+        private readonly IGridModel<INode> grid;
 
-        public SnakeModel (SnakeData data, IBodyPartModel.Factory bodyPartFactory, IGridModel grid)
+        public SnakeModel (SnakeData data, IBodyPartModel.Factory bodyPartFactory, IGridModel<INode> grid)
         {
             this.data = data;
             this.bodyPartFactory = bodyPartFactory;

@@ -4,10 +4,10 @@ namespace LeandroExhumed.SnakeGame.Grid
 {
     public class GridController : IDisposable
     {
-        private readonly IGridModel model;
+        private readonly IGridModel<INode> model;
         private readonly GridView view;
 
-        public GridController (IGridModel model, GridView view)
+        public GridController (IGridModel<INode> model, GridView view)
         {
             this.model = model;
             this.view = view;

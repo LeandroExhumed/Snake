@@ -1,6 +1,7 @@
 ﻿using LeandroExhumed.SnakeGame.Snake;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.AI
@@ -16,16 +17,27 @@ namespace LeandroExhumed.SnakeGame.AI
             Vector2Int.down
         };
 
+        private readonly PathFinding pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
-        public SimulatedInput (MonoBehaviour monoBehaviour)
+        public SimulatedInput (PathFinding pathFinding, MonoBehaviour monoBehaviour)
         {
+            this.pathFinding = pathFinding;
             this.monoBehaviour = monoBehaviour;
         }
 
         public void Initialize ()
         {
-            monoBehaviour.StartCoroutine(TickRoutine());
+            List<PathNode> path = pathFinding.FindPath(0, 0, 15, 15);
+            if (path != null)
+            {
+                for (int i = 0; i < path.Count - 1; i++)
+                {
+                    Debug.DrawLine(new Vector3(path[i].x, path[i].y), new Vector3(path[i + 1].x, path[i + 1].y));
+                    Debug.Break();
+                }
+            }
+            //monoBehaviour.StartCoroutine(TickRoutine());
         }
 
         private IEnumerator TickRoutine ()

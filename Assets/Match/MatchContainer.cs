@@ -1,6 +1,5 @@
 using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
-using LeandroExhumed.SnakeGame.Input;
 using LeandroExhumed.SnakeGame.Snake;
 using UnityEngine;
 using Zenject;
@@ -23,7 +22,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
             Container.Bind<Input.PlayerInput>().AsSingle();
 
-            Container.Bind<IGridModel>().FromInstance(grid);
+            Container.Bind<IGridModel<INode>>().FromInstance(grid);
 
             for (int i = 0; i < snakes.Length; i++)
             {

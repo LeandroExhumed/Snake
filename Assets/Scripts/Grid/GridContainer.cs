@@ -11,7 +11,7 @@ namespace LeandroExhumed.SnakeGame.Grid
 
         private void ResolveMVC ()
         {
-            Container.Bind<IGridModel>().FromInstance(new GridModel(30, 30)).AsSingle();
+            Container.Bind<IGridModel<INode>>().FromInstance(new GridModel<INode>(30, 30)).AsSingle();
             Container.Bind<GridController>().AsSingle();
             Container.BindInstance(GetComponent<GridView>()).AsSingle();
         }

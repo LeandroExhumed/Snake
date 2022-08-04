@@ -2,12 +2,12 @@
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
-    public interface IGridModel
+    public interface IGridModel<T>
     {
-        event Action<INode[,]> OnInitialized;
+        event Action<T[,]> OnInitialized;
 
-        INode GetNode (int x, int y);
+        T GetNode (int x, int y);
         void Initialize ();
-        void SetNode (int x, int y, INode node);
+        void SetNode (int x, int y, T node);
     }
 }

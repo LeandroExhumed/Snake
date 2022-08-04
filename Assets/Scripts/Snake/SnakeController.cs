@@ -19,8 +19,14 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Setup ()
         {
+            model.OnHit += HandleHit;
             view.OnUpdate += HandleViewUpdate;
             input.OnMovementRequested += HandleMovementInputPerformed;
+        }
+
+        private void HandleHit ()
+        {
+            view.PlayBlinkingEffect();
         }
 
         private void HandleViewUpdate ()
@@ -36,6 +42,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Dispose ()
         {
+            model.OnHit -= HandleHit;
             view.OnUpdate -= HandleViewUpdate;
             input.OnMovementRequested -= HandleMovementInputPerformed;
         }
