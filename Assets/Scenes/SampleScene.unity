@@ -369,6 +369,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
+      propertyPath: initialPosition.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
+      propertyPath: initialPosition.y
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 3728020192351822931, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -501,7 +509,9 @@ MonoBehaviour:
   grid: {fileID: 1440177774}
   snakes:
   - {fileID: 352771335}
-  collectablePrefab: {fileID: 7376579263700333441, guid: 6ae22664f229e3346ae20d2b968ff68d, type: 3}
+  collectables:
+  - {fileID: 4193843619912030038, guid: 4548308932c93344793102b148b6bc93, type: 3}
+  - {fileID: 7376579263700333441, guid: 6ae22664f229e3346ae20d2b968ff68d, type: 3}
 --- !u!114 &1285814413
 MonoBehaviour:
   m_ObjectHideFlags: 0

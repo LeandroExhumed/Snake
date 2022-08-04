@@ -19,7 +19,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             model.OnPositionChanged += HandlePositionChanged;
         }
 
-        private void HandlePositionChanged (Vector2Int value)
+        private void HandlePositionChanged (IBodyPartModel model, Vector2Int value)
         {
             view.Position = value;
         }

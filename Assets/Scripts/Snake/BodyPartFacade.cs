@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.Snake
     {
         public Vector2Int Position { get => model.Position; set => model.Position = value; }
 
-        public event Action<Vector2Int> OnPositionChanged
+        public event Action<IBodyPartModel, Vector2Int> OnPositionChanged
         {
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;

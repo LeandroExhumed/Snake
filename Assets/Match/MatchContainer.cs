@@ -15,7 +15,7 @@ namespace LeandroExhumed.SnakeGame.Match
         private SnakeFacade[] snakes;
 
         [SerializeField]
-        private CollectableFacade collectablePrefab;
+        private CollectableFacade[] collectables;
 
         public override void InstallBindings ()
         {
@@ -26,8 +26,11 @@ namespace LeandroExhumed.SnakeGame.Match
 
             Container.Bind<IGridModel>().FromInstance(grid);
             Container.Bind<ISnakeModel[]>().FromInstance(snakes);
-            Container.BindFactory<ICollectableModel, ICollectableModel.Factory>()
-                .FromComponentInNewPrefab(collectablePrefab).AsSingle();
+            for (int i = 0; i < collectables.Length; i++)
+            {
+                Container.BindFactory<ICollectableModel, ICollectableModel.Factory>()
+                    .FromComponentInNewPrefab(collectables[i]).AsCached();
+            }
         }
     } 
 }

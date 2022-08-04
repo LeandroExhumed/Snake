@@ -1,14 +1,13 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Grid;
+using System;
 using UnityEngine;
 using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    public interface IBodyPartModel
+    public interface IBodyPartModel : INode
     {
-        event Action<Vector2Int> OnPositionChanged;
-
-        Vector2Int Position { get; set; }
+        event Action<IBodyPartModel, Vector2Int> OnPositionChanged;
 
         void Initialize (Vector2Int initialPosition);
 

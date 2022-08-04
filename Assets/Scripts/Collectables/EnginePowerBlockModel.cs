@@ -4,7 +4,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
 {
     public class EnginePowerBlockModel : CollectableModel
     {
-        private readonly float speedAddition;
+        private readonly float speedAddition = 0.075f;
 
         public override void BeCollected (ICollector collector)
         {

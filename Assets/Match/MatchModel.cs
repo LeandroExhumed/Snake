@@ -1,11 +1,6 @@
 ﻿using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Snake;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Match
@@ -17,61 +12,48 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly IGridModel grid;
         private readonly ISnakeModel[] snakes;
 
-        private readonly ICollectableModel.Factory collectableFactory;
+        private readonly ICollectableModel.Factory[] collectableFactories;
 
-        public MatchModel (IGridModel grid, ISnakeModel[] snakes, ICollectableModel.Factory collectableFactory)
+        public MatchModel (IGridModel grid, ISnakeModel[] snakes, ICollectableModel.Factory[] collectableFactories)
         {
             this.grid = grid;
             this.snakes = snakes;
-            this.collectableFactory = collectableFactory;
+            this.collectableFactories = collectableFactories;
         }
 
         public void Initialize ()
         {
             grid.Initialize();
+            for (int i = 0; i < snakes.Length; i++)
+            {
+                snakes[i].OnHit += HandleSnakeHit;
+            }
             GenerateBlock();
         }
 
         public void GenerateBlock ()
         {
-            block = collectableFactory.Create();
-            Vector2Int spawnPosition = new(UnityEngine.Random.Range(0, 30), UnityEngine.Random.Range(0, 30));
+            block = collectableFactories[Random.Range(0, collectableFactories.Length)].Create();
+            Vector2Int spawnPosition = new(Random.Range(0, 30), Random.Range(0, 30));
             block.Initialize(spawnPosition);
             block.OnCollected += HandleBlockCollected;
             grid.SetNode(block.Position.x, block.Position.y, block);
+        }
 
-            for (int i = 0; i < snakes.Length; i++)
-            {
-                snakes[i].OnPositionChanged += HandleSnakePositionChanged;
-            }
+        private void HandleSnakeHit ()
+        {
+            End();
         }
 
         public void End ()
         {
-
+            Debug.Log("You died!");
         }
 
         private void HandleBlockCollected ()
         {
             grid.SetNode(block.Position.x, block.Position.y, null);
-        }
-
-        private void HandleSnakePositionChanged (ISnakeModel snake, Vector2Int value)
-        {
-            INode targetNode = grid.GetNode(value.x, value.y);
-            if (targetNode != null)
-            {
-                if (targetNode is IBodyPartModel)
-                {
-                    End();
-                }
-                else if (targetNode is ICollectableModel collectable)
-                {
-                    collectable.BeCollected(snake);
-                    GenerateBlock();
-                }
-            }
-            
+            GenerateBlock();
         }
     }
 }
