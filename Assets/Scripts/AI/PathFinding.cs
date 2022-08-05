@@ -7,7 +7,6 @@ namespace LeandroExhumed.SnakeGame.AI
     public class PathFinding
     {
         private const int MOVE_STRAIGHT_COST = 10;
-        private const int MOVE_DIAGONAL_COST = 14;
 
         private List<PathNode> openList;
         private List<PathNode> closedList;
@@ -17,9 +16,9 @@ namespace LeandroExhumed.SnakeGame.AI
         public PathFinding ()
         {
             grid = new GridModel<PathNode>(30, 30);
-            for (int x = 0; x < 30; x++)
+            for (int x = 0; x < grid.Width; x++)
             {
-                for (int y = 0; y < 30; y++)
+                for (int y = 0; y < grid.Height; y++)
                 {
                     grid.SetNode(x, y, new PathNode(x, y));
                 }
@@ -34,9 +33,9 @@ namespace LeandroExhumed.SnakeGame.AI
             openList = new List<PathNode>() { startNode };
             closedList = new List<PathNode>();
 
-            for (int x = 0; x < 30; x++)
+            for (int x = 0; x < grid.Width; x++)
             {
-                for (int y = 0; y < 30; y++)
+                for (int y = 0; y < grid.Height; y++)
                 {
                     PathNode node = grid.GetNode(x, y);
                     node.GCost = int.MaxValue;
@@ -98,31 +97,11 @@ namespace LeandroExhumed.SnakeGame.AI
             {
                 // Left
                 neighbourList.Add(GetNode(currentNode.x -1, currentNode.y));
-                // Left Down
-                if (currentNode.y - 1 >= 0)
-                {
-                    neighbourList.Add(GetNode(currentNode.x - 1, currentNode.y - 1));
-                }
-                // Left Up
-                if (currentNode.y + 1 >= 30)
-                {
-                    neighbourList.Add(GetNode(currentNode.x - 1, currentNode.y + 1));
-                }
             }
-            if (currentNode.x + 1 < 30)
+            if (currentNode.x + 1 < grid.Width)
             {
                 // Right
                 neighbourList.Add(GetNode(currentNode.x + 1, currentNode.y));
-                // Right Down
-                if (currentNode.y - 1 >= 0)
-                {
-                    neighbourList.Add(GetNode(currentNode.x + 1, currentNode.y - 1));
-                }
-                // Right Up
-                if (currentNode.y + 1 < 30)
-                {
-                    neighbourList.Add(GetNode(currentNode.x + 1, currentNode.y + 1));
-                }
             }
             // Down
             if (currentNode.y - 1 >= 0)
@@ -130,7 +109,7 @@ namespace LeandroExhumed.SnakeGame.AI
                 neighbourList.Add(GetNode(currentNode.x, currentNode.y - 1));
             }
             // Up
-            if (currentNode.y + 1 < 30)
+            if (currentNode.y + 1 < grid.Height)
             {
                 neighbourList.Add(GetNode(currentNode.x, currentNode.y + 1));
             }
@@ -164,7 +143,7 @@ namespace LeandroExhumed.SnakeGame.AI
             int yDistance = Mathf.Abs(a.y - b.y);
             int remaining = Mathf.Abs(xDistance - yDistance);
 
-            return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+            return Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
         }
 
         private PathNode GetLowestFCostNode (List<PathNode> pathNodeList)

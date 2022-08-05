@@ -6,7 +6,7 @@ namespace LeandroExhumed.SnakeGame.AI
     public class PathNode : INode
     {
         public Vector2Int Position {
-            get => throw new System.NotImplementedException();
+            get => new(x, y);
             set => throw new System.NotImplementedException();
         
         }

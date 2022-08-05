@@ -13,8 +13,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action OnHit;
 
         public Vector2Int Position => bodyParts.Peek().Position;
-
-        private Vector2Int direction;
+        public Vector2Int Direction { get; private set; }
 
         private readonly Stack<IBodyPartModel> bodyParts = new();
 
@@ -40,21 +39,23 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             for (int i = 0; i < data.Size; i++)
             {
-                Vector2Int partPosition = startPosition - new Vector2Int((data.Size - i), 0);
+                Vector2Int partPosition = new(
+                    startPosition.x - ((data.Size - 1) - i) * startDirection.x,
+                    startPosition.y);
                 AddBodyPart(partPosition);
             }
 
-            direction = startDirection;
+            Direction = startDirection;
         }
 
         public void LookTo (Vector2Int direction)
         {
-            if (this.direction.x == direction.x || this.direction.y == direction.y)
+            if (this.Direction.x == direction.x || this.Direction.y == direction.y)
             {
                 return;
             }
 
-            this.direction = direction;
+            Direction = direction;
 
             Move(direction);
         }
@@ -81,7 +82,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             if (timer >= movingInterval)
             {
-                Move(direction);
+                Move(Direction);
             }
 
             timer += Time.deltaTime;
@@ -128,6 +129,8 @@ namespace LeandroExhumed.SnakeGame.Snake
             grid.SetNode(lastPosition.x, lastPosition.y, null);
 
             timer = 0f;
+
+            OnPositionChanged?.Invoke(this, Position);
         }
 
         private void HandleDestination (Vector2Int value)

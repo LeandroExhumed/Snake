@@ -7,6 +7,8 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchModel
     {
+        public event System.Action<Vector2Int> OnBlockGenerated;
+
         private int snakesPerMatch = 2;
         private readonly Vector2Int[] spawnPositions =
         {
@@ -63,6 +65,8 @@ namespace LeandroExhumed.SnakeGame.Match
             block.Initialize(spawnPosition);
             block.OnCollected += HandleBlockCollected;
             grid.SetNode(block.Position.x, block.Position.y, block);
+
+            OnBlockGenerated?.Invoke(block.Position);
         }
 
         private void HandleSnakeHit ()

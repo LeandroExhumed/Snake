@@ -12,6 +12,9 @@ namespace LeandroExhumed.SnakeGame.Grid
             remove => model.OnInitialized -= value;
         }
 
+        public int Width => model.Width;
+        public int Height => model.Height;
+
         private IGridModel<INode> model;
         private GridController controller;
 

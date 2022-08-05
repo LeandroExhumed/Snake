@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
@@ -7,14 +6,15 @@ namespace LeandroExhumed.SnakeGame.Grid
     {
         public event Action<T[,]> OnInitialized;
 
-        private readonly int width;
-        private readonly int height;
-        private T[,] array;
+        public int Width { get; }
+        public int Height { get; }
+
+        private readonly T[,] array;
 
         public GridModel (int width, int height)
         {
-            this.width = width;
-            this.height = height;
+            Width = width;
+            Height = height;
 
             array = new T[width, height];
         }

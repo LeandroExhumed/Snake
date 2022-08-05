@@ -18,6 +18,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         }
 
         public Vector2Int Position => model.Position;
+        public Vector2Int Direction => model.Direction;
 
         private ISnakeModel model;
         private SnakeController controller;

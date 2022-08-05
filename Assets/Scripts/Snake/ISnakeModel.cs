@@ -10,6 +10,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         event Action OnHit;
 
         Vector2Int Position { get; }
+        Vector2Int Direction { get; }
 
         void Initialize (Vector2Int startPosition, Vector2Int startDirection);
         void LookTo (Vector2Int direction);
