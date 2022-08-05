@@ -36,9 +36,9 @@ namespace LeandroExhumed.SnakeGame.Grid
             model.Initialize();
         }
 
-        public INode GetNode (int x, int y) => model.GetNode(x, y);
+        public INode GetNode (Vector2Int position) => model.GetNode(position);
 
-        public void SetNode (int x, int y, INode node) => model.SetNode(x, y, node);
+        public void SetNode (Vector2Int position, INode node) => model.SetNode(position, node);
 
         private void OnDestroy ()
         {

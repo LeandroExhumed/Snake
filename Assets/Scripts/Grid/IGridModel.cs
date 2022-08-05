@@ -11,8 +11,8 @@ namespace LeandroExhumed.SnakeGame.Grid
         public int Width { get; }
         public int Height { get; }
 
-        T GetNode (int x, int y);
+        T GetNode (Vector2Int position);
         void Initialize ();
-        void SetNode (int x, int y, T node);
+        void SetNode (Vector2Int position, T node);
     }
 }

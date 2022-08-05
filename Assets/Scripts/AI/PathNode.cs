@@ -5,14 +5,7 @@ namespace LeandroExhumed.SnakeGame.AI
 {
     public class PathNode : INode
     {
-        public Vector2Int Position {
-            get => new(x, y);
-            set => throw new System.NotImplementedException();
-        
-        }
-
-        public int x;
-        public int y;
+        public Vector2Int Position { get => position; set => position = value; }
 
         public int GCost { get; set; }
         public int HCost { get; set; }
@@ -21,10 +14,11 @@ namespace LeandroExhumed.SnakeGame.AI
 
         public PathNode CameFromNode { get; set; }
 
-        public PathNode (int x, int y, bool isWalkable)
+        private Vector2Int position;
+
+        public PathNode (Vector2Int position, bool isWalkable)
         {
-            this.x = x;
-            this.y = y;
+            Position = position;
             IsWalkable = isWalkable;
         }
 

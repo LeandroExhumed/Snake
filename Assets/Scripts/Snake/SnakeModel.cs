@@ -136,7 +136,7 @@ namespace LeandroExhumed.SnakeGame.Snake
                 lastPosition = temp;
             }
 
-            grid.SetNode(lastPosition.x, lastPosition.y, null);
+            grid.SetNode(lastPosition, null);
 
             timer = 0f;
 
@@ -145,7 +145,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleDestination (Vector2Int value)
         {
-            INode targetNode = grid.GetNode(value.x, value.y);
+            INode targetNode = grid.GetNode(value);
             if (targetNode != null)
             {
                 if (targetNode is IBodyPartModel)
@@ -161,7 +161,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleHeadPositionChanged (IBodyPartModel bodyPart, Vector2Int value)
         {
-            grid.SetNode(value.x, value.y, bodyPart);
+            grid.SetNode(value, bodyPart);
         }
     }
 }

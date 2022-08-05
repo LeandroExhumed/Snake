@@ -25,25 +25,23 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private float reasoningTime = 0.5f;
 
-        private float safeInputTime = 0.15f;
-        private const float SAFE_INPUT_DELAY = 0.1F;
+        private float safeInputTime = 0.2f;
+        private const float SAFE_INPUT_DELAY = 0.05F;
 
         List<PathNode> path;
-        int nextNode = 0;
+        int targetNode = 0;
         private Vector2Int block;
         private bool reasonedAboutNewBlock = false;
 
         private readonly ISnakeModel snake;
-        private readonly IGridModel<INode> grid;
         private readonly PathFinding pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
         private readonly MatchModel match;
 
-        public SimulatedInput (ISnakeModel snake, IGridModel<INode> grid, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
+        public SimulatedInput (ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
         {
             this.snake = snake;
-            this.grid = grid;
             this.pathFinding = pathFinding;
             this.monoBehaviour = monoBehaviour;
             this.match = match;
@@ -53,7 +51,6 @@ namespace LeandroExhumed.SnakeGame.AI
         {
             snake.OnPositionChanged += HandlePositionChanged;
             snake.OnTimeToMoveChanged += HandleTimeToMoveChanged;
-            grid.OnNodeChanged += HandleGridNodeChanged;
             match.OnBlockGenerated += HandleBlockGenerated;
         }
 
@@ -65,10 +62,9 @@ namespace LeandroExhumed.SnakeGame.AI
             }
 
             int pathindex = Path.FindIndex(x => x.Position == nodePosition);
-            if (nodePosition != snake.Position && pathindex > nextNode)
+            if (nodePosition != snake.Position && pathindex > targetNode)
             {
-                Debug.Log("Changed block " + nodePosition);
-                monoBehaviour.StartCoroutine(delayedFindPath());
+                monoBehaviour.StartCoroutine(ThinkAboutPathObstructed());
             }
         }
 
@@ -86,17 +82,15 @@ namespace LeandroExhumed.SnakeGame.AI
                 }
             }
 
-            Vector2Int input = Path[nextNode + 1].Position - snake.Position;
-            nextNode++;
-            Debug.Log("Node: " + nextNode);
+            Vector2Int input = Path[targetNode + 1].Position - snake.Position;
+            targetNode++;
 
             if (snake.Direction == input)
             {
                 return;
             }
 
-            Debug.Log("From " + snake.Position + " to " + Path[nextNode].Position + "Input: " + input);
-            monoBehaviour.StartCoroutine(delayedInput(input));
+            monoBehaviour.StartCoroutine(RequestMovementInput(input));
         }
 
         private void HandleTimeToMoveChanged (float value)
@@ -104,17 +98,16 @@ namespace LeandroExhumed.SnakeGame.AI
             safeInputTime = value - SAFE_INPUT_DELAY;
         }
 
-        private IEnumerator delayedInput (Vector2Int input)
+        private IEnumerator RequestMovementInput (Vector2Int input)
         {
             yield return new WaitForSeconds(safeInputTime);
             OnMovementRequested?.Invoke(input);
         }
 
-        private IEnumerator delayedFindPath ()
+        private IEnumerator ThinkAboutPathObstructed ()
         {
             Path = null;
-            yield return new WaitForSeconds(0.5f);
-
+            yield return new WaitForSeconds(reasoningTime);
             reasonedAboutNewBlock = true;
         }
 
@@ -122,22 +115,13 @@ namespace LeandroExhumed.SnakeGame.AI
         {
             block = position;
             reasonedAboutNewBlock = false;
-            monoBehaviour.StartCoroutine(delayedFindPath());
+            monoBehaviour.StartCoroutine(ThinkAboutPathObstructed());
         }
 
         private void FindPath (int endX, int endY)
         {
             Path = pathFinding.FindPath(snake.Position.x, snake.Position.y, endX, endY);
-            if (Path != null)
-            {
-                for (int i = 0; i < Path.Count - 1; i++)
-                {
-                    Debug.DrawLine(new Vector3(Path[i].x, Path[i].y), new Vector3(Path[i + 1].x, Path[i + 1].y), color: Color.red);
-                    Debug.Break();
-                }
-            }
-
-            nextNode = 0;
+            targetNode = 0;
         }
     }
 }

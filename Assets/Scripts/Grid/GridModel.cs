@@ -26,15 +26,15 @@ namespace LeandroExhumed.SnakeGame.Grid
             OnInitialized?.Invoke(array);
         }
 
-        public T GetNode (int x, int y)
+        public T GetNode (Vector2Int position)
         {
-            return array[x, y];
+            return array[position.x, position.y];
         }
 
-        public void SetNode (int x, int y, T node)
+        public void SetNode (Vector2Int position, T node)
         {
-            array[x, y] = node;
-            OnNodeChanged?.Invoke(new Vector2Int(x, y));
+            array[position.x, position.y] = node;
+            OnNodeChanged?.Invoke(position);
         }
     }
 }

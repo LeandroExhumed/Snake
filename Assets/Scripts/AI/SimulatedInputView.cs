@@ -2,7 +2,7 @@
 
 namespace LeandroExhumed.SnakeGame.AI
 {
-    public class SimulatedView : MonoBehaviour
+    public class SimulatedInputView : MonoBehaviour
     {
         [SerializeField]
         private bool debug;
@@ -24,7 +24,8 @@ namespace LeandroExhumed.SnakeGame.AI
             for (int i = 0; i < path.Length - 1; i++)
             {
                 Gizmos.DrawLine(
-                    new Vector3(path[i].x, path[i].y), new Vector3(path[i + 1].x, path[i + 1].y));
+                    new Vector3(path[i].Position.x, path[i].Position.y),
+                    new Vector3(path[i + 1].Position.x, path[i + 1].Position.y));
             }
         }
     }

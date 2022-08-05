@@ -61,10 +61,14 @@ namespace LeandroExhumed.SnakeGame.Match
         public void GenerateBlock ()
         {
             block = collectableFactories[Random.Range(0, collectableFactories.Length)].Create();
-            Vector2Int spawnPosition = new(Random.Range(0, 30), Random.Range(0, 30));
+            Vector2Int spawnPosition;
+            do
+            {
+                spawnPosition = new(Random.Range(0, grid.Width), Random.Range(0, grid.Height));
+            } while (grid.GetNode(spawnPosition) != null);
             block.Initialize(spawnPosition);
             block.OnCollected += HandleBlockCollected;
-            grid.SetNode(block.Position.x, block.Position.y, block);
+            grid.SetNode(block.Position, block);
 
             OnBlockGenerated?.Invoke(block.Position);
         }
@@ -81,7 +85,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void HandleBlockCollected ()
         {
-            grid.SetNode(block.Position.x, block.Position.y, null);
+            grid.SetNode(block.Position, null);
             GenerateBlock();
         }
     }

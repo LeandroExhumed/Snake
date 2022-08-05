@@ -14,7 +14,7 @@ namespace LeandroExhumed.SnakeGame.AI
         {
             Container.Bind<ISimulatedInput>().To<SimulatedInput>().AsSingle();
             Container.Bind<SimulatedInputController>().AsSingle();
-            Container.BindInstance(GetComponent<SimulatedView>()).AsSingle();
+            Container.BindInstance(GetComponent<SimulatedInputView>()).AsSingle();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using LeandroExhumed.SnakeGame.Grid;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.AI
@@ -9,11 +8,11 @@ namespace LeandroExhumed.SnakeGame.AI
     public class SimulatedInputController : IDisposable
     {
         private readonly ISimulatedInput model;
-        private readonly SimulatedView view;
+        private readonly SimulatedInputView view;
 
         private readonly IGridModel<INode> levelGrid;
 
-        public SimulatedInputController (ISimulatedInput model, SimulatedView view, IGridModel<INode> levelGrid)
+        public SimulatedInputController (ISimulatedInput model, SimulatedInputView view, IGridModel<INode> levelGrid)
         {
             this.model = model;
             this.view = view;
