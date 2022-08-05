@@ -2,7 +2,7 @@
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    [CreateAssetMenu(fileName = "Snake", menuName = "Snake")]
+    [CreateAssetMenu(fileName = "Snake", menuName = "Data/Snake")]
     public class SnakeData : ScriptableObject
     {
         public int Size => size;

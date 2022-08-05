@@ -1,12 +1,17 @@
-﻿using Zenject;
+﻿using UnityEngine;
+using Zenject;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
     public class SimulatedInputContainer : MonoInstaller
     {
+        [SerializeField]
+        private AIData data;
+
         public override void InstallBindings ()
         {
             ResolveMVC();
+            Container.BindInstance(data).AsSingle();
             Container.Bind<PathFinding>().AsSingle();
         }
 

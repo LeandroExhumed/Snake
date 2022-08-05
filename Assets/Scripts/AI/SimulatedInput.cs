@@ -1,5 +1,4 @@
-﻿using LeandroExhumed.SnakeGame.Grid;
-using LeandroExhumed.SnakeGame.Match;
+﻿using LeandroExhumed.SnakeGame.Match;
 using LeandroExhumed.SnakeGame.Snake;
 using System;
 using System.Collections;
@@ -23,15 +22,15 @@ namespace LeandroExhumed.SnakeGame.AI
             }
         }
 
-        private float reasoningTime = 0.5f;
+        private const float MIN_INPUT_SPEED = 0.05F;
+        private const float MAX_INPUT_SPEED = 0.2F;
 
-        private float safeInputTime = 0.2f;
-        private const float SAFE_INPUT_DELAY = 0.05F;
-
-        List<PathNode> path;
-        int targetNode = 0;
+        private List<PathNode> path;
+        private int targetNode = 0;
         private Vector2Int block;
         private bool reasonedAboutNewBlock = false;
+
+        private readonly AIData data;
 
         private readonly ISnakeModel snake;
         private readonly PathFinding pathFinding;
@@ -39,8 +38,9 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private readonly MatchModel match;
 
-        public SimulatedInput (ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
+        public SimulatedInput (AIData data, ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
         {
+            this.data = data;
             this.snake = snake;
             this.pathFinding = pathFinding;
             this.monoBehaviour = monoBehaviour;
@@ -50,7 +50,6 @@ namespace LeandroExhumed.SnakeGame.AI
         public void Initialize ()
         {
             snake.OnPositionChanged += HandlePositionChanged;
-            snake.OnTimeToMoveChanged += HandleTimeToMoveChanged;
             match.OnBlockGenerated += HandleBlockGenerated;
         }
 
@@ -64,8 +63,31 @@ namespace LeandroExhumed.SnakeGame.AI
             int pathindex = Path.FindIndex(x => x.Position == nodePosition);
             if (nodePosition != snake.Position && pathindex > targetNode)
             {
-                monoBehaviour.StartCoroutine(ThinkAboutPathObstructed());
+                float reasoningTime = UnityEngine.Random.Range(
+                    data.MinReactionSpeedRegardingPathObstructed,
+                    data.MaxReactionSpeedRegardingPathObstructed);
+                monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
             }
+        }
+
+        private void FindPath (Vector2Int end)
+        {
+            Path = pathFinding.FindPath(snake.Position, end);
+            targetNode = 0;
+        }
+
+        private IEnumerator RequestMovementInput (Vector2Int input)
+        {
+            float reasoningTime = UnityEngine.Random.Range(MIN_INPUT_SPEED, MAX_INPUT_SPEED);
+            yield return new WaitForSeconds(snake.TimeToMove - reasoningTime);
+            OnMovementRequested?.Invoke(input);
+        }
+
+        private IEnumerator ThinkAboutNewPath (float reasoningSpeed)
+        {
+            Path = null;
+            yield return new WaitForSeconds(reasoningSpeed);
+            reasonedAboutNewBlock = true;
         }
 
         private void HandlePositionChanged (ISnakeModel arg1, Vector2Int arg2)
@@ -74,7 +96,7 @@ namespace LeandroExhumed.SnakeGame.AI
             {
                 if (reasonedAboutNewBlock)
                 {
-                    FindPath(block.x, block.y);
+                    FindPath(block);
                 }
                 else
                 {
@@ -93,35 +115,14 @@ namespace LeandroExhumed.SnakeGame.AI
             monoBehaviour.StartCoroutine(RequestMovementInput(input));
         }
 
-        private void HandleTimeToMoveChanged (float value)
-        {
-            safeInputTime = value - SAFE_INPUT_DELAY;
-        }
-
-        private IEnumerator RequestMovementInput (Vector2Int input)
-        {
-            yield return new WaitForSeconds(safeInputTime);
-            OnMovementRequested?.Invoke(input);
-        }
-
-        private IEnumerator ThinkAboutPathObstructed ()
-        {
-            Path = null;
-            yield return new WaitForSeconds(reasoningTime);
-            reasonedAboutNewBlock = true;
-        }
-
         private void HandleBlockGenerated (Vector2Int position)
         {
             block = position;
             reasonedAboutNewBlock = false;
-            monoBehaviour.StartCoroutine(ThinkAboutPathObstructed());
-        }
-
-        private void FindPath (int endX, int endY)
-        {
-            Path = pathFinding.FindPath(snake.Position.x, snake.Position.y, endX, endY);
-            targetNode = 0;
+            float reasoningTime = UnityEngine.Random.Range(
+                data.MinReactionSpeedRegardingNewBlockGenerated,
+                data.MaxReactionSpeedRegardingNewBlockGenerated);
+            monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
         }
     }
 }

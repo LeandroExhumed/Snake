@@ -22,25 +22,12 @@ namespace LeandroExhumed.SnakeGame.AI
             grid = new GridModel<PathNode>(levelGrid.Width, levelGrid.Height);
         }
 
-        private void UpdateBaseGrid (IGridModel<INode> levelGrid)
+        public List<PathNode> FindPath (Vector2Int start, Vector2Int end)
         {
-            for (int x = 0; x < grid.Width; x++)
-            {
-                for (int y = 0; y < grid.Height; y++)
-                {
-                    Vector2Int position = new(x, y);
-                    bool isWalkable = levelGrid.GetNode(position) is not IBodyPartModel;
-                    grid.SetNode(position, new PathNode(new (x, y), isWalkable));
-                }
-            }
-        }
+            UpdateGridBasedOnLevel(levelGrid);
 
-        public List<PathNode> FindPath (int startX, int startY, int endX, int endY)
-        {
-            UpdateBaseGrid(levelGrid);
-
-            PathNode startNode = grid.GetNode(new(startX, startY));
-            PathNode endNode = grid.GetNode(new(endX, endY));
+            PathNode startNode = grid.GetNode(start);
+            PathNode endNode = grid.GetNode(end);
 
             openList = new List<PathNode>() { startNode };
             closedList = new List<PathNode>();
@@ -65,7 +52,6 @@ namespace LeandroExhumed.SnakeGame.AI
                 PathNode currentNode = GetLowestFCostNode(openList);
                 if (currentNode == endNode)
                 {
-                    Debug.Log("Final node reached!");
                     return CalculatePath(endNode);
                 }
 
@@ -107,52 +93,17 @@ namespace LeandroExhumed.SnakeGame.AI
             return null;
         }
 
-        private List<PathNode> GetNeighbourList (PathNode currentNode)
+        private void UpdateGridBasedOnLevel (IGridModel<INode> levelGrid)
         {
-            List<PathNode> neighbourList = new();
-
-            if (currentNode.Position.x -1 >= 0)
+            for (int x = 0; x < grid.Width; x++)
             {
-                // Left
-                neighbourList.Add(GetNode(currentNode.Position.x - 1, currentNode.Position.y));
+                for (int y = 0; y < grid.Height; y++)
+                {
+                    Vector2Int position = new(x, y);
+                    bool isWalkable = levelGrid.GetNode(position) is not IBodyPartModel;
+                    grid.SetNode(position, new PathNode(new(x, y), isWalkable));
+                }
             }
-            if (currentNode.Position.x + 1 < grid.Width)
-            {
-                // Right
-                neighbourList.Add(GetNode(currentNode.Position.x + 1, currentNode.Position.y));
-            }
-            // Down
-            if (currentNode.Position.y - 1 >= 0)
-            {
-                neighbourList.Add(GetNode(currentNode.Position.x, currentNode.Position.y - 1));
-            }
-            // Up
-            if (currentNode.Position.y + 1 < grid.Height)
-            {
-                neighbourList.Add(GetNode(currentNode.Position.x, currentNode.Position.y + 1));
-            }
-
-            return neighbourList;
-        }
-
-        private PathNode GetNode (int x, int y)
-        {
-            return grid.GetNode(new(x, y));
-        }
-
-        private List<PathNode> CalculatePath (PathNode endNode)
-        {
-            List<PathNode> path = new();
-            path.Add(endNode);
-            PathNode currentNode = endNode;
-            while (currentNode.CameFromNode != null)
-            {
-                path.Add(currentNode.CameFromNode);
-                currentNode = currentNode.CameFromNode;
-            }
-            path.Reverse();
-
-            return path;
         }
 
         private int CalculateDistanceCost (PathNode a, PathNode b)
@@ -176,6 +127,54 @@ namespace LeandroExhumed.SnakeGame.AI
             }
 
             return lowestFCostNode;
+        }
+
+        private List<PathNode> CalculatePath (PathNode endNode)
+        {
+            List<PathNode> path = new();
+            path.Add(endNode);
+            PathNode currentNode = endNode;
+            while (currentNode.CameFromNode != null)
+            {
+                path.Add(currentNode.CameFromNode);
+                currentNode = currentNode.CameFromNode;
+            }
+            path.Reverse();
+
+            return path;
+        }
+
+        private List<PathNode> GetNeighbourList (PathNode currentNode)
+        {
+            List<PathNode> neighbourList = new();
+
+            if (currentNode.Position.x -1 >= 0)
+            {
+                Vector2Int leftNeighbour = new(currentNode.Position.x - 1, currentNode.Position.y);
+                neighbourList.Add(GetNode(leftNeighbour));
+            }
+            if (currentNode.Position.x + 1 < grid.Width)
+            {
+                Vector2Int rightNeighbour = new(currentNode.Position.x + 1, currentNode.Position.y);
+                neighbourList.Add(GetNode(rightNeighbour));
+            }
+            Vector2Int downNeighbour = new(currentNode.Position.x, currentNode.Position.y - 1);
+            if (currentNode.Position.y - 1 >= 0)
+            {
+                neighbourList.Add(GetNode(downNeighbour));
+            }
+            Vector2Int upNeighbour = new(currentNode.Position.x, currentNode.Position.y + 1);
+            if (currentNode.Position.y + 1 < grid.Height)
+            {
+                neighbourList.Add(GetNode(upNeighbour));
+            }
+
+            return neighbourList;
+        }
+
+        private PathNode GetNode (Vector2Int position)
+        {
+            return grid.GetNode(position);
         }
     }
 }

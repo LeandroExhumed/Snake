@@ -10,20 +10,11 @@ namespace LeandroExhumed.SnakeGame.Snake
     public class SnakeModel : ISnakeModel
     {
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
-        public event Action<float> OnTimeToMoveChanged;
         public event Action OnHit;
 
         public Vector2Int Position => bodyParts.Peek().Position;
         public Vector2Int Direction { get; private set; }
-        private float TimeToMove
-        {
-            get => timeToMove;
-            set
-            {
-                timeToMove = value;
-                OnTimeToMoveChanged?.Invoke(value);
-            }
-        }
+        public float TimeToMove { get; private set; }
 
         private readonly Stack<IBodyPartModel> bodyParts = new();
 
@@ -67,7 +58,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             Direction = direction;
 
-            Move(direction);
+            //Move(direction);
         }
 
         public void Grow ()
