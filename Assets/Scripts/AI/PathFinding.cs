@@ -1,4 +1,5 @@
 ﻿using LeandroExhumed.SnakeGame.Grid;
+using LeandroExhumed.SnakeGame.Snake;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,22 +12,31 @@ namespace LeandroExhumed.SnakeGame.AI
         private List<PathNode> openList;
         private List<PathNode> closedList;
 
+        private readonly IGridModel<INode> levelGrid;
         private readonly GridModel<PathNode> grid;
 
-        public PathFinding ()
+        public PathFinding (IGridModel<INode> levelGrid)
         {
-            grid = new GridModel<PathNode>(30, 30);
+            this.levelGrid = levelGrid;
+
+            grid = new GridModel<PathNode>(levelGrid.Width, levelGrid.Height);
+        }
+
+        private void UpdateBaseGrid (IGridModel<INode> levelGrid)
+        {
             for (int x = 0; x < grid.Width; x++)
             {
                 for (int y = 0; y < grid.Height; y++)
                 {
-                    grid.SetNode(x, y, new PathNode(x, y));
+                    grid.SetNode(x, y, new PathNode(x, y, levelGrid.GetNode(x, y) is not IBodyPartModel));
                 }
             }
         }
 
         public List<PathNode> FindPath (int startX, int startY, int endX, int endY)
         {
+            UpdateBaseGrid(levelGrid);
+
             PathNode startNode = grid.GetNode(startX, startY);
             PathNode endNode = grid.GetNode(endX, endY);
 
@@ -65,6 +75,12 @@ namespace LeandroExhumed.SnakeGame.AI
                 {
                     if (closedList.Contains(neighbourList[i]))
                     {
+                        continue;
+                    }
+                    if (!neighbourList[i].IsWalkable)
+                    {
+                        closedList.Add(neighbourList[i]);
+                        
                         continue;
                     }
 

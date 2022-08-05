@@ -27,8 +27,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             else
             {
                 Container.BindInstance(GetComponent<MonoBehaviour>()).AsSingle();
-                Container.Bind<IMovementRequester>().To<SimulatedInput>().AsSingle();
-                Container.Bind<PathFinding>().AsSingle();
+                Container.Bind<IMovementRequester>().FromComponentInNewPrefabResource("SimulatedInput").AsSingle();
             }
 
             Container.BindFactory<IBodyPartModel, IBodyPartModel.Factory>().FromComponentInNewPrefab(bodyPartPrefab)

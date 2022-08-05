@@ -7,6 +7,7 @@ namespace LeandroExhumed.SnakeGame.Snake
     public interface ISnakeModel : ICollector
     {
         event Action<ISnakeModel, Vector2Int> OnPositionChanged;
+        event Action<float> OnTimeToMoveChanged;
         event Action OnHit;
 
         Vector2Int Position { get; }

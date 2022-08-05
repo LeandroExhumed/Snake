@@ -11,6 +11,11 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
         }
+        public event Action<float> OnTimeToMoveChanged
+        {
+            add => model.OnTimeToMoveChanged += value;
+            remove => model.OnTimeToMoveChanged -= value;
+        }
         public event Action OnHit
         {
             add => model.OnHit += value;

@@ -1,10 +1,12 @@
 ﻿using System;
+using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
     public class GridModel<T> : IGridModel<T>
     {
         public event Action<T[,]> OnInitialized;
+        public event Action<Vector2Int> OnNodeChanged;
 
         public int Width { get; }
         public int Height { get; }
@@ -32,6 +34,7 @@ namespace LeandroExhumed.SnakeGame.Grid
         public void SetNode (int x, int y, T node)
         {
             array[x, y] = node;
+            OnNodeChanged?.Invoke(new Vector2Int(x, y));
         }
     }
 }

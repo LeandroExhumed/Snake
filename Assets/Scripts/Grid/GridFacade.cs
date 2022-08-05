@@ -11,6 +11,11 @@ namespace LeandroExhumed.SnakeGame.Grid
             add => model.OnInitialized += value;
             remove => model.OnInitialized -= value;
         }
+        public event Action<Vector2Int> OnNodeChanged
+        {
+            add => model.OnNodeChanged += value;
+            remove => model.OnNodeChanged -= value;
+        }
 
         public int Width => model.Width;
         public int Height => model.Height;

@@ -10,15 +10,24 @@ namespace LeandroExhumed.SnakeGame.Snake
     public class SnakeModel : ISnakeModel
     {
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
+        public event Action<float> OnTimeToMoveChanged;
         public event Action OnHit;
 
         public Vector2Int Position => bodyParts.Peek().Position;
         public Vector2Int Direction { get; private set; }
+        private float TimeToMove
+        {
+            get => timeToMove;
+            set
+            {
+                timeToMove = value;
+                OnTimeToMoveChanged?.Invoke(value);
+            }
+        }
 
         private readonly Stack<IBodyPartModel> bodyParts = new();
 
         private float timer = 0f;
-        private float movingInterval;
         private float speedDecreaseOnLoad = 0.05f;
 
         private readonly SnakeData data;
@@ -26,13 +35,13 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly IBodyPartModel.Factory bodyPartFactory;
         private readonly IGridModel<INode> grid;
 
+        private float timeToMove;
+
         public SnakeModel (SnakeData data, IBodyPartModel.Factory bodyPartFactory, IGridModel<INode> grid)
         {
             this.data = data;
             this.bodyPartFactory = bodyPartFactory;
             this.grid = grid;
-
-            movingInterval = data.Speed;
         }
 
         public void Initialize (Vector2Int startPosition, Vector2Int startDirection)
@@ -46,6 +55,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             }
 
             Direction = startDirection;
+            TimeToMove = data.Speed;
         }
 
         public void LookTo (Vector2Int direction)
@@ -62,7 +72,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Grow ()
         {
-            movingInterval += speedDecreaseOnLoad;
+            TimeToMove += speedDecreaseOnLoad;
             AddBodyPart(Position);
         }
 
@@ -75,12 +85,12 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void CollectEnginePower (float speedAddition)
         {
             Grow();
-            movingInterval -= speedAddition;
+            TimeToMove -= speedAddition;
         }
 
         public void Tick ()
         {
-            if (timer >= movingInterval)
+            if (timer >= TimeToMove)
             {
                 Move(Direction);
             }

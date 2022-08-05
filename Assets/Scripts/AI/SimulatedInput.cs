@@ -1,4 +1,5 @@
-﻿using LeandroExhumed.SnakeGame.Match;
+﻿using LeandroExhumed.SnakeGame.Grid;
+using LeandroExhumed.SnakeGame.Match;
 using LeandroExhumed.SnakeGame.Snake;
 using System;
 using System.Collections;
@@ -7,19 +8,25 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
-    public class SimulatedInput : IMovementRequester
+    public class SimulatedInput : ISimulatedInput
     {
         public event Action<Vector2Int> OnMovementRequested;
+        public event Action<List<PathNode>> OnPathChanged;
 
-        private readonly Vector2Int[] directions = {
-            Vector2Int.left,
-            Vector2Int.right,
-            Vector2Int.up,
-            Vector2Int.down
-        };
+        private List<PathNode> Path
+        {
+            get => path;
+            set
+            {
+                path = value;
+                OnPathChanged?.Invoke(value);
+            }
+        }
 
-        private float lastReasonTime;
         private float reasoningTime = 0.5f;
+
+        private float safeInputTime = 0.15f;
+        private const float SAFE_INPUT_DELAY = 0.1F;
 
         List<PathNode> path;
         int nextNode = 0;
@@ -27,14 +34,16 @@ namespace LeandroExhumed.SnakeGame.AI
         private bool reasonedAboutNewBlock = false;
 
         private readonly ISnakeModel snake;
+        private readonly IGridModel<INode> grid;
         private readonly PathFinding pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
         private readonly MatchModel match;
 
-        public SimulatedInput (ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
+        public SimulatedInput (ISnakeModel snake, IGridModel<INode> grid, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
         {
             this.snake = snake;
+            this.grid = grid;
             this.pathFinding = pathFinding;
             this.monoBehaviour = monoBehaviour;
             this.match = match;
@@ -43,68 +52,92 @@ namespace LeandroExhumed.SnakeGame.AI
         public void Initialize ()
         {
             snake.OnPositionChanged += HandlePositionChanged;
+            snake.OnTimeToMoveChanged += HandleTimeToMoveChanged;
+            grid.OnNodeChanged += HandleGridNodeChanged;
             match.OnBlockGenerated += HandleBlockGenerated;
-            //monoBehaviour.StartCoroutine(TickRoutine());
+        }
+
+        public void HandleGridNodeChanged (Vector2Int nodePosition)
+        {
+            if (Path == null)
+            {
+                return;
+            }
+
+            int pathindex = Path.FindIndex(x => x.Position == nodePosition);
+            if (nodePosition != snake.Position && pathindex > nextNode)
+            {
+                Debug.Log("Changed block " + nodePosition);
+                monoBehaviour.StartCoroutine(delayedFindPath());
+            }
         }
 
         private void HandlePositionChanged (ISnakeModel arg1, Vector2Int arg2)
         {
-            if (!reasonedAboutNewBlock && (Time.time - lastReasonTime < reasoningTime))
+            if (Path == null)
             {
-                FindPath(block.x, block.y);
-                nextNode = 0;
-
-                reasonedAboutNewBlock = true;
+                if (reasonedAboutNewBlock)
+                {
+                    FindPath(block.x, block.y);
+                }
+                else
+                {
+                    return;
+                }
             }
 
+            Vector2Int input = Path[nextNode + 1].Position - snake.Position;
             nextNode++;
-            Vector2Int input = path[nextNode].Position - snake.Position;
             Debug.Log("Node: " + nextNode);
-            
+
             if (snake.Direction == input)
             {
                 return;
             }
 
-            
-            Debug.Log("From " + snake.Position + " to " + path[nextNode].Position + "Input: " + input);
+            Debug.Log("From " + snake.Position + " to " + Path[nextNode].Position + "Input: " + input);
             monoBehaviour.StartCoroutine(delayedInput(input));
         }
 
-        IEnumerator delayedInput (Vector2Int input)
+        private void HandleTimeToMoveChanged (float value)
         {
-            yield return new WaitForSeconds(0.15f);
+            safeInputTime = value - SAFE_INPUT_DELAY;
+        }
+
+        private IEnumerator delayedInput (Vector2Int input)
+        {
+            yield return new WaitForSeconds(safeInputTime);
             OnMovementRequested?.Invoke(input);
+        }
+
+        private IEnumerator delayedFindPath ()
+        {
+            Path = null;
+            yield return new WaitForSeconds(0.5f);
+
+            reasonedAboutNewBlock = true;
         }
 
         private void HandleBlockGenerated (Vector2Int position)
         {
             block = position;
             reasonedAboutNewBlock = false;
-            lastReasonTime = Time.time;
+            monoBehaviour.StartCoroutine(delayedFindPath());
         }
 
         private void FindPath (int endX, int endY)
         {
-            path = pathFinding.FindPath(snake.Position.x, snake.Position.y, endX, endY);
-            if (path != null)
+            Path = pathFinding.FindPath(snake.Position.x, snake.Position.y, endX, endY);
+            if (Path != null)
             {
-                for (int i = 0; i < path.Count - 1; i++)
+                for (int i = 0; i < Path.Count - 1; i++)
                 {
-                    Debug.DrawLine(new Vector3(path[i].x, path[i].y), new Vector3(path[i + 1].x, path[i + 1].y), color: Color.red);
+                    Debug.DrawLine(new Vector3(Path[i].x, Path[i].y), new Vector3(Path[i + 1].x, Path[i + 1].y), color: Color.red);
                     Debug.Break();
                 }
             }
-        }
 
-        private IEnumerator TickRoutine ()
-        {
-            while (true)
-            {
-                int directionIndex = UnityEngine.Random.Range(0, directions.Length);
-                OnMovementRequested?.Invoke(directions[directionIndex]);
-                yield return new WaitForSeconds(0.5f);
-            }
+            nextNode = 0;
         }
     }
 }
