@@ -482,6 +482,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 1642769486730304163, guid: cc745ba2e863a6d4da210ecd5466fbf3, type: 3}
+  primaryColor: {r: 0, g: 0, b: 0, a: 1}
+  secondaryColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &1440177774
 MonoBehaviour:
   m_ObjectHideFlags: 0
