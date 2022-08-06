@@ -1,15 +1,12 @@
 ﻿using LeandroExhumed.SnakeGame.Snake;
 using System;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Input
 {
     public class InputFacade : IMovementRequester
     {
-        public event Action<Vector2Int> OnMovementRequested;
-
-        public InputAction Movement => input.Gameplay.Movement;
+        public event Action<int> OnMovementRequested;
 
         private readonly PlayerInput input;
 
@@ -21,12 +18,12 @@ namespace LeandroExhumed.SnakeGame.Input
         public void Initialize ()
         {
             input.Enable();
-            input.Gameplay.Movement.performed += HandleMovementInputperformed;
+            input.Gameplay.Move.performed += HandleMovementInputperformed;
         }
 
         private void HandleMovementInputperformed (InputAction.CallbackContext obj)
         {
-            OnMovementRequested?.Invoke(Vector2Int.RoundToInt(obj.ReadValue<Vector2>()));
+            OnMovementRequested?.Invoke((int)(obj.ReadValue<float>()));
         }
     }
 }

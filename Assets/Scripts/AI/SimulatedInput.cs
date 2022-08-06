@@ -9,7 +9,7 @@ namespace LeandroExhumed.SnakeGame.AI
 {
     public class SimulatedInput : ISimulatedInput
     {
-        public event Action<Vector2Int> OnMovementRequested;
+        public event Action<int> OnMovementRequested;
         public event Action<List<PathNode>> OnPathChanged;
 
         private List<PathNode> Path
@@ -76,7 +76,7 @@ namespace LeandroExhumed.SnakeGame.AI
             targetNode = 0;
         }
 
-        private IEnumerator RequestMovementInput (Vector2Int input)
+        private IEnumerator RequestMovementInput (int input)
         {
             float reasoningTime = UnityEngine.Random.Range(MIN_INPUT_SPEED, MAX_INPUT_SPEED);
             yield return new WaitForSeconds(snake.TimeToMove - reasoningTime);
@@ -104,14 +104,32 @@ namespace LeandroExhumed.SnakeGame.AI
                 }
             }
 
-            Vector2Int input = Path[targetNode + 1].Position - snake.Position;
+            Vector2Int targetDirection = Path[targetNode + 1].Position - snake.Position;
             targetNode++;
 
-            if (snake.Direction == input)
+            if (snake.Direction == targetDirection)
             {
                 return;
             }
 
+            // TODO: Improve this
+            int input = 0;
+            if (targetDirection.y > 0)
+            {
+                input = snake.Direction.x > 0 ? -1 : 1;
+            }
+            else if (targetDirection.y < 0)
+            {
+                input = snake.Direction.x > 0 ? 1 : -1;
+            }
+            if (targetDirection.x > 0)
+            {
+                input = snake.Direction.y > 0 ? 1 : -1;
+            }
+            else if (targetDirection.x < 0)
+            {
+                input = snake.Direction.y > 0 ? -1 : 1;
+            }
             monoBehaviour.StartCoroutine(RequestMovementInput(input));
         }
 

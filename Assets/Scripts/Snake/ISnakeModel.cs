@@ -14,7 +14,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         float TimeToMove { get; }
 
         void Initialize (Vector2Int startPosition, Vector2Int startDirection);
-        void LookTo (Vector2Int direction);
+        void LookTo (int direction);
         void Grow ();
         void Tick ();
 

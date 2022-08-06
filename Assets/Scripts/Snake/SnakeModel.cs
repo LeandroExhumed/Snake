@@ -26,8 +26,6 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly IBodyPartModel.Factory bodyPartFactory;
         private readonly IGridModel<INode> grid;
 
-        private float timeToMove;
-
         public SnakeModel (SnakeData data, IBodyPartModel.Factory bodyPartFactory, IGridModel<INode> grid)
         {
             this.data = data;
@@ -49,16 +47,16 @@ namespace LeandroExhumed.SnakeGame.Snake
             TimeToMove = data.Speed;
         }
 
-        public void LookTo (Vector2Int direction)
+        public void LookTo (int direction)
         {
-            if (this.Direction.x == direction.x || this.Direction.y == direction.y)
+            if (direction < 0)
             {
-                return;
+                Direction = new Vector2Int(-Direction.y, Direction.x);
             }
-
-            Direction = direction;
-
-            //Move(direction);
+            else
+            {
+                Direction = new Vector2Int(Direction.y, -Direction.x);
+            }
         }
 
         public void Grow ()

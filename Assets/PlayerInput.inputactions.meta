@@ -11,4 +11,4 @@ ScriptedImporter:
   generateWrapperCode: 1
   wrapperCodePath: Assets/Scripts/Input/PlayerInput.cs
   wrapperClassName: 
-  wrapperCodeNamespace: LeadroExhumed.SnakeGame.Input
+  wrapperCodeNamespace: LeandroExhumed.SnakeGame.Input

@@ -5,7 +5,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public interface IMovementRequester
     {
-        event Action<Vector2Int> OnMovementRequested;
+        event Action<int> OnMovementRequested;
 
         void Initialize ();
     }

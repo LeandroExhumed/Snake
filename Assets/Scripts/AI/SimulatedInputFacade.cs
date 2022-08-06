@@ -23,7 +23,7 @@ namespace LeandroExhumed.SnakeGame.AI
             remove => model.OnPathChanged -= value;
         }
 
-        public event Action<Vector2Int> OnMovementRequested
+        public event Action<int> OnMovementRequested
         {
             add => model.OnMovementRequested += value;
             remove => model.OnMovementRequested -= value;

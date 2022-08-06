@@ -41,7 +41,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             movementRequester.Initialize();
         }
 
-        public void LookTo (Vector2Int direction) => model.LookTo(direction);
+        public void LookTo (int direction) => model.LookTo(direction);
 
         public void Grow () => model.Grow();
 

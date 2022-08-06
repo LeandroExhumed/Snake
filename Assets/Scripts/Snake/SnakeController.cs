@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
@@ -34,7 +33,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             model.Tick();
         }
 
-        private void HandleMovementInputPerformed (Vector2Int value)
+        private void HandleMovementInputPerformed (int value)
         {
 
             model.LookTo(value);
