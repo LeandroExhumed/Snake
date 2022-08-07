@@ -22,7 +22,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
 
         private Vector2Int position;
 
-        public void Initialize (Vector2Int startPosition)
+        public virtual void Initialize (Vector2Int startPosition)
         {
             Position = startPosition;
         }

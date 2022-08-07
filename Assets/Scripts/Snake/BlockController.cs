@@ -19,11 +19,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             model.OnPositionChanged += HandlePositionChanged;
             model.OnAttached += HandleAttached;
-        }
-
-        private void HandleAttached (Transform owner)
-        {
-            view.SetParent(owner);
+            model.OnBenefitRemoved += HandleBenefitRemoved;
         }
 
         private void HandlePositionChanged (INode model, Vector2Int value)
@@ -31,9 +27,21 @@ namespace LeandroExhumed.SnakeGame.Snake
             view.Position = value;
         }
 
+        private void HandleAttached (Transform owner)
+        {
+            view.SetParent(owner);
+        }
+
+        private void HandleBenefitRemoved ()
+        {
+            view.SetNoBenefitVisual();
+        }
+
         public void Dispose ()
         {
             model.OnPositionChanged -= HandlePositionChanged;
+            model.OnAttached -= HandleAttached;
+            model.OnBenefitRemoved -= HandleBenefitRemoved;
         }
     }
 }

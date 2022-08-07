@@ -18,9 +18,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public IBlockModel CreateRandomly (int startIndex = 0)
         {
-            int index = Random.Range(startIndex, factories.Length);
-            Debug.Log("Index: " + index);
-            return factories[index].Create();
+            return factories[Random.Range(startIndex, factories.Length)].Create();
         }
     }
 }

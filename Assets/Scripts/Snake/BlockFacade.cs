@@ -12,20 +12,26 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
         }
-        public event Action<Transform> OnAttached
-        {
-            add => model.OnAttached += value;
-            remove => model.OnAttached -= value;
-        }
         public event Action OnCollected
         {
             add => model.OnCollected += value;
             remove => model.OnCollected -= value;
         }
+        public event Action<Transform> OnAttached
+        {
+            add => model.OnAttached += value;
+            remove => model.OnAttached -= value;
+        }
+        public event Action OnBenefitRemoved
+        {
+            add => model.OnBenefitRemoved += value;
+            remove => model.OnBenefitRemoved -= value;
+        }
 
         public int ID => model.ID;
         public Vector2Int Position { get => model.Position; set => model.Position = value; }
         public bool IsAttached => model.IsAttached;
+        public bool HasBenefit => model.HasBenefit;
 
         private IBlockModel model;
         private BlockController controller;
@@ -46,6 +52,8 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void BeCollected (ICollector collector) => model.BeCollected(collector);
 
         public void Attach (Transform owner) => model.Attach(owner);
+
+        public void RemoveBenefit () => model.RemoveBenefit();
 
         private void OnDestroy ()
         {

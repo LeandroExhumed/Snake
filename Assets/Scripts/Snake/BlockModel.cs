@@ -7,9 +7,11 @@ namespace LeandroExhumed.SnakeGame.Snake
     public class BlockModel : CollectableModel, IBlockModel
     {
         public event Action<Transform> OnAttached;
+        public event Action OnBenefitRemoved;
 
         public int ID => data.ID;
         public bool IsAttached { get; private set; }
+        public bool HasBenefit { get; private set; }
 
         private readonly BlockData data;
 
@@ -18,10 +20,22 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.data = data;
         }
 
+        public override void Initialize (Vector2Int startPosition)
+        {
+            base.Initialize(startPosition);
+            HasBenefit = true;
+        }
+
         public void Attach (Transform owner)
         {
             IsAttached = true;
             OnAttached?.Invoke(owner);
+        }
+
+        public void RemoveBenefit ()
+        {
+            HasBenefit = false;
+            OnBenefitRemoved?.Invoke();
         }
     }
 }

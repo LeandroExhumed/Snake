@@ -13,9 +13,11 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action<IBlockModel> OnBlockAttached;
         public event Action OnHit;
 
-        public Vector2Int Position => attachedBlocks.Peek().Position;
+        public Vector2Int Position => Head.Position;
         public Vector2Int Direction { get; private set; }
         public float TimeToMove { get; private set; }
+
+        private IBlockModel Head => attachedBlocks.Peek();
 
         private readonly Stack<IBlockModel> attachedBlocks = new();
 
@@ -69,7 +71,6 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void CollectBatteringRam (IBlockModel block)
         {
             Grow(block);
-            Debug.Log("Battering ram effect applied.");
         }
 
         public void CollectEnginePower (IBlockModel block, float speedAddition)
@@ -100,7 +101,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void Move (Vector2Int direction)
         {
-            Vector2Int lastPosition = attachedBlocks.Peek().Position + direction;
+            Vector2Int lastPosition = Head.Position + direction;
             // TODO: Improve this.
             if (lastPosition.x == 30)
             {
@@ -144,7 +145,14 @@ namespace LeandroExhumed.SnakeGame.Snake
                 {
                     if (block.IsAttached)
                     {
-                        OnHit?.Invoke();
+                        if (Head is BatteringRamBlockModel batteringRam && batteringRam.HasBenefit)
+                        {
+                            Head.RemoveBenefit();
+                        }
+                        else
+                        {
+                            OnHit?.Invoke();
+                        }
                     }
                     else
                     {

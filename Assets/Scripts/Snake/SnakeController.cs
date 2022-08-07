@@ -47,6 +47,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Dispose ()
         {
+            model.OnBlockAttached -= HandleBlockAttached;
             model.OnHit -= HandleHit;
             view.OnUpdate -= HandleViewUpdate;
             input.OnMovementRequested -= HandleMovementInputPerformed;
