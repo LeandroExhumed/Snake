@@ -103,21 +103,21 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             Vector2Int lastPosition = Head.Position + direction;
             // TODO: Improve this.
-            if (lastPosition.x == 30)
+            if (lastPosition.x == levelGrid.Width)
             {
                 lastPosition.x = 0;
             }
             else if (lastPosition.x < 0)
             {
-                lastPosition.x = 29;
+                lastPosition.x = levelGrid.Width - 1;
             }
-            if (lastPosition.y == 30)
+            if (lastPosition.y == levelGrid.Height)
             {
                 lastPosition.y = 0;
             }
             else if (lastPosition.y < 0)
             {
-                lastPosition.y = 29;
+                lastPosition.y = levelGrid.Height - 1;
             }
 
             HandleDestination(lastPosition);

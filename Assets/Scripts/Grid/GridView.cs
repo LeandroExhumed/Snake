@@ -12,6 +12,8 @@ namespace LeandroExhumed.SnakeGame.Grid
         [SerializeField]
         private Color secondaryColor = Color.gray;
 
+        private const int GRID_SIZE = 1;
+
         public void Initialize (INode[,] array)
         {
             for (int x = 0; x < array.GetLength(0); x++)
@@ -29,6 +31,20 @@ namespace LeandroExhumed.SnakeGame.Grid
                     }
                 }
             }
+
+            CenterizeCamera(array);
+        }
+
+        private void CenterizeCamera (INode[,] array)
+        {
+            float xCenter = GetCellCenter(array.GetLength(0));
+            float yCenter = GetCellCenter(array.GetLength(1));
+            Camera.main.transform.position = new Vector3(xCenter, yCenter, Camera.main.transform.position.z);
+        }
+
+        private float GetCellCenter (int dimension)
+        {
+            return (dimension / 2) - GRID_SIZE;
         }
     }
 }

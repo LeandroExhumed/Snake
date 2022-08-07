@@ -8,6 +8,9 @@ namespace LeandroExhumed.SnakeGame.Match
     public class MatchContainer : MonoInstaller
     {
         [SerializeField]
+        private MatchData matchData;
+
+        [SerializeField]
         private GridFacade grid;
         [SerializeField]
         private SnakeFacade[] snakes;
@@ -15,6 +18,7 @@ namespace LeandroExhumed.SnakeGame.Match
         public override void InstallBindings ()
         {
             Container.Bind<MatchModel>().AsSingle();
+            Container.BindInstance(matchData).AsSingle();
 
             Container.Bind<Input.PlayerInput>().AsSingle();
 

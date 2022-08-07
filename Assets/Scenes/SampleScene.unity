@@ -430,14 +430,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96e80a50ad09f9b4cb71363139092582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchData: {fileID: 11400000, guid: bf7f15c2d22546545aa496c13949781a, type: 2}
   grid: {fileID: 1440177774}
   snakes:
   - {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
   - {fileID: 2229183097551860550, guid: 3df6c626424f59f40ae4e3b7e8dc4519, type: 3}
-  blocks:
-  - {fileID: 4139346495368554806, guid: 808e7368080c3c24fb9f9b3b76852cb3, type: 3}
-  - {fileID: 6660054321878462703, guid: 4548308932c93344793102b148b6bc93, type: 3}
-  - {fileID: 32238266029112, guid: 6ae22664f229e3346ae20d2b968ff68d, type: 3}
 --- !u!114 &1285814413
 MonoBehaviour:
   m_ObjectHideFlags: 0
