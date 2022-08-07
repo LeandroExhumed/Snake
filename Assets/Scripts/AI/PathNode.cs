@@ -1,11 +1,22 @@
 using LeandroExhumed.SnakeGame.Grid;
+using System;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
     public class PathNode : INode
     {
-        public Vector2Int Position { get => position; set => position = value; }
+        public event Action<INode, Vector2Int> OnPositionChanged;
+
+        public Vector2Int Position
+        {
+            get => position;
+            set
+            {
+                position = value;
+                OnPositionChanged?.Invoke(this, value);
+            }
+        }
 
         public int GCost { get; set; }
         public int HCost { get; set; }

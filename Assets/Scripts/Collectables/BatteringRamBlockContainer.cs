@@ -1,19 +1,13 @@
-﻿using Zenject;
+﻿using LeandroExhumed.SnakeGame.Snake;
 
 namespace LeandroExhumed.SnakeGame.Collectables
 {
-    public class BatteringRamBlockContainer : MonoInstaller
+    public class BatteringRamBlockContainer : BlockContainer
     {
-        public override void InstallBindings ()
+        protected override void ResolveMVC ()
         {
-            ResolveMVC();
-        }
-
-        private void ResolveMVC ()
-        {
-            Container.Bind<ICollectableModel>().To<BatteringRamBlockModel>().AsSingle();
-            Container.Bind<CollectableController>().AsSingle();
-            Container.BindInstance(GetComponent<CollectableView>()).AsSingle();
+            Container.Bind<IBlockModel>().To<BatteringRamBlockModel>().AsSingle();
+            base.ResolveMVC();
         }
     }
 }

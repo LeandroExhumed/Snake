@@ -2,11 +2,13 @@
 
 namespace LeandroExhumed.SnakeGame.Collectables
 {
-    public class BatteringRamBlockModel : CollectableModel
+    public class BatteringRamBlockModel : BlockModel
     {
+        public BatteringRamBlockModel (BlockData data) : base(data) { }
+
         public override void BeCollected (ICollector collector)
         {
-            collector.CollectBatteringRam();
+            collector.CollectBatteringRam(this);
             base.BeCollected(collector);
         }
     }

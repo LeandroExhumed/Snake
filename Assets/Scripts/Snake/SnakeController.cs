@@ -18,9 +18,15 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Setup ()
         {
+            model.OnBlockAttached += HandleBlockAttached;
             model.OnHit += HandleHit;
             view.OnUpdate += HandleViewUpdate;
             input.OnMovementRequested += HandleMovementInputPerformed;
+        }
+
+        private void HandleBlockAttached (IBlockModel block)
+        {
+            block.Attach(view.Transform);
         }
 
         private void HandleHit ()

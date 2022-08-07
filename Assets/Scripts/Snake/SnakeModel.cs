@@ -10,37 +10,38 @@ namespace LeandroExhumed.SnakeGame.Snake
     public class SnakeModel : ISnakeModel
     {
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
+        public event Action<IBlockModel> OnBlockAttached;
         public event Action OnHit;
 
-        public Vector2Int Position => bodyParts.Peek().Position;
+        public Vector2Int Position => attachedBlocks.Peek().Position;
         public Vector2Int Direction { get; private set; }
         public float TimeToMove { get; private set; }
 
-        private readonly Stack<IBodyPartModel> bodyParts = new();
+        private readonly Stack<IBlockModel> attachedBlocks = new();
 
         private float timer = 0f;
         private float speedDecreaseOnLoad = 0.05f;
 
         private readonly SnakeData data;
 
-        private readonly IBodyPartModel.Factory bodyPartFactory;
-        private readonly IGridModel<INode> grid;
+        private readonly BlockFactory blockFactory;
+        private readonly IGridModel<INode> levelGrid;
 
-        public SnakeModel (SnakeData data, IBodyPartModel.Factory bodyPartFactory, IGridModel<INode> grid)
+        public SnakeModel (SnakeData data, BlockFactory blockFactory, IGridModel<INode> levelGrid)
         {
             this.data = data;
-            this.bodyPartFactory = bodyPartFactory;
-            this.grid = grid;
+            this.blockFactory = blockFactory;
+            this.levelGrid = levelGrid;
         }
 
         public void Initialize (Vector2Int startPosition, Vector2Int startDirection)
         {
             for (int i = 0; i < data.Size; i++)
             {
-                Vector2Int partPosition = new(
+                Vector2Int blockPosition = new(
                     startPosition.x - ((data.Size - 1) - i) * startDirection.x,
                     startPosition.y);
-                AddBodyPart(partPosition);
+                AttachBlock(blockFactory.Create(1), blockPosition);
             }
 
             Direction = startDirection;
@@ -59,21 +60,21 @@ namespace LeandroExhumed.SnakeGame.Snake
             }
         }
 
-        public void Grow ()
+        public void Grow (IBlockModel block)
         {
             TimeToMove += speedDecreaseOnLoad;
-            AddBodyPart(Position);
+            AttachBlock(block, Position);
         }
 
-        public void CollectBatteringRam ()
+        public void CollectBatteringRam (IBlockModel block)
         {
-            Grow();
+            Grow(block);
             Debug.Log("Battering ram effect applied.");
         }
 
-        public void CollectEnginePower (float speedAddition)
+        public void CollectEnginePower (IBlockModel block, float speedAddition)
         {
-            Grow();
+            Grow(block);
             TimeToMove -= speedAddition;
         }
 
@@ -87,18 +88,20 @@ namespace LeandroExhumed.SnakeGame.Snake
             timer += Time.deltaTime;
         }
 
-        private void AddBodyPart (Vector2Int partPosition)
+        private void AttachBlock (IBlockModel block, Vector2Int position)
         {
-            IBodyPartModel bodyPart = bodyPartFactory.Create();
-            bodyPart.Initialize(partPosition);
-            bodyPart.OnPositionChanged += HandleHeadPositionChanged;
+            block.Initialize(position);
+            block.OnPositionChanged += HandleAttachedBlockPositionChanged;
 
-            bodyParts.Push(bodyPart);
+            attachedBlocks.Push(block);
+
+            OnBlockAttached?.Invoke(block);
         }
 
         private void Move (Vector2Int direction)
         {
-            Vector2Int lastPosition = bodyParts.Peek().Position + direction;
+            Vector2Int lastPosition = attachedBlocks.Peek().Position + direction;
+            // TODO: Improve this.
             if (lastPosition.x == 30)
             {
                 lastPosition.x = 0;
@@ -118,14 +121,14 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             HandleDestination(lastPosition);
 
-            foreach (IBodyPartModel item in bodyParts.ToList())
+            foreach (IBlockModel item in attachedBlocks.ToList())
             {
                 Vector2Int temp = item.Position;
                 item.Position = lastPosition;
                 lastPosition = temp;
             }
 
-            grid.SetNode(lastPosition, null);
+            levelGrid.SetNode(lastPosition, null);
 
             timer = 0f;
 
@@ -134,12 +137,19 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleDestination (Vector2Int value)
         {
-            INode targetNode = grid.GetNode(value);
+            INode targetNode = levelGrid.GetNode(value);
             if (targetNode != null)
             {
-                if (targetNode is IBodyPartModel)
+                if (targetNode is IBlockModel block)
                 {
-                    OnHit?.Invoke();
+                    if (block.IsAttached)
+                    {
+                        OnHit?.Invoke();
+                    }
+                    else
+                    {
+                        block.BeCollected(this);
+                    }
                 }
                 else if (targetNode is ICollectableModel collectable)
                 {
@@ -148,9 +158,9 @@ namespace LeandroExhumed.SnakeGame.Snake
             }
         }
 
-        private void HandleHeadPositionChanged (IBodyPartModel bodyPart, Vector2Int value)
+        private void HandleAttachedBlockPositionChanged (INode block, Vector2Int value)
         {
-            grid.SetNode(value, bodyPart);
+            levelGrid.SetNode(value, block);
         }
     }
 }

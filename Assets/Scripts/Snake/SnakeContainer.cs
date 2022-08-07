@@ -1,5 +1,4 @@
-﻿using LeandroExhumed.SnakeGame.AI;
-using LeandroExhumed.SnakeGame.Input;
+﻿using LeandroExhumed.SnakeGame.Input;
 using UnityEngine;
 using Zenject;
 
@@ -12,9 +11,6 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         [SerializeField]
         private SnakeData data;
-
-        [SerializeField]
-        private BodyPartFacade bodyPartPrefab;
 
         public override void InstallBindings ()
         {
@@ -29,9 +25,6 @@ namespace LeandroExhumed.SnakeGame.Snake
                 Container.BindInstance(GetComponent<MonoBehaviour>()).AsSingle();
                 Container.Bind<IMovementRequester>().FromComponentInNewPrefabResource("SimulatedInput").AsSingle();
             }
-
-            Container.BindFactory<IBodyPartModel, IBodyPartModel.Factory>().FromComponentInNewPrefab(bodyPartPrefab)
-                .AsSingle();
         }
 
         private void ResolveMVC ()

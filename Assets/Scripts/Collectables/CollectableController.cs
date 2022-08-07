@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Grid;
+using System;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Collectables
@@ -20,7 +21,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
             model.OnCollected += HandleCollected;
         }
 
-        private void HandlePositionChanged (Vector2Int value)
+        private void HandlePositionChanged (INode _, Vector2Int value)
         {
             view.Position = value;
         }

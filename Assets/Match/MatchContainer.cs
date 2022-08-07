@@ -1,4 +1,3 @@
-using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Snake;
 using UnityEngine;
@@ -13,9 +12,6 @@ namespace LeandroExhumed.SnakeGame.Match
         [SerializeField]
         private SnakeFacade[] snakes;
 
-        [SerializeField]
-        private CollectableFacade[] collectables;
-
         public override void InstallBindings ()
         {
             Container.Bind<MatchModel>().AsSingle();
@@ -29,11 +25,14 @@ namespace LeandroExhumed.SnakeGame.Match
                 Container.BindFactory<ISnakeModel, ISnakeModel.Factory>().FromComponentInNewPrefab(snakes[i])
                     .AsCached();
             }
-            for (int i = 0; i < collectables.Length; i++)
+            // TODO: Change magic number (3).
+            for (int i = 0; i < 3; i++)
             {
-                Container.BindFactory<ICollectableModel, ICollectableModel.Factory>()
-                    .FromComponentInNewPrefab(collectables[i]).AsCached();
+                string resource = string.Concat("Blocks/", i + 1);
+                Container.BindFactory<IBlockModel, IBlockModel.Factory>()
+                    .FromComponentInNewPrefabResource(resource).AsCached();
             }
+            Container.Bind<BlockFactory>().AsSingle();
         }
     } 
 }

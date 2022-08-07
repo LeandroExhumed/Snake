@@ -11,6 +11,11 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
         }
+        public event Action<IBlockModel> OnBlockAttached
+        {
+            add => model.OnBlockAttached += value;
+            remove => model.OnBlockAttached -= value;
+        }
         public event Action OnHit
         {
             add => model.OnHit += value;
@@ -43,11 +48,11 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void LookTo (int direction) => model.LookTo(direction);
 
-        public void Grow () => model.Grow();
+        public void Grow (IBlockModel block) => model.Grow(block);
 
-        public void CollectEnginePower (float speedAddition) => model.CollectEnginePower(speedAddition);
+        public void CollectEnginePower (IBlockModel block, float speedAddition) => model.CollectEnginePower(block, speedAddition);
 
-        public void CollectBatteringRam () => model.CollectBatteringRam();
+        public void CollectBatteringRam (IBlockModel block) => model.CollectBatteringRam(block);
 
         public void Tick () => model.Tick();
 

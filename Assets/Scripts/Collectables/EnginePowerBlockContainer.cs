@@ -1,19 +1,13 @@
-﻿using Zenject;
+﻿using LeandroExhumed.SnakeGame.Snake;
 
 namespace LeandroExhumed.SnakeGame.Collectables
 {
-    public class EnginePowerBlockContainer : MonoInstaller
+    public class EnginePowerBlockContainer : BlockContainer
     {
-        public override void InstallBindings ()
+        protected override void ResolveMVC ()
         {
-            ResolveMVC();
-        }
-
-        private void ResolveMVC ()
-        {
-            Container.Bind<ICollectableModel>().To<EnginePowerBlockModel>().AsSingle();
-            Container.Bind<CollectableController>().AsSingle();
-            Container.BindInstance(GetComponent<CollectableView>()).AsSingle();
+            Container.Bind<IBlockModel>().To<EnginePowerBlockModel>().AsSingle();
+            base.ResolveMVC();
         }
     }
 }

@@ -7,6 +7,7 @@ namespace LeandroExhumed.SnakeGame.Snake
     public interface ISnakeModel : ICollector
     {
         event Action<ISnakeModel, Vector2Int> OnPositionChanged;
+        event Action<IBlockModel> OnBlockAttached;
         event Action OnHit;
 
         Vector2Int Position { get; }
@@ -15,7 +16,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         void Initialize (Vector2Int startPosition, Vector2Int startDirection);
         void LookTo (int direction);
-        void Grow ();
+        void Grow (IBlockModel block);
         void Tick ();
 
         public class Factory : PlaceholderFactory<ISnakeModel> { }

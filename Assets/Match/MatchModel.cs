@@ -1,5 +1,4 @@
-﻿using LeandroExhumed.SnakeGame.Collectables;
-using LeandroExhumed.SnakeGame.Grid;
+﻿using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Snake;
 using UnityEngine;
 
@@ -15,19 +14,19 @@ namespace LeandroExhumed.SnakeGame.Match
             new Vector2Int(3, 1),
             new Vector2Int(27, 29)
         };
-        private ICollectableModel block;
+        private IBlockModel block;
         private ISnakeModel[] snakes;
 
         private readonly IGridModel<INode> grid;
 
         private readonly ISnakeModel.Factory[] snakeFactories;
-        private readonly ICollectableModel.Factory[] collectableFactories;
+        private readonly BlockFactory blockFactory;
 
-        public MatchModel (IGridModel<INode> grid, ISnakeModel.Factory[] snakeFactories, ICollectableModel.Factory[] collectableFactories)
+        public MatchModel (IGridModel<INode> grid, ISnakeModel.Factory[] snakeFactories, BlockFactory blockFactory)
         {
             this.grid = grid;
             this.snakeFactories = snakeFactories;
-            this.collectableFactories = collectableFactories;
+            this.blockFactory = blockFactory;
         }
 
         public void Initialize ()
@@ -60,7 +59,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void GenerateBlock ()
         {
-            block = collectableFactories[Random.Range(0, collectableFactories.Length)].Create();
+            block = blockFactory.CreateRandomly(1);
             Vector2Int spawnPosition;
             do
             {

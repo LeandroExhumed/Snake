@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4012382882875780137}
   - component: {fileID: 4945456635557921054}
-  - component: {fileID: 6858748204860083855}
-  - component: {fileID: 8698543626295987950}
+  - component: {fileID: 4139346495368554806}
+  - component: {fileID: -6204559084049262268}
   m_Layer: 0
-  m_Name: Collectable
+  m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}
---- !u!114 &6858748204860083855
+--- !u!114 &4139346495368554806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62,10 +62,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3417091087213469694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f6e7bbd1db42ce488b04759ac597d7f, type: 3}
+  m_Script: {fileID: 11500000, guid: 41e984218bce8e949b71221ab6189883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8698543626295987950
+--- !u!114 &-6204559084049262268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3417091087213469694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4730d16bbd37c2479e1528c04d1469b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3abfe4ae83e7af341be2c1d271bad8a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7658470512545777431

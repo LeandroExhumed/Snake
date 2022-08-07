@@ -8,6 +8,8 @@ namespace LeandroExhumed.SnakeGame.Snake
     {
         public event Action OnUpdate;
 
+        public Transform Transform => transform;
+
         private const int BLINK_AMOUNT = 5;
         private const float BLINK_RATE = 0.1F;
 

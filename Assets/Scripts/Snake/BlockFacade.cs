@@ -1,17 +1,21 @@
 ﻿using LeandroExhumed.SnakeGame.Grid;
-using LeandroExhumed.SnakeGame.Snake;
 using System;
 using UnityEngine;
 using Zenject;
 
-namespace LeandroExhumed.SnakeGame.Collectables
+namespace LeandroExhumed.SnakeGame.Snake
 {
-    public class CollectableFacade : MonoBehaviour, ICollectableModel
+    public class BlockFacade : MonoBehaviour, IBlockModel
     {
         public event Action<INode, Vector2Int> OnPositionChanged
         {
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
+        }
+        public event Action<Transform> OnAttached
+        {
+            add => model.OnAttached += value;
+            remove => model.OnAttached -= value;
         }
         public event Action OnCollected
         {
@@ -19,23 +23,29 @@ namespace LeandroExhumed.SnakeGame.Collectables
             remove => model.OnCollected -= value;
         }
 
+        public int ID => model.ID;
         public Vector2Int Position { get => model.Position; set => model.Position = value; }
+        public bool IsAttached => model.IsAttached;
 
-        private ICollectableModel model;
-        private CollectableController controller;
+        private IBlockModel model;
+        private BlockController controller;
 
         [Inject]
-        public void Constructor (ICollectableModel model, CollectableController controller)
+        public void Constructor (IBlockModel model, BlockController controller)
         {
             this.model = model;
             this.controller = controller;
-
-            controller.Setup();
         }
 
-        public void Initialize (Vector2Int startPosition) => model.Initialize(startPosition);
+        public void Initialize (Vector2Int initialPosition)
+        {
+            controller.Setup();
+            model.Initialize(initialPosition);
+        }
 
         public void BeCollected (ICollector collector) => model.BeCollected(collector);
+
+        public void Attach (Transform owner) => model.Attach(owner);
 
         private void OnDestroy ()
         {

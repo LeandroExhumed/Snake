@@ -100,7 +100,11 @@ namespace LeandroExhumed.SnakeGame.AI
                 for (int y = 0; y < grid.Height; y++)
                 {
                     Vector2Int position = new(x, y);
-                    bool isWalkable = levelGrid.GetNode(position) is not IBodyPartModel;
+                    bool isWalkable = true;
+                    if (levelGrid.GetNode(position) is IBlockModel block)
+                    {
+                        isWalkable = !block.IsAttached;
+                    }
                     grid.SetNode(position, new PathNode(new(x, y), isWalkable));
                 }
             }
