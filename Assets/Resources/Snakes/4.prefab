@@ -8,6 +8,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1685952877153199158, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 9158e5c11e9b583419404f06f83979c2, type: 2}
+    - target: {fileID: 1685952877153199158, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
       propertyPath: isAI
       value: 1
       objectReference: {fileID: 0}
@@ -57,7 +61,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8264877065908896230, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
       propertyPath: m_Name
-      value: Snake
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}

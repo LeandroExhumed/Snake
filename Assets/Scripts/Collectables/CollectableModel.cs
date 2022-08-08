@@ -22,14 +22,19 @@ namespace LeandroExhumed.SnakeGame.Collectables
 
         private Vector2Int position;
 
-        public virtual void Initialize (Vector2Int startPosition)
+        protected ICollector owner;
+
+        public virtual void Initialize (Vector2Int startPosition, ICollector owner = null)
         {
             Position = startPosition;
+            this.owner = owner;
         }
 
-        public virtual void BeCollected (ICollector collector)
+        public virtual void BeCollected ()
         {
             OnCollected?.Invoke();
         }
+
+        public virtual void ApplyEffect () { }
     }
 }

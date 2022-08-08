@@ -33,9 +33,12 @@ namespace LeandroExhumed.SnakeGame.Collectables
             controller.Setup();
         }
 
-        public void Initialize (Vector2Int startPosition) => model.Initialize(startPosition);
+        public void Initialize (Vector2Int startPosition, ICollector owner = null)
+            => model.Initialize(startPosition, owner);
 
-        public void BeCollected (ICollector collector) => model.BeCollected(collector);
+        public void BeCollected () => model.BeCollected();
+
+        public void ApplyEffect () => model.ApplyEffect();
 
         private void OnDestroy ()
         {

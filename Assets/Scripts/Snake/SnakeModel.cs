@@ -38,12 +38,12 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Initialize (Vector2Int startPosition, Vector2Int startDirection)
         {
-            for (int i = 0; i < data.Size; i++)
+            for (int i = 0; i < data.StartingBlocks.Length; i++)
             {
                 Vector2Int blockPosition = new(
-                    startPosition.x - ((data.Size - 1) - i) * startDirection.x,
+                    startPosition.x - ((data.StartingBlocks.Length - 1) - i) * startDirection.x,
                     startPosition.y);
-                AttachBlock(blockFactory.Create(1), blockPosition);
+                AttachBlock(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition);
             }
 
             Direction = startDirection;
@@ -70,12 +70,10 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void CollectBatteringRam (IBlockModel block)
         {
-            Grow(block);
         }
 
         public void CollectEnginePower (IBlockModel block, float speedAddition)
         {
-            Grow(block);
             TimeToMove -= speedAddition;
         }
 
@@ -91,7 +89,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void AttachBlock (IBlockModel block, Vector2Int position)
         {
-            block.Initialize(position);
+            block.Initialize(position, this);
+            block.ApplyEffect();
             block.OnPositionChanged += HandleAttachedBlockPositionChanged;
 
             attachedBlocks.Push(block);
@@ -156,12 +155,13 @@ namespace LeandroExhumed.SnakeGame.Snake
                     }
                     else
                     {
-                        block.BeCollected(this);
+                        block.BeCollected();
+                        Grow(block);
                     }
                 }
                 else if (targetNode is ICollectableModel collectable)
                 {
-                    collectable.BeCollected(this);
+                    collectable.BeCollected();
                 }
             }
         }

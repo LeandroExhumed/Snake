@@ -1,6 +1,9 @@
 ﻿using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Snake;
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
@@ -19,13 +22,13 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private readonly IGridModel<INode> grid;
 
-        private readonly ISnakeModel.Factory[] snakeFactories;
+        private readonly SnakeFactory snakeFactory;
         private readonly BlockFactory blockFactory;
 
-        public MatchModel (IGridModel<INode> grid, ISnakeModel.Factory[] snakeFactories, BlockFactory blockFactory)
+        public MatchModel (IGridModel<INode> grid, SnakeFactory snakeFactory, BlockFactory blockFactory)
         {
             this.grid = grid;
-            this.snakeFactories = snakeFactories;
+            this.snakeFactory = snakeFactory;
             this.blockFactory = blockFactory;
         }
 
@@ -44,12 +47,12 @@ namespace LeandroExhumed.SnakeGame.Match
                 Vector2Int startDirection;
                 if (i % 2 == 0)
                 {
-                    snake = snakeFactories[0].Create();
+                    snake = snakeFactory.Create(1);
                     startDirection = Vector2Int.right;
                 }
                 else
                 {
-                    snake = snakeFactories[1].Create();
+                    snake = snakeFactory.Create(4);
                     startDirection = Vector2Int.left;
                 }
                 snake.Initialize(spawnPositions[i], startDirection);
@@ -63,7 +66,7 @@ namespace LeandroExhumed.SnakeGame.Match
             Vector2Int spawnPosition;
             do
             {
-                spawnPosition = new(Random.Range(0, grid.Width), Random.Range(0, grid.Height));
+                spawnPosition = new(UnityEngine.Random.Range(0, grid.Width), UnityEngine.Random.Range(0, grid.Height));
             } while (grid.GetNode(spawnPosition) != null);
             block.Initialize(spawnPosition);
             block.OnCollected += HandleBlockCollected;

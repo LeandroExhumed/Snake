@@ -10,8 +10,9 @@ namespace LeandroExhumed.SnakeGame.Collectables
     {
         event Action OnCollected;
 
-        void Initialize (Vector2Int startPosition);
-        void BeCollected (ICollector collector);
+        void Initialize (Vector2Int startPosition, ICollector owner = null);
+        void BeCollected ();
+        void ApplyEffect ();
 
         public class Factory : PlaceholderFactory<ICollectableModel> { }
     }

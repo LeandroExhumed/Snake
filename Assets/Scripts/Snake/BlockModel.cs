@@ -20,9 +20,9 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.data = data;
         }
 
-        public override void Initialize (Vector2Int startPosition)
+        public override void Initialize (Vector2Int startPosition, ICollector owner = null)
         {
-            base.Initialize(startPosition);
+            base.Initialize(startPosition, owner);
             HasBenefit = true;
         }
 

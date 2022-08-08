@@ -10,7 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a078109c8d11bbf4faa44a5d08584c5f, type: 3}
-  m_Name: Snake
+  m_Name: Leandro
   m_EditorClassIdentifier: 
-  size: 3
+  id: 4
+  startingBlocks:
+  - {fileID: 11400000, guid: 88a76fcec92e7514face7641ba2d2173, type: 2}
+  - {fileID: 11400000, guid: 88a76fcec92e7514face7641ba2d2173, type: 2}
+  - {fileID: 11400000, guid: 88a76fcec92e7514face7641ba2d2173, type: 2}
   speed: 0.25

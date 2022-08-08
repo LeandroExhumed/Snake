@@ -43,13 +43,15 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.controller = controller;
         }
 
-        public void Initialize (Vector2Int initialPosition)
+        public void Initialize (Vector2Int initialPosition, ICollector owner = null)
         {
             controller.Setup();
-            model.Initialize(initialPosition);
+            model.Initialize(initialPosition, owner);
         }
 
-        public void BeCollected (ICollector collector) => model.BeCollected(collector);
+        public void BeCollected () => model.BeCollected();
+
+        public void ApplyEffect () => model.ApplyEffect();
 
         public void Attach (Transform owner) => model.Attach(owner);
 

@@ -11,9 +11,12 @@ namespace LeandroExhumed.SnakeGame.Match
         private MatchData matchData;
 
         [SerializeField]
-        private GridFacade grid;
+        private SnakeList snakeList;
         [SerializeField]
-        private SnakeFacade[] snakes;
+        private BlockList blockList;
+
+        [SerializeField]
+        private GridFacade grid;
 
         public override void InstallBindings ()
         {
@@ -24,18 +27,19 @@ namespace LeandroExhumed.SnakeGame.Match
 
             Container.Bind<IGridModel<INode>>().FromInstance(grid);
 
-            for (int i = 0; i < snakes.Length; i++)
+            for (int i = 0; i < snakeList.Snakes.Length; i++)
             {
-                Container.BindFactory<ISnakeModel, ISnakeModel.Factory>().FromComponentInNewPrefab(snakes[i])
+                string resource = string.Concat("Snakes/", snakeList.Snakes[i].ID);
+                Container.BindFactory<ISnakeModel, ISnakeModel.Factory>().FromComponentInNewPrefabResource(resource)
                     .AsCached();
             }
-            // TODO: Change magic number (3).
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < blockList.Blocks.Length; i++)
             {
-                string resource = string.Concat("Blocks/", i + 1);
-                Container.BindFactory<IBlockModel, IBlockModel.Factory>()
-                    .FromComponentInNewPrefabResource(resource).AsCached();
+                string resource = string.Concat("Blocks/", blockList.Blocks[i].ID);
+                Container.BindFactory<IBlockModel, IBlockModel.Factory>().FromComponentInNewPrefabResource(resource)
+                    .AsCached();
             }
+            Container.Bind<SnakeFactory>().AsSingle();
             Container.Bind<BlockFactory>().AsSingle();
         }
     } 

@@ -431,10 +431,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   matchData: {fileID: 11400000, guid: bf7f15c2d22546545aa496c13949781a, type: 2}
+  snakeList: {fileID: 11400000, guid: deb0fdc0425731a46b59477e92d42ab9, type: 2}
+  blockList: {fileID: 11400000, guid: 42f8ba2f4374eef46a97f1a7f2c4fc13, type: 2}
   grid: {fileID: 1440177774}
-  snakes:
-  - {fileID: 2782504903655805551, guid: aeac315494885aa4a9dcac2edf788af6, type: 3}
-  - {fileID: 2229183097551860550, guid: 3df6c626424f59f40ae4e3b7e8dc4519, type: 3}
 --- !u!114 &1285814413
 MonoBehaviour:
   m_ObjectHideFlags: 0
