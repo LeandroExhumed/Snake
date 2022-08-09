@@ -42,6 +42,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
                 blinksExecuted++;
             }
+
+            Destroy(gameObject);
         }
     }
 }

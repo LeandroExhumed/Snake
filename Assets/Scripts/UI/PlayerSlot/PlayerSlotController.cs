@@ -36,6 +36,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             model.OnEnabled += HandleEnabled;
             model.OnSnakeShown += HandleSnakeShown;
             model.OnSnakeSelected += HandleSnakeSelected;
+            model.OnDisabled += HandleDisabled;
             view.OnConfirmationKeyPressed += HandleConfirmationKeyPressed;
         }
 
@@ -43,8 +44,8 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         {
             Input = input;
 
-            view.ShowKeysIcons();
-            view.ShowSnakePreview();
+            view.SetKeysIconsActive(true);
+            view.SetSnakePreviewActive(true);
             view.SetSelectSnakeTextActive(true);
         }
 
@@ -56,7 +57,15 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private void HandleSnakeSelected (int selectedSnakeID, int playerNumber, IMovementRequester input)
         {
             view.SetSelectSnakeTextActive(false);
-            view.ShowOkIcon();
+            view.SetOkIconActive(true);
+        }
+
+        private void HandleDisabled ()
+        {
+            view.SetKeysIconsActive(false);
+            view.SetSnakePreviewActive(false);
+            view.SetSelectSnakeTextActive(false);
+            view.SetOkIconActive(false);
         }
 
         private void HandleConfirmationKeyPressed ()
@@ -88,8 +97,12 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             model.OnEnabled -= HandleEnabled;
             model.OnSnakeShown -= HandleSnakeShown;
             model.OnSnakeSelected -= HandleSnakeSelected;
+            model.OnDisabled -= HandleDisabled;
             view.OnConfirmationKeyPressed -= HandleConfirmationKeyPressed;
-            Input.OnMovementRequested -= HandleMovementRequested;
+            if (Input != null)
+            {
+                Input.OnMovementRequested -= HandleMovementRequested; 
+            }
         }
     }
 }

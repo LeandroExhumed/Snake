@@ -49,7 +49,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             block.Attach(view.Transform);
         }
 
-        private void HandleHit ()
+        private void HandleHit (ISnakeModel model)
         {
             view.PlayBlinkingEffect();
         }

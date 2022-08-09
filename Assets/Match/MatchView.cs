@@ -7,6 +7,8 @@ namespace LeandroExhumed.SnakeGame.Match
     public class MatchView : MonoBehaviour
     {
         [SerializeField]
+        private TextMeshProUGUI winnerMessageText;
+        [SerializeField]
         private Vector2 guideOffset;
 
         [SerializeField]
@@ -25,6 +27,16 @@ namespace LeandroExhumed.SnakeGame.Match
 
             Vector3 fixedPosition = new(targetPosition.x + guideOffset.x, targetPosition.y + guideOffset.y, 0);
             guides[player].transform.position = Camera.main.WorldToScreenPoint(fixedPosition);
+        }
+
+        public void SetWinnerMessage (string winner)
+        {
+            winnerMessageText.text = $"{winner} WON!";
+        }
+
+        public void SetWinnerMessageActive (bool value)
+        {
+            winnerMessageText.gameObject.SetActive(value);
         }
 
         public void RemoveGuide (int player)

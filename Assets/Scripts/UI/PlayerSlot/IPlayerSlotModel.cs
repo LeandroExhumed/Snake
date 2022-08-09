@@ -10,11 +10,13 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         event Action<IMovementRequester> OnEnabled;
         event Action<int[]> OnSnakeShown;
         event Action<int, int, IMovementRequester> OnSnakeSelected;
+        event Action OnDisabled;
 
         void Initialize (int playerNumber);
         void Enable (IMovementRequester input);
-        void Confirm ();
         void ShowPreviousSnake ();
         void ShowNextSnake ();
+        void Confirm ();
+        void Disable ();
     }
 }

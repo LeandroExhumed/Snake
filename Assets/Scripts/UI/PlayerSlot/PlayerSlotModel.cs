@@ -10,6 +10,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         public event Action<IMovementRequester> OnEnabled;
         public event Action<int[]> OnSnakeShown;
         public event Action<int, int, IMovementRequester> OnSnakeSelected;
+        public event Action OnDisabled;
 
         public SlotState State { get; private set; }
 
@@ -62,6 +63,12 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         {
             State = SlotState.Playing;
             OnSnakeSelected?.Invoke(snakes[currentSnake].ID, playerNumber, input);
+        }
+
+        public void Disable ()
+        {
+            State = SlotState.Waiting;
+            OnDisabled?.Invoke();
         }
 
         private void ShowSnake ()

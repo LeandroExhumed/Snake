@@ -3,6 +3,7 @@ using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Input;
 using LeandroExhumed.SnakeGame.Snake;
 using LeandroExhumed.SnakeGame.UI.PlayerSlot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,9 +13,11 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchModel : IMatchModel
     {
-        public event System.Action OnInitialized;
-        public event System.Action<Vector2Int> OnBlockGenerated;
-        public event System.Action<int, Vector2Int> OnSnakePositionChanged;
+        public event Action OnInitialized;
+        public event Action<Vector2Int> OnBlockGenerated;
+        public event Action<int> OnPlayerLeft;
+        public event Action<int, Vector2Int> OnSnakePositionChanged;
+        public event Action<int> OnOver;
 
         private int snakesPerMatch = 2;
         private readonly Vector2Int[] spawnPositions =
@@ -25,6 +28,7 @@ namespace LeandroExhumed.SnakeGame.Match
         private IBlockModel block;
 
         private readonly Dictionary<ISnakeModel, int> players = new();
+        private readonly List<ISnakeModel> snakes = new();
 
         private readonly IGridModel<INode> grid;
 
@@ -102,6 +106,8 @@ namespace LeandroExhumed.SnakeGame.Match
                 }
                 snake.Initialize(spawnPositions[i], startDirection, _input);
                 snake.OnHit += HandleSnakeHit;
+
+                snakes.Add(snake);
             }
         }
 
@@ -130,9 +136,33 @@ namespace LeandroExhumed.SnakeGame.Match
             Debug.Log("You died!");
         }
 
-        private void HandleSnakeHit ()
+        private void RemoveSnake (ISnakeModel snake)
         {
-            End();
+            if (players.ContainsKey(snake))
+            {
+                int playerNumber = players[snake];
+                playerSlots[playerNumber - 1].Disable();
+                players.Remove(snake);
+
+                snake.OnPositionChanged -= HandleSnakePositionChanged;
+
+                OnPlayerLeft?.Invoke(playerNumber);
+            }
+
+            snake.OnHit -= HandleSnakeHit;
+            snakes.Remove(snake);
+        }
+
+        private void HandleSnakeHit (ISnakeModel snake)
+        {
+            RemoveSnake(snake);
+
+            if (snakes.Count == 1)
+            {
+                int playerNumber = players.TryGetValue(snake, out int number) ? number : 0;
+                OnOver?.Invoke(playerNumber);
+                End();
+            }
         }
 
         private void HandleSnakePositionChanged (ISnakeModel snake, Vector2Int position)

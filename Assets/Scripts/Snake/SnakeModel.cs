@@ -13,7 +13,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action<IMovementRequester> OnInitialized;
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnBlockAttached;
-        public event Action OnHit;
+        public event Action<ISnakeModel> OnHit;
 
         public Vector2Int Position => Head.Position;
         public Vector2Int Direction { get; private set; }
@@ -25,6 +25,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private float timer = 0f;
         private float speedDecreaseOnLoad = 0.05f;
+        private bool isAlive = true;
 
         private readonly SnakeData data;
 
@@ -83,6 +84,11 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Tick ()
         {
+            if (!isAlive)
+            {
+                return;
+            }
+
             if (timer >= TimeToMove)
             {
                 Move(Direction);
@@ -154,7 +160,8 @@ namespace LeandroExhumed.SnakeGame.Snake
                         }
                         else
                         {
-                            OnHit?.Invoke();
+                            isAlive = false;
+                            OnHit?.Invoke(this);
                         }
                     }
                     else

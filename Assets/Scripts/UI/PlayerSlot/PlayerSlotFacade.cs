@@ -22,6 +22,11 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             add => model.OnSnakeSelected += value;
             remove => model.OnSnakeSelected -= value;
         }
+        public event Action OnDisabled
+        {
+            add => model.OnDisabled += value;
+            remove => model.OnDisabled -= value;
+        }
 
         public SlotState State => model.State;
 
@@ -50,6 +55,11 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private void OnDestroy ()
         {
             controller.Dispose();
+        }
+
+        public void Disable ()
+        {
+            model.Disable();
         }
     }
 }

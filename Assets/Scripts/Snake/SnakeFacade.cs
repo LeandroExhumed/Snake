@@ -22,7 +22,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnBlockAttached += value;
             remove => model.OnBlockAttached -= value;
         }
-        public event Action OnHit
+        public event Action<ISnakeModel> OnHit
         {
             add => model.OnHit += value;
             remove => model.OnHit -= value;

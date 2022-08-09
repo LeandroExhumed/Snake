@@ -6,6 +6,8 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchController : IDisposable
     {
+        private const string AI_NAME = "AI";
+
         private readonly IMatchModel model;
         private readonly MatchView view;
 
@@ -22,7 +24,15 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             model.OnInitialized += HandleInitialized;
             model.OnSnakePositionChanged += HandleSnakePositionChanged;
+            model.OnPlayerLeft += HandlePlayerLeft;
+            model.OnOver += HandleOver;
             lobby.OnNewPlayerJoined += HandleNewPlayerJoined;
+        }
+
+        private void HandleOver (int playerNumber)
+        {
+            view.SetWinnerMessageActive(true);
+            view.SetWinnerMessage(playerNumber != 0 ? $"P{playerNumber}" : AI_NAME);
         }
 
         private void HandleSnakePositionChanged (int player, Vector2Int position)
@@ -35,6 +45,11 @@ namespace LeandroExhumed.SnakeGame.Match
             lobby.Initialize();
         }
 
+        private void HandlePlayerLeft (int playerNumber)
+        {
+            view.RemoveGuide(playerNumber);
+        }
+
         private void HandleNewPlayerJoined (InputAction inputAction)
         {
             model.AddPlayer(inputAction);
@@ -44,6 +59,7 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             model.OnInitialized -= HandleInitialized;
             model.OnSnakePositionChanged -= HandleSnakePositionChanged;
+            model.OnPlayerLeft -= HandlePlayerLeft;
             lobby.OnNewPlayerJoined -= HandleNewPlayerJoined;
         }
     }

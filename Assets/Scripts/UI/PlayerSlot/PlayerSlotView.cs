@@ -39,16 +39,13 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             rightKeyImage.sprite = GetKeySprite(rightKey);
         }
 
-        public void ShowKeysIcons ()
+        public void SetKeysIconsActive (bool value)
         {
-            leftKeyImage.gameObject.SetActive(true);
-            rightKeyImage.gameObject.SetActive(true);
+            leftKeyImage.gameObject.SetActive(value);
+            rightKeyImage.gameObject.SetActive(value);
         }
 
-        public void ShowSnakePreview ()
-        {
-            snakePreview.SetActive(true);
-        }
+        public void SetSnakePreviewActive (bool value) => snakePreview.SetActive(value);
 
         public void ShowSnake (int[] blockIDs)
         {
@@ -70,7 +67,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         public void SetSelectSnakeTextActive (bool value) => selectSnakeText.SetActive(value);
 
-        public void ShowOkIcon () => checkMarkIcon.SetActive(true);
+        public void SetOkIconActive (bool value) => checkMarkIcon.SetActive(value);
 
         private void Update ()
         {
