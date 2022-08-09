@@ -59,6 +59,16 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Tick () => model.Tick();
 
+        public override bool Equals (object other)
+        {
+            return model != null ? model.Equals(other) : base.Equals(other);
+        }
+
+        public override int GetHashCode ()
+        {
+            return model != null ? model.GetHashCode() : base.GetHashCode();
+        }
+
         private void OnDestroy ()
         {
             controller.Dispose();

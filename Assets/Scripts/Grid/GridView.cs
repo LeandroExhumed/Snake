@@ -12,7 +12,7 @@ namespace LeandroExhumed.SnakeGame.Grid
         [SerializeField]
         private Color secondaryColor = Color.gray;
 
-        private const int GRID_SIZE = 1;
+        private const float GRID_HALF_SIZE = 0.5F;
 
         public void Initialize (INode[,] array)
         {
@@ -44,7 +44,7 @@ namespace LeandroExhumed.SnakeGame.Grid
 
         private float GetCellCenter (int dimension)
         {
-            return (dimension / 2) - GRID_SIZE;
+            return (dimension / 2) - GRID_HALF_SIZE;
         }
     }
 }

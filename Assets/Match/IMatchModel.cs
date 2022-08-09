@@ -9,10 +9,11 @@ namespace LeandroExhumed.SnakeGame.Match
     {
         event Action OnInitialized;
         event Action<Vector2Int> OnBlockGenerated;
+        event Action<int, Vector2Int> OnSnakePositionChanged;
 
         void Initialize ();
         void AddPlayer (InputAction inputAction);
-        void Play (int selectedSnakeID, IMovementRequester input);
+        void Play (int selectedSnakeID, int playerNumber, IMovementRequester input);
         void GenerateBlock ();
         void End ();
     }

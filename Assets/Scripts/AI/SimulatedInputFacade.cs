@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Snake;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -29,11 +30,13 @@ namespace LeandroExhumed.SnakeGame.AI
             remove => model.OnMovementRequested -= value;
         }
 
-        public void Initialize ()
+        public void Initialize (ISnakeModel snake)
         {
             controller.Setup();
-            model.Initialize();
+            model.Initialize(snake);
         }
+
+        public void Initialize () => model.Initialize();
 
         public void HandleGridNodeChanged (Vector2Int nodePosition) => model.HandleGridNodeChanged(nodePosition);
 

@@ -11,8 +11,9 @@ namespace LeandroExhumed.SnakeGame.AI
     {
         event Action<List<PathNode>> OnPathChanged;
 
+        void Initialize (ISnakeModel snake);
         void HandleGridNodeChanged (Vector2Int nodePosition);
 
-        public class Factory : PlaceholderFactory<ISnakeModel, ISimulatedInput> { }
+        public class Factory : PlaceholderFactory<ISimulatedInput> { }
     }
 }

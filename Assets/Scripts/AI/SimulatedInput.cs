@@ -31,20 +31,25 @@ namespace LeandroExhumed.SnakeGame.AI
         private bool reasonedAboutNewBlock = false;
 
         private readonly AIData data;
+        private ISnakeModel snake;
 
-        private readonly ISnakeModel snake;
         private readonly PathFinding pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
         private readonly IMatchModel match;
 
-        public SimulatedInput (AIData data, ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
+        public SimulatedInput (AIData data, PathFinding pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
         {
-            this.data = data;
-            this.snake = snake;
+            this.data = data;            
             this.pathFinding = pathFinding;
             this.monoBehaviour = monoBehaviour;
             this.match = match;
+        }
+
+        public void Initialize (ISnakeModel snake)
+        {
+            this.snake = snake;
+            Initialize();
         }
 
         public void Initialize ()

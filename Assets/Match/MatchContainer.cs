@@ -32,8 +32,6 @@ namespace LeandroExhumed.SnakeGame.Match
 
             Container.Bind<IGridModel<INode>>().FromInstance(levelGrid);
             Container.BindInstance(snakeList.Snakes).AsSingle();
-            Container.BindFactory<ISnakeModel, ISimulatedInput, ISimulatedInput.Factory>()
-                .FromComponentInNewPrefabResource("SimulatedInput");
             ResolveFactories();
 
             Container.Bind<IPlayerSlotModel[]>().FromInstance(playerSlots).AsSingle();
@@ -43,10 +41,13 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             Container.Bind<IMatchModel>().To<MatchModel>().AsSingle();
             Container.Bind<MatchController>().AsSingle();
+            Container.BindInstance(GetComponent<MatchView>()).AsSingle();
         }
 
         private void ResolveFactories ()
         {
+            Container.BindFactory<ISimulatedInput, ISimulatedInput.Factory>()
+                .FromComponentInNewPrefabResource("SimulatedInput");
             for (int i = 0; i < snakeList.Snakes.Length; i++)
             {
                 string resource = string.Concat("Snakes/", snakeList.Snakes[i].ID);

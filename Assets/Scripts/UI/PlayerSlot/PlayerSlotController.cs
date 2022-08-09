@@ -53,7 +53,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             view.ShowSnake(blockIDs);
         }
 
-        private void HandleSnakeSelected (int selectedSnakeID, IMovementRequester input)
+        private void HandleSnakeSelected (int selectedSnakeID, int playerNumber, IMovementRequester input)
         {
             view.SetSelectSnakeTextActive(false);
             view.ShowOkIcon();
@@ -61,7 +61,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         private void HandleConfirmationKeyPressed ()
         {
-            if (model.IsAvailable)
+            if (model.State != SlotState.Selection)
             {
                 return;
             }

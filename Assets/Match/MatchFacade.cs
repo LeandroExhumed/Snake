@@ -30,12 +30,18 @@ namespace LeandroExhumed.SnakeGame.Match
             add => model.OnBlockGenerated += value;
             remove => model.OnBlockGenerated -= value;
         }
+        public event Action<int, Vector2Int> OnSnakePositionChanged
+        {
+            add => model.OnSnakePositionChanged += value;
+            remove => model.OnSnakePositionChanged -= value;
+        }
 
         public void Initialize () => model.Initialize();
 
         public void AddPlayer (InputAction inputAction) => model.AddPlayer(inputAction);
 
-        public void Play (int selectedSnakeID, IMovementRequester input) => model.Play(selectedSnakeID, input);
+        public void Play (int selectedSnakeID, int playerNumber, IMovementRequester input)
+            => model.Play(selectedSnakeID, playerNumber, input);
 
         public void GenerateBlock () => model.GenerateBlock();
 

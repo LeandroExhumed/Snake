@@ -17,13 +17,13 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             add => model.OnSnakeShown += value;
             remove => model.OnSnakeShown -= value;
         }
-        public event Action<int, IMovementRequester> OnSnakeSelected
+        public event Action<int, int, IMovementRequester> OnSnakeSelected
         {
             add => model.OnSnakeSelected += value;
             remove => model.OnSnakeSelected -= value;
         }
 
-        public bool IsAvailable => model.IsAvailable;
+        public SlotState State => model.State;
 
         private IPlayerSlotModel model;
         private PlayerSlotController controller;
@@ -36,6 +36,8 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
             controller.Setup();
         }
+
+        public void Initialize (int playerNumber) => model.Initialize(playerNumber);
 
         public void Enable (IMovementRequester input) => model.Enable(input);
 

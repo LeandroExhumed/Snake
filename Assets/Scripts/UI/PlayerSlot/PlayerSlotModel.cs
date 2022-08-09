@@ -9,9 +9,11 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
     {
         public event Action<IMovementRequester> OnEnabled;
         public event Action<int[]> OnSnakeShown;
-        public event Action<int, IMovementRequester> OnSnakeSelected;
+        public event Action<int, int, IMovementRequester> OnSnakeSelected;
 
-        public bool IsAvailable { get; private set; } = true;
+        public SlotState State { get; private set; }
+
+        private int playerNumber;
 
         private int currentSnake = 0;
         private IMovementRequester input;
@@ -23,11 +25,16 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             this.snakes = snakes;
         }
 
+        public void Initialize (int playerNumber)
+        {
+            this.playerNumber = playerNumber;
+        }
+
         public void Enable (IMovementRequester input)
         {
             this.input = input;
 
-            IsAvailable = false;
+            State = SlotState.Selection;
             OnEnabled?.Invoke(input);
         }
 
@@ -53,7 +60,8 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         public void Confirm ()
         {
-            OnSnakeSelected?.Invoke(snakes[currentSnake].ID, input);
+            State = SlotState.Playing;
+            OnSnakeSelected?.Invoke(snakes[currentSnake].ID, playerNumber, input);
         }
 
         private void ShowSnake ()
@@ -61,5 +69,12 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             int[] blockIDs = snakes[currentSnake].StartingBlocks.Select(x => x.ID).ToArray();
             OnSnakeShown?.Invoke(blockIDs);
         }
+    }
+
+    public enum SlotState
+    {
+        Waiting,
+        Selection,
+        Playing
     }
 }

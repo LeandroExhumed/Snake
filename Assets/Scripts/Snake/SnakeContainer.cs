@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using LeandroExhumed.SnakeGame.AI;
+using UnityEngine;
 using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
@@ -12,6 +13,8 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             ResolveMVC();
             Container.BindInstance(data).AsSingle();
+            Container.BindFactory<ISimulatedInput, ISimulatedInput.Factory>()
+                .FromComponentInNewPrefabResource("SimulatedInput");
         }
 
         private void ResolveMVC ()
