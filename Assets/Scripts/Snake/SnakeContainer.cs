@@ -1,5 +1,4 @@
-﻿using LeandroExhumed.SnakeGame.Input;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
@@ -7,24 +6,12 @@ namespace LeandroExhumed.SnakeGame.Snake
     public class SnakeContainer : MonoInstaller
     {
         [SerializeField]
-        private bool isAI = false;
-
-        [SerializeField]
         private SnakeData data;
 
         public override void InstallBindings ()
         {
             ResolveMVC();
             Container.BindInstance(data).AsSingle();
-            if (!isAI)
-            {
-                Container.Bind<IMovementRequester>().To<InputFacade>().AsSingle();
-            }
-            else
-            {
-                Container.BindInstance(GetComponent<MonoBehaviour>()).AsSingle();
-                Container.Bind<IMovementRequester>().FromComponentInNewPrefabResource("SimulatedInput").AsSingle();
-            }
         }
 
         private void ResolveMVC ()

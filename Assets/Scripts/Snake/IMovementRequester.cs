@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
 
-namespace LeandroExhumed.SnakeGame.Snake
+namespace LeandroExhumed.SnakeGame.Input
 {
     public interface IMovementRequester
     {

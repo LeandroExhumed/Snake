@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Input;
+using System;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
@@ -7,21 +8,40 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly ISnakeModel model;
         private readonly SnakeView view;
 
-        private readonly IMovementRequester input;
+        private IMovementRequester Input
+        {
+            get => input;
+            set
+            {
+                if (input != null)
+                {
+                    input.OnMovementRequested -= HandleMovementInputPerformed;
+                }
 
-        public SnakeController (ISnakeModel model, SnakeView view, IMovementRequester input)
+                input = value;
+                input.OnMovementRequested += HandleMovementInputPerformed;
+            }
+        }
+
+        private IMovementRequester input;
+
+        public SnakeController (ISnakeModel model, SnakeView view)
         {
             this.model = model;
             this.view = view;
-            this.input = input;
         }
 
         public void Setup ()
         {
+            model.OnInitialized += HandleInitialized;
             model.OnBlockAttached += HandleBlockAttached;
             model.OnHit += HandleHit;
             view.OnUpdate += HandleViewUpdate;
-            input.OnMovementRequested += HandleMovementInputPerformed;
+        }
+
+        private void HandleInitialized (IMovementRequester input)
+        {
+            Input = input;
         }
 
         private void HandleBlockAttached (IBlockModel block)
@@ -47,10 +67,11 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Dispose ()
         {
+            model.OnInitialized -= HandleInitialized;
             model.OnBlockAttached -= HandleBlockAttached;
             model.OnHit -= HandleHit;
             view.OnUpdate -= HandleViewUpdate;
-            input.OnMovementRequested -= HandleMovementInputPerformed;
+            Input.OnMovementRequested -= HandleMovementInputPerformed;
         }
     }
 }

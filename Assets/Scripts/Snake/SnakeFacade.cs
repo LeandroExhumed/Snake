@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Input;
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -6,6 +7,11 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeFacade : MonoBehaviour, ISnakeModel
     {
+        public event Action<IMovementRequester> OnInitialized
+        {
+            add => model.OnInitialized += value;
+            remove => model.OnInitialized -= value;
+        }
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged
         {
             add => model.OnPositionChanged += value;
@@ -28,22 +34,19 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private ISnakeModel model;
         private SnakeController controller;
-        private IMovementRequester movementRequester;
 
         [Inject]
-        public void Constructor (ISnakeModel model, SnakeController controller, IMovementRequester movementRequester)
+        public void Constructor (ISnakeModel model, SnakeController controller)
         {
             this.model = model;
             this.controller = controller;
-            this.movementRequester = movementRequester;
 
             controller.Setup();
         }
 
-        public void Initialize (Vector2Int startPosition, Vector2Int startDirection)
+        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input)
         {
-            model.Initialize(startPosition, startDirection);
-            movementRequester.Initialize();
+            model.Initialize(startPosition, startDirection, input);
         }
 
         public void LookTo (int direction) => model.LookTo(direction);

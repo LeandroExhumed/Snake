@@ -11,6 +11,7 @@ namespace LeandroExhumed.SnakeGame.AI
         public override void InstallBindings ()
         {
             ResolveMVC();
+            Container.BindInstance(GetComponent<MonoBehaviour>()).AsSingle();
             Container.BindInstance(data).AsSingle();
             Container.Bind<PathFinding>().AsSingle();
         }

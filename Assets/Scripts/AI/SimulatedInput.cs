@@ -36,9 +36,9 @@ namespace LeandroExhumed.SnakeGame.AI
         private readonly PathFinding pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
-        private readonly MatchModel match;
+        private readonly IMatchModel match;
 
-        public SimulatedInput (AIData data, ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, MatchModel match)
+        public SimulatedInput (AIData data, ISnakeModel snake, PathFinding pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
         {
             this.data = data;
             this.snake = snake;

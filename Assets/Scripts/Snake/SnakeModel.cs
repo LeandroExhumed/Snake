@@ -1,5 +1,6 @@
 using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
+using LeandroExhumed.SnakeGame.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeModel : ISnakeModel
     {
+        public event Action<IMovementRequester> OnInitialized;
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnBlockAttached;
         public event Action OnHit;
@@ -36,7 +38,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.levelGrid = levelGrid;
         }
 
-        public void Initialize (Vector2Int startPosition, Vector2Int startDirection)
+        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input)
         {
             for (int i = 0; i < data.StartingBlocks.Length; i++)
             {
@@ -48,6 +50,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             Direction = startDirection;
             TimeToMove = data.Speed;
+
+            OnInitialized.Invoke(input);
         }
 
         public void LookTo (int direction)
