@@ -7,7 +7,7 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class LobbyModel
     {
-        public event Action<InputAction> OnNewPlayerJoined;
+        public event Action<char, char> OnNewPlayerJoined;
 
         private readonly List<char> unavailableKeys = new();
         private readonly List<char> currentHeldKeys = new();
@@ -34,17 +34,6 @@ namespace LeandroExhumed.SnakeGame.Match
             }
         }
 
-        private void AddPlayer (char leftKey, char rightKey)
-        {
-            InputAction inputAction = new("Move");
-            inputAction.AddCompositeBinding("1DAxis")
-                .With("Negative", $"<Keyboard>/{leftKey}")
-                .With("Positive", $"<Keyboard>/{rightKey}");
-            inputAction.Enable();
-
-            OnNewPlayerJoined?.Invoke(inputAction);
-        }
-
         private void HandleAnyKeyHeld (InputAction.CallbackContext obj)
         {
             if (unavailableKeys.Contains(GetKey(obj)))
@@ -60,9 +49,8 @@ namespace LeandroExhumed.SnakeGame.Match
                 unavailableKeys.Add(left);
                 unavailableKeys.Add(right);
                 currentHeldKeys.Clear();
-                Debug.Log("Left: " + left + ", right: " + right);
 
-                AddPlayer(left, right);
+                OnNewPlayerJoined?.Invoke(left, right);
             }
         }
 

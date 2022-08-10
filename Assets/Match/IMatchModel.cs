@@ -14,7 +14,7 @@ namespace LeandroExhumed.SnakeGame.Match
         event Action<int> OnOver;
 
         void Initialize ();
-        void AddPlayer (InputAction inputAction);
+        void AddPlayer (char leftKey, char rightKey);
         void Play (int selectedSnakeID, int playerNumber, IMovementRequester input);
         void GenerateBlock ();
         void End ();

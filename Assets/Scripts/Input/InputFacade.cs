@@ -1,5 +1,4 @@
-﻿using LeandroExhumed.SnakeGame.Snake;
-using System;
+﻿using System;
 using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Input
@@ -10,9 +9,13 @@ namespace LeandroExhumed.SnakeGame.Input
 
         private readonly InputAction action;
 
-        public InputFacade (InputAction action)
+        public InputFacade (char leftKey, char rightKey)
         {
-            this.action = action;
+            action = new("Move");
+            action.AddCompositeBinding("1DAxis")
+                .With("Negative", $"<Keyboard>/{leftKey}")
+                .With("Positive", $"<Keyboard>/{rightKey}");
+            action.Enable();
         }
 
         public void Initialize ()

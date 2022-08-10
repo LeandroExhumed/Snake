@@ -13,7 +13,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
         }
-        public event Action OnCollected
+        public event Action<ICollectableModel> OnCollected
         {
             add => model.OnCollected += value;
             remove => model.OnCollected -= value;

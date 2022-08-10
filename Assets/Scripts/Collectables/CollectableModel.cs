@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
     public abstract class CollectableModel : ICollectableModel
     {
         public event Action<INode, Vector2Int> OnPositionChanged;
-        public event Action OnCollected;
+        public event Action<ICollectableModel> OnCollected;
 
         public Vector2Int Position
         {
@@ -32,7 +32,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
 
         public virtual void BeCollected ()
         {
-            OnCollected?.Invoke();
+            OnCollected?.Invoke(this);
         }
 
         public virtual void ApplyEffect () { }

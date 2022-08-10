@@ -1,4 +1,5 @@
-﻿using LeandroExhumed.SnakeGame.Grid;
+﻿using LeandroExhumed.SnakeGame.Collectables;
+using LeandroExhumed.SnakeGame.Grid;
 using System;
 using UnityEngine;
 using Zenject;
@@ -12,7 +13,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
         }
-        public event Action OnCollected
+        public event Action<ICollectableModel> OnCollected
         {
             add => model.OnCollected += value;
             remove => model.OnCollected -= value;
@@ -56,6 +57,16 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void Attach (Transform owner) => model.Attach(owner);
 
         public void RemoveBenefit () => model.RemoveBenefit();
+
+        public override bool Equals (object other)
+        {
+            return model != null ? model.Equals(other) : base.Equals(other);
+        }
+
+        public override int GetHashCode ()
+        {
+            return model != null ? model.GetHashCode() : base.GetHashCode();
+        }
 
         private void OnDestroy ()
         {

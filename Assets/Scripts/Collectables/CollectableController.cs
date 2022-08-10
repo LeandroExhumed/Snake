@@ -26,7 +26,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
             view.Position = value;
         }
 
-        private void HandleCollected ()
+        private void HandleCollected (ICollectableModel model)
         {
             view.Destroy();
         }

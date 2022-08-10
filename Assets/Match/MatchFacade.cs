@@ -1,7 +1,6 @@
 using LeandroExhumed.SnakeGame.Input;
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Match
@@ -48,7 +47,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize () => model.Initialize();
 
-        public void AddPlayer (InputAction inputAction) => model.AddPlayer(inputAction);
+        public void AddPlayer (char leftKey, char rightKey) => model.AddPlayer(leftKey, rightKey);
 
         public void Play (int selectedSnakeID, int playerNumber, IMovementRequester input)
             => model.Play(selectedSnakeID, playerNumber, input);

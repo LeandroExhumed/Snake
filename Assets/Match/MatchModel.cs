@@ -1,4 +1,5 @@
 ﻿using LeandroExhumed.SnakeGame.AI;
+using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Input;
 using LeandroExhumed.SnakeGame.Snake;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
@@ -25,10 +25,11 @@ namespace LeandroExhumed.SnakeGame.Match
             new Vector2Int(3, 1),
             new Vector2Int(27, 29)
         };
-        private IBlockModel block;
+        private MatchPersistentData persistentData;
 
         private readonly Dictionary<ISnakeModel, int> players = new();
         private readonly List<ISnakeModel> snakes = new();
+        private readonly List<ICollectableModel> blocks = new();
 
         private readonly IGridModel<INode> grid;
 
@@ -54,6 +55,8 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize ()
         {
+            persistentData = new MatchPersistentData();
+
             grid.Initialize();
             for (int i = 0; i < playerSlots.Length; i++)
             {
@@ -62,12 +65,33 @@ namespace LeandroExhumed.SnakeGame.Match
             OnInitialized?.Invoke();
         }
 
-        public void AddPlayer (InputAction inputAction)
+        public void Rewind ()
+        {
+            //for (int i = 0; i < persistentData.Players.Count; i++)
+            //{
+            //    ISnakeModel snake = snakeFactory.Create(persistentData.Players[i].Snake.ID);
+
+            //    Vector2Int startDirection = Vector2Int.right;
+            //    InputFacade input = new(
+            //        persistentData.Players[i].Input.LeftKey, persistentData.Players[i].Input.RightKey);
+            //    input.Initialize();
+
+            //    snake.Initialize(spawnPositions[i], startDirection, input);
+            //    snake.OnPositionChanged += HandleSnakePositionChanged;
+            //    snake.OnHit += HandleSnakeHit;
+
+            //    snakes.Add(snake);
+
+            //    players.Add(snake, persistentData.Players[i].Number);
+            //}
+        }
+
+        public void AddPlayer (char leftKey, char rightKey)
         {
             IPlayerSlotModel slot = playerSlots.FirstOrDefault(x => x.State == SlotState.Waiting);
             if (slot != null)
             {
-                InputFacade input = new(inputAction);
+                InputFacade input = new(leftKey, rightKey);
                 input.Initialize();
                 slot.Enable(input);
                 slot.OnSnakeSelected += HandleSelectionConfirmed;
@@ -113,7 +137,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void GenerateBlock ()
         {
-            block = blockFactory.CreateRandomly(1);
+            IBlockModel block = blockFactory.CreateRandomly(1);
             Vector2Int spawnPosition;
             do
             {
@@ -122,6 +146,8 @@ namespace LeandroExhumed.SnakeGame.Match
             block.Initialize(spawnPosition);
             block.OnCollected += HandleBlockCollected;
             grid.SetNode(block.Position, block);
+
+            blocks.Add(block);
 
             OnBlockGenerated?.Invoke(block.Position);
         }
@@ -134,6 +160,30 @@ namespace LeandroExhumed.SnakeGame.Match
         public void End ()
         {
             Debug.Log("You died!");
+        }
+
+        public void Save ()
+        {
+            //for (int i = 0; i < snakes.Count; i++)
+            //{
+            //    SnakePersistentData snakeData = new();
+            //    snakes[i].Save(snakeData);
+
+            //    persistentData.Snakes.Add(snakeData);
+            //}
+
+            //foreach (var item in players.ToArray())
+            //{
+            //    item.Key.Save(snake);
+            //    PlayerPersistentData player = new(item.Value, new InputPersistentData('q', 'e'), snake);
+            //    persistentData.Players.Add(item.Value, player);
+            //}
+
+            //for (int i = 0; i < blocks.Count; i++)
+            //{
+            //    BlockPersistentData block = new(blocks[i].ID, blocks[i].Position);
+            //    persistentData.Blocks.Add(block);
+            //}
         }
 
         private void RemoveSnake (ISnakeModel snake)
@@ -170,9 +220,10 @@ namespace LeandroExhumed.SnakeGame.Match
             OnSnakePositionChanged?.Invoke(players[snake], position);
         }
 
-        private void HandleBlockCollected ()
+        private void HandleBlockCollected (ICollectableModel block)
         {
             grid.SetNode(block.Position, null);
+            blocks.Remove(block);
             GenerateBlock();
         }
     }

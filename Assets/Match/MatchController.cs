@@ -50,9 +50,9 @@ namespace LeandroExhumed.SnakeGame.Match
             view.RemoveGuide(playerNumber);
         }
 
-        private void HandleNewPlayerJoined (InputAction inputAction)
+        private void HandleNewPlayerJoined (char leftKey, char rightKey)
         {
-            model.AddPlayer(inputAction);
+            model.AddPlayer(leftKey, rightKey);
         }
 
         public void Dispose ()

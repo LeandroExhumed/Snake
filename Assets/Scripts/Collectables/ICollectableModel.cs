@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
 {
     public interface ICollectableModel : INode
     {
-        event Action OnCollected;
+        event Action<ICollectableModel> OnCollected;
 
         void Initialize (Vector2Int startPosition, ICollector owner = null);
         void BeCollected ();

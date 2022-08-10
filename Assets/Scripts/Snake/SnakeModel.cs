@@ -26,6 +26,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         private float timer = 0f;
         private float speedDecreaseOnLoad = 0.05f;
         private bool isAlive = true;
+        private bool hasTimeTravel = false;
 
         private readonly SnakeData data;
 
@@ -51,6 +52,19 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             Direction = startDirection;
             TimeToMove = data.Speed;
+
+            OnInitialized.Invoke(input);
+        }
+
+        public void Initialize (SnakePersistentData persistentData, IMovementRequester input)
+        {
+            for (int i = 0; i < persistentData.Blocks.Length; i++)
+            {
+                AttachBlock(blockFactory.Create(persistentData.Blocks[i].ID), persistentData.Position);
+            }
+
+            Direction = persistentData.Direction;
+            TimeToMove = persistentData.TimeToMove;
 
             OnInitialized.Invoke(input);
         }
@@ -95,6 +109,21 @@ namespace LeandroExhumed.SnakeGame.Snake
             }
 
             timer += Time.deltaTime;
+        }
+
+        public void Save (SnakePersistentData persistentData)
+        {
+            persistentData.Position = Position;
+            persistentData.Direction = Direction;
+            persistentData.TimeToMove = TimeToMove;
+            persistentData.HasTimeTravel = hasTimeTravel;
+
+            List<BlockPersistentData> blocks = new ();
+            foreach (IBlockModel item in attachedBlocks.ToList())
+            {
+                blocks.Add(new BlockPersistentData(item.ID, item.Position));
+            }
+            persistentData.Blocks = blocks.ToArray();
         }
 
         private void AttachBlock (IBlockModel block, Vector2Int position)
