@@ -52,10 +52,6 @@ namespace LeandroExhumed.SnakeGame.Match
         public void Play (int selectedSnakeID, int playerNumber, IMovementRequester input)
             => model.Play(selectedSnakeID, playerNumber, input);
 
-        public void GenerateBlock () => model.GenerateBlock();
-
-        public void End () => model.End();
-
         private void OnDestroy ()
         {
             controller.Dispose();

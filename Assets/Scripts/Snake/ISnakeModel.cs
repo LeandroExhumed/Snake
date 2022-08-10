@@ -10,7 +10,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         event Action<IMovementRequester> OnInitialized;
         event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         event Action<IBlockModel> OnBlockAttached;
-        event Action<ISnakeModel> OnHit;
+        event Action<ISnakeModel, bool> OnHit;
 
         Vector2Int Position { get; }
         Vector2Int Direction { get; }

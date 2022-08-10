@@ -8,6 +8,6 @@ namespace LeandroExhumed.SnakeGame.Match
         public Dictionary<int, PlayerPersistentData> Players { get; private set; }
         public List<SnakePersistentData> Snakes { get; private set; }
         public SnakePersistentData[] AISnakes { get; private set; }
-        public List<BlockPersistentData[]> Blocks { get; private set; }
+        public List<BlockPersistentData> Blocks { get; private set; }
     }
 }

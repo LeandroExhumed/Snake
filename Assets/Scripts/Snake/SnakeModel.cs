@@ -13,7 +13,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action<IMovementRequester> OnInitialized;
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnBlockAttached;
-        public event Action<ISnakeModel> OnHit;
+        public event Action<ISnakeModel, bool> OnHit;
 
         public Vector2Int Position => Head.Position;
         public Vector2Int Direction { get; private set; }
@@ -94,6 +94,11 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void CollectEnginePower (IBlockModel block, float speedAddition)
         {
             TimeToMove -= speedAddition;
+        }
+
+        public void CollectTimeTravel ()
+        {
+            hasTimeTravel = true;
         }
 
         public void Tick ()
@@ -190,7 +195,7 @@ namespace LeandroExhumed.SnakeGame.Snake
                         else
                         {
                             isAlive = false;
-                            OnHit?.Invoke(this);
+                            OnHit?.Invoke(this, hasTimeTravel);
                         }
                     }
                     else
