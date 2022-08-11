@@ -16,12 +16,13 @@ namespace LeandroExhumed.SnakeGame.Snake
         bool IsAttached { get; }
         bool HasBenefit { get; }
 
-        void Initialize (Vector2Int startPosition, ICollector owner = null);
+        void Initialize (Vector2Int startPosition, bool hasBenefit, ICollector owner = null);
         void BeCollected ();
         void ApplyEffect ();
         void Attach (Transform owner);
         void RemoveBenefit ();
         void Destroy ();
+        bool IsEqual (IBlockModel other);
 
         public class Factory : PlaceholderFactory<IBlockModel> { }
     }

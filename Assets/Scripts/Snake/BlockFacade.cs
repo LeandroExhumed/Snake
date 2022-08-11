@@ -49,10 +49,10 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.controller = controller;
         }
 
-        public void Initialize (Vector2Int initialPosition, ICollector owner = null)
+        public void Initialize (Vector2Int initialPosition, bool hasBenefit, ICollector owner = null)
         {
             controller.Setup();
-            model.Initialize(initialPosition, owner);
+            model.Initialize(initialPosition, hasBenefit, owner);
         }
 
         public void BeCollected () => model.BeCollected();
@@ -64,6 +64,11 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void RemoveBenefit () => model.RemoveBenefit();
 
         public void Destroy () => model.Destroy();
+
+        public bool IsEqual (IBlockModel other)
+        {
+            return model == other;
+        }
 
         public override bool Equals (object other)
         {

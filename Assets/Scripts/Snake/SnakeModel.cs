@@ -48,7 +48,7 @@ namespace LeandroExhumed.SnakeGame.Snake
                 Vector2Int blockPosition = new(
                     startPosition.x - ((data.StartingBlocks.Length - 1) - i) * startDirection.x,
                     startPosition.y);
-                AttachBlock(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition);
+                AttachBlock(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition, true);
             }
 
             Direction = startDirection;
@@ -59,9 +59,13 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Initialize (SnakePersistentData persistentData, IMovementRequester input)
         {
+            persistentData.Blocks = persistentData.Blocks.Reverse().ToArray();
             for (int i = 0; i < persistentData.Blocks.Length; i++)
             {
-                AttachBlock(blockFactory.Create(persistentData.Blocks[i].ID), persistentData.Position);
+                AttachBlock(
+                    blockFactory.Create(persistentData.Blocks[i].ID),
+                    persistentData.Blocks[i].Position,
+                    persistentData.Blocks[i].HasBenefit);
             }
 
             Direction = persistentData.Direction;
@@ -85,7 +89,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void Grow (IBlockModel block)
         {
             TimeToMove += speedDecreaseOnLoad;
-            AttachBlock(block, Position);
+            AttachBlock(block, Position, block.HasBenefit);
         }
 
         public void CollectBatteringRam (IBlockModel block)
@@ -132,7 +136,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             List<BlockPersistentData> blocks = new ();
             foreach (IBlockModel item in attachedBlocks.ToList())
             {
-                blocks.Add(new BlockPersistentData(item.ID, item.Position));
+                blocks.Add(new BlockPersistentData(item.ID, item.Position, !item.IsEqual(timeTravelBlock) && item.HasBenefit));
             }
             persistentData.Blocks = blocks.ToArray();
         }
@@ -142,9 +146,9 @@ namespace LeandroExhumed.SnakeGame.Snake
             OnDestroyed?.Invoke();
         }
 
-        private void AttachBlock (IBlockModel block, Vector2Int position)
+        private void AttachBlock (IBlockModel block, Vector2Int position, bool hasBenefit)
         {
-            block.Initialize(position, this);
+            block.Initialize(position, hasBenefit, this);
             block.ApplyEffect();
             block.OnPositionChanged += HandleAttachedBlockPositionChanged;
 
@@ -207,16 +211,19 @@ namespace LeandroExhumed.SnakeGame.Snake
                         {
                             if (timeTravelBlock != null)
                             {
-                                isAlive = false;
+                                timeTravelBlock.RemoveBenefit();
                             }
 
+                            isAlive = false;
+
                             OnHit?.Invoke(this, timeTravelBlock);
+                            timeTravelBlock = null;
                         }
                     }
                     else
                     {
-                        block.BeCollected();
                         Grow(block);
+                        block.BeCollected();
                     }
                 }
                 else if (targetNode is ICollectableModel collectable)

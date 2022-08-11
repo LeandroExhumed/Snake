@@ -24,24 +24,36 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public int ID => data.ID;
         public bool IsAttached { get; private set; }
-        public bool HasBenefit { get; private set; }
+        public bool HasBenefit
+        {
+            get => hasBenefit;
+            private set
+            {
+                hasBenefit = value;
+                if (!value)
+                {
+                    OnBenefitRemoved?.Invoke();
+                }
+            }
+        }
 
         protected ICollector owner;
 
         private readonly BlockData data;
 
         private Vector2Int position;
+        private bool hasBenefit;
 
         public BlockModel (BlockData data)
         {
             this.data = data;
         }
 
-        public virtual void Initialize (Vector2Int startPosition, ICollector owner = null)
+        public virtual void Initialize (Vector2Int startPosition, bool hasBenefit, ICollector owner = null)
         {
             Position = startPosition;
+            HasBenefit = hasBenefit;
             this.owner = owner;
-            HasBenefit = true;
         }
 
         public void Attach (Transform owner)
@@ -60,12 +72,16 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void RemoveBenefit ()
         {
             HasBenefit = false;
-            OnBenefitRemoved?.Invoke();
         }
 
         public void Destroy ()
         {
             OnDestroyed?.Invoke();
+        }
+
+        public bool IsEqual (IBlockModel other)
+        {
+            return this == other;
         }
     }
 }

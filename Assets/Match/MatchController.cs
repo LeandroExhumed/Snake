@@ -53,11 +53,13 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void HandleRewind ()
         {
+            Time.timeScale = 0;
             view.PlayRewindEffect();
         }
 
         private void HandleRewindEffectOver ()
         {
+            Time.timeScale = 1;
             model.Rewind();
         }
 

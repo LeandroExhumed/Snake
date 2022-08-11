@@ -61,7 +61,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private IEnumerator RewindEffectRoutine ()
         {
-            yield return new WaitForSeconds(2f);
+            yield return null;
             OnRewindEffectOver?.Invoke();
         }
     }
