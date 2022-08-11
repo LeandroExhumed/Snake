@@ -46,6 +46,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
             view.SetKeysIconsActive(true);
             view.SetSnakePreviewActive(true);
+            view.SetArrowsActive(true);
             view.SetSelectSnakeTextActive(true);
         }
 
@@ -56,6 +57,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         private void HandleSnakeSelected (int selectedSnakeID, int playerNumber, IMovementRequester input)
         {
+            view.SetArrowsActive(false);
             view.SetSelectSnakeTextActive(false);
             view.SetOkIconActive(true);
         }

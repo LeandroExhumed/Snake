@@ -65,6 +65,12 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             StartCoroutine(ArrowHightlightingRoutine(rightArrowImage));
         }
 
+        public void SetArrowsActive (bool value)
+        {
+            leftArrowImage.gameObject.SetActive(value);
+            rightArrowImage.gameObject.SetActive(value);
+        }
+
         public void SetSelectSnakeTextActive (bool value) => selectSnakeText.SetActive(value);
 
         public void SetOkIconActive (bool value) => checkMarkIcon.SetActive(value);

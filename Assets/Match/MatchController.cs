@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
@@ -25,7 +24,9 @@ namespace LeandroExhumed.SnakeGame.Match
             model.OnInitialized += HandleInitialized;
             model.OnSnakePositionChanged += HandleSnakePositionChanged;
             model.OnPlayerLeft += HandlePlayerLeft;
+            model.OnRewind += HandleRewind;
             model.OnOver += HandleOver;
+            view.OnRewindEffectOver += HandleRewindEffectOver;
             lobby.OnNewPlayerJoined += HandleNewPlayerJoined;
         }
 
@@ -50,6 +51,16 @@ namespace LeandroExhumed.SnakeGame.Match
             view.RemoveGuide(playerNumber);
         }
 
+        private void HandleRewind ()
+        {
+            view.PlayRewindEffect();
+        }
+
+        private void HandleRewindEffectOver ()
+        {
+            model.Rewind();
+        }
+
         private void HandleNewPlayerJoined (char leftKey, char rightKey)
         {
             model.AddPlayer(leftKey, rightKey);
@@ -60,6 +71,9 @@ namespace LeandroExhumed.SnakeGame.Match
             model.OnInitialized -= HandleInitialized;
             model.OnSnakePositionChanged -= HandleSnakePositionChanged;
             model.OnPlayerLeft -= HandlePlayerLeft;
+            model.OnRewind -= HandleRewind;
+            model.OnOver -= HandleOver;
+            view.OnRewindEffectOver -= HandleRewindEffectOver;
             lobby.OnNewPlayerJoined -= HandleNewPlayerJoined;
         }
     }

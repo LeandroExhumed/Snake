@@ -10,6 +10,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         event Action<IBlockModel> OnCollected;
         event Action<Transform> OnAttached;
         event Action OnBenefitRemoved;
+        event Action OnDestroyed;
 
         int ID { get; }
         bool IsAttached { get; }
@@ -20,6 +21,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         void ApplyEffect ();
         void Attach (Transform owner);
         void RemoveBenefit ();
+        void Destroy ();
 
         public class Factory : PlaceholderFactory<IBlockModel> { }
     }

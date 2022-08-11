@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,6 +8,8 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchView : MonoBehaviour
     {
+        public event Action OnRewindEffectOver;
+
         [SerializeField]
         private TextMeshProUGUI winnerMessageText;
         [SerializeField]
@@ -45,9 +49,20 @@ namespace LeandroExhumed.SnakeGame.Match
             guides.Remove(player);
         }
 
+        public void PlayRewindEffect ()
+        {
+            StartCoroutine(RewindEffectRoutine());
+        }
+
         private TextMeshProUGUI GetNewGuide ()
         {
             return Resources.Load<TextMeshProUGUI>("Guide");
+        }
+
+        private IEnumerator RewindEffectRoutine ()
+        {
+            yield return new WaitForSeconds(2f);
+            OnRewindEffectOver?.Invoke();
         }
     }
 }

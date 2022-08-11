@@ -22,10 +22,15 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnBlockAttached += value;
             remove => model.OnBlockAttached -= value;
         }
-        public event Action<ISnakeModel, bool> OnHit
+        public event Action<ISnakeModel, IBlockModel> OnHit
         {
             add => model.OnHit += value;
             remove => model.OnHit -= value;
+        }
+        public event Action OnDestroyed
+        {
+            add => model.OnDestroyed += value;
+            remove => model.OnDestroyed -= value;
         }
 
         public Vector2Int Position => model.Position;
@@ -45,9 +50,10 @@ namespace LeandroExhumed.SnakeGame.Snake
         }
 
         public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input)
-        {
-            model.Initialize(startPosition, startDirection, input);
-        }
+            => model.Initialize(startPosition, startDirection, input);
+
+        public void Initialize (SnakePersistentData persistentData, IMovementRequester input)
+            => model.Initialize(persistentData, input);
 
         public void LookTo (int direction) => model.LookTo(direction);
 
@@ -57,7 +63,13 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void CollectBatteringRam (IBlockModel block) => model.CollectBatteringRam(block);
 
+        public void CollectTimeTravel (IBlockModel block) => model.CollectTimeTravel(block);
+
         public void Tick () => model.Tick();
+
+        public void Save (SnakePersistentData persistentData) => model.Save(persistentData);
+
+        public void Destroy () => model.Destroy();
 
         public override bool Equals (object other)
         {

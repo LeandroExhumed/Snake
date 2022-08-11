@@ -14,5 +14,6 @@ namespace LeandroExhumed.SnakeGame.Grid
         T GetNode (Vector2Int position);
         void Initialize ();
         void SetNode (Vector2Int position, T node);
+        void Clear ();
     }
 }

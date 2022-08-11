@@ -1,4 +1,5 @@
 ﻿using LeandroExhumed.SnakeGame.AI;
+using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Input;
 using LeandroExhumed.SnakeGame.Snake;
@@ -16,6 +17,7 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action<Vector2Int> OnBlockGenerated;
         public event Action<int> OnPlayerLeft;
         public event Action<int, Vector2Int> OnSnakePositionChanged;
+        public event Action OnRewind;
         public event Action<int> OnOver;
 
         private int snakesPerMatch = 2;
@@ -24,7 +26,9 @@ namespace LeandroExhumed.SnakeGame.Match
             new Vector2Int(3, 1),
             new Vector2Int(27, 29)
         };
-        private MatchPersistentData persistentData;
+
+        private Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
+        private IBlockModel currentRewindResponsible;
 
         private readonly Dictionary<ISnakeModel, int> players = new();
         private readonly List<ISnakeModel> snakes = new();
@@ -54,8 +58,6 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize ()
         {
-            persistentData = new MatchPersistentData();
-
             grid.Initialize();
             for (int i = 0; i < playerSlots.Length; i++)
             {
@@ -66,9 +68,23 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Rewind ()
         {
-            for (int i = 0; i < persistentData.Blocks.Count; i++)
+            Clear();
+
+            MatchPersistentData data = persistentData[currentRewindResponsible];
+            for (int i = 0; i < data.Blocks.Count; i++)
             {                
-                GenerateBlock(blockFactory.Create(persistentData.Blocks[i].ID), persistentData.Blocks[i].Position);
+                GenerateBlock(blockFactory.Create(data.Blocks[i].ID), data.Blocks[i].Position);
+            }
+            for (int i = 0; i < data.Snakes.Count; i++)
+            {
+                ISnakeModel snake = snakeFactory.Create(data.Snakes[i].ID);
+                ISimulatedInput simulatedInput = simulatedInputFactory.Create();
+                simulatedInput.Initialize(snake);
+
+                snake.Initialize(data.Snakes[i].Position, data.Snakes[i].Direction, simulatedInput);
+                snake.OnHit += HandleSnakeHit;
+
+                snakes.Add(snake);
             }
             //for (int i = 0; i < persistentData.Players.Count; i++)
             //{
@@ -87,6 +103,15 @@ namespace LeandroExhumed.SnakeGame.Match
 
             //    players.Add(snake, persistentData.Players[i].Number);
             //}
+        }
+
+        private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IMovementRequester input)
+        {
+            ISnakeModel snake = snakeFactory.Create(id);
+            snake.Initialize(position, direction, input);
+            snake.OnHit += HandleSnakeHit;
+
+            snakes.Add(snake);
         }
 
         public void AddPlayer (char leftKey, char rightKey)
@@ -144,7 +169,10 @@ namespace LeandroExhumed.SnakeGame.Match
             block.OnCollected += HandleBlockCollected;
             grid.SetNode(block.Position, block);
 
-            blocks.Add(block);
+            if (block.ID == 4)
+            {
+                blocks.Add(block);
+            }
 
             OnBlockGenerated?.Invoke(block.Position);
         }
@@ -159,7 +187,7 @@ namespace LeandroExhumed.SnakeGame.Match
             Debug.Log("You died!");
         }
 
-        public void Save ()
+        public void Save (IBlockModel timeTravelBlock)
         {
             //for (int i = 0; i < snakes.Count; i++)
             //{
@@ -176,11 +204,20 @@ namespace LeandroExhumed.SnakeGame.Match
             //    persistentData.Players.Add(item.Value, player);
             //}
 
+            MatchPersistentData data = new();
             for (int i = 0; i < blocks.Count; i++)
             {
                 BlockPersistentData block = new(blocks[i].ID, blocks[i].Position);
-                persistentData.Blocks.Add(block);
+                data.Blocks.Add(block);
             }
+            for (int i = 0; i < snakes.Count; i++)
+            {
+                SnakePersistentData snakeData = new();
+                snakes[i].Save(snakeData);
+                data.Snakes.Add(snakeData);
+            }
+
+            persistentData.Add(timeTravelBlock, data);
         }
 
         private void GenerateRandomBlock ()
@@ -190,7 +227,7 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 spawnPosition = new(UnityEngine.Random.Range(0, grid.Width), UnityEngine.Random.Range(0, grid.Height));
             } while (grid.GetNode(spawnPosition) != null);
-            GenerateBlock(blockFactory.CreateRandomly(1), spawnPosition);
+            GenerateBlock(blockFactory.Create(4), spawnPosition);
         }
 
         private void RemoveSnake (ISnakeModel snake)
@@ -210,11 +247,30 @@ namespace LeandroExhumed.SnakeGame.Match
             snakes.Remove(snake);
         }
 
-        private void HandleSnakeHit (ISnakeModel snake, bool hasTimeTravel)
+        private void Clear ()
         {
-            if (hasTimeTravel)
+            grid.Clear();
+
+            for (int i = 0; i < snakes.Count; i++)
             {
-                Rewind();
+                snakes[i].Destroy();
+            }
+            snakes.Clear();
+
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                blocks[i].Destroy();
+            }
+            blocks.Clear();
+        }
+
+        private void HandleSnakeHit (ISnakeModel snake, IBlockModel timeTravelBlock)
+        {
+            if (timeTravelBlock != null)
+            {
+                currentRewindResponsible = timeTravelBlock;
+                blocks.Remove(timeTravelBlock);
+                OnRewind?.Invoke();
 
                 return;
             }
@@ -236,6 +292,11 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void HandleBlockCollected (IBlockModel block)
         {
+            if (block.ID == 4)
+            {
+                Save(block);
+            }
+
             grid.SetNode(block.Position, null);
             blocks.Remove(block);
             GenerateRandomBlock();

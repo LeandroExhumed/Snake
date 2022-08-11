@@ -36,6 +36,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             model.OnInitialized += HandleInitialized;
             model.OnBlockAttached += HandleBlockAttached;
             model.OnHit += HandleHit;
+            model.OnDestroyed += HandleDestroyed;
             view.OnUpdate += HandleViewUpdate;
         }
 
@@ -49,9 +50,14 @@ namespace LeandroExhumed.SnakeGame.Snake
             block.Attach(view.Transform);
         }
 
-        private void HandleHit (ISnakeModel model, bool hasTimeTravel)
+        private void HandleHit (ISnakeModel model, IBlockModel timeTravelBlock)
         {
             view.PlayBlinkingEffect();
+        }
+
+        private void HandleDestroyed ()
+        {
+            view.Destroy();
         }
 
         private void HandleViewUpdate ()
@@ -70,6 +76,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             model.OnInitialized -= HandleInitialized;
             model.OnBlockAttached -= HandleBlockAttached;
             model.OnHit -= HandleHit;
+            model.OnDestroyed -= HandleDestroyed;
             view.OnUpdate -= HandleViewUpdate;
             Input.OnMovementRequested -= HandleMovementInputPerformed;
         }

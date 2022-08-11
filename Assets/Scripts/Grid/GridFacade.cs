@@ -40,6 +40,8 @@ namespace LeandroExhumed.SnakeGame.Grid
 
         public void SetNode (Vector2Int position, INode node) => model.SetNode(position, node);
 
+        public void Clear () => model.Clear();
+
         private void OnDestroy ()
         {
             controller.Dispose();

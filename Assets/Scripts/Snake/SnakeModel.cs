@@ -13,7 +13,8 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action<IMovementRequester> OnInitialized;
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnBlockAttached;
-        public event Action<ISnakeModel, bool> OnHit;
+        public event Action<ISnakeModel, IBlockModel> OnHit;
+        public event Action OnDestroyed;
 
         public Vector2Int Position => Head.Position;
         public Vector2Int Direction { get; private set; }
@@ -26,7 +27,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         private float timer = 0f;
         private float speedDecreaseOnLoad = 0.05f;
         private bool isAlive = true;
-        private bool hasTimeTravel = false;
+        private IBlockModel timeTravelBlock;
 
         private readonly SnakeData data;
 
@@ -96,9 +97,14 @@ namespace LeandroExhumed.SnakeGame.Snake
             TimeToMove -= speedAddition;
         }
 
-        public void CollectTimeTravel ()
+        public void CollectTimeTravel (IBlockModel block)
         {
-            hasTimeTravel = true;
+            if (timeTravelBlock != null)
+            {
+                timeTravelBlock.RemoveBenefit();
+            }
+
+            timeTravelBlock = block;
         }
 
         public void Tick ()
@@ -118,10 +124,10 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Save (SnakePersistentData persistentData)
         {
+            persistentData.ID = data.ID;
             persistentData.Position = Position;
             persistentData.Direction = Direction;
             persistentData.TimeToMove = TimeToMove;
-            persistentData.HasTimeTravel = hasTimeTravel;
 
             List<BlockPersistentData> blocks = new ();
             foreach (IBlockModel item in attachedBlocks.ToList())
@@ -129,6 +135,11 @@ namespace LeandroExhumed.SnakeGame.Snake
                 blocks.Add(new BlockPersistentData(item.ID, item.Position));
             }
             persistentData.Blocks = blocks.ToArray();
+        }
+
+        public void Destroy ()
+        {
+            OnDestroyed?.Invoke();
         }
 
         private void AttachBlock (IBlockModel block, Vector2Int position)
@@ -194,8 +205,12 @@ namespace LeandroExhumed.SnakeGame.Snake
                         }
                         else
                         {
-                            isAlive = false;
-                            OnHit?.Invoke(this, hasTimeTravel);
+                            if (timeTravelBlock != null)
+                            {
+                                isAlive = false;
+                            }
+
+                            OnHit?.Invoke(this, timeTravelBlock);
                         }
                     }
                     else

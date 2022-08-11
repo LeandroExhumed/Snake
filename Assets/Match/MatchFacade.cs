@@ -39,6 +39,11 @@ namespace LeandroExhumed.SnakeGame.Match
             add => model.OnPlayerLeft += value;
             remove => model.OnPlayerLeft -= value;
         }
+        public event Action OnRewind
+        {
+            add => model.OnRewind += value;
+            remove => model.OnRewind -= value;
+        }
         public event Action<int> OnOver
         {
             add => model.OnOver += value;
@@ -51,6 +56,8 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Play (int selectedSnakeID, int playerNumber, IMovementRequester input)
             => model.Play(selectedSnakeID, playerNumber, input);
+
+        public void Rewind () => model.Rewind();
 
         private void OnDestroy ()
         {

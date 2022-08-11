@@ -18,6 +18,8 @@ namespace LeandroExhumed.SnakeGame.Snake
             StartCoroutine(SpriteBlinkingEffectRoutine());
         }
 
+        public void Destroy () => Destroy(gameObject);
+
         private void Update ()
         {
             OnUpdate?.Invoke();
@@ -43,7 +45,7 @@ namespace LeandroExhumed.SnakeGame.Snake
                 blinksExecuted++;
             }
 
-            Destroy(gameObject);
+            Destroy();
         }
     }
 }

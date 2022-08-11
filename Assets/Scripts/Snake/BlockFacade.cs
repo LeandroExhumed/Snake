@@ -28,6 +28,11 @@ namespace LeandroExhumed.SnakeGame.Snake
             add => model.OnBenefitRemoved += value;
             remove => model.OnBenefitRemoved -= value;
         }
+        public event Action OnDestroyed
+        {
+            add => model.OnDestroyed += value;
+            remove => model.OnDestroyed -= value;
+        }
 
         public int ID => model.ID;
         public Vector2Int Position { get => model.Position; set => model.Position = value; }
@@ -57,6 +62,8 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void Attach (Transform owner) => model.Attach(owner);
 
         public void RemoveBenefit () => model.RemoveBenefit();
+
+        public void Destroy () => model.Destroy();
 
         public override bool Equals (object other)
         {

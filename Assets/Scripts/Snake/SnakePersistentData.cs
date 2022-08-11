@@ -10,7 +10,6 @@ namespace LeandroExhumed.SnakeGame.Snake
         public Vector2Int Position { get; set; }
         public Vector2Int Direction { get; set; }
         public float TimeToMove { get; set; }
-        public bool HasTimeTravel { get; set; }
         public BlockPersistentData[] Blocks { get; set; }
 
         //public SnakePersistentData (

@@ -21,5 +21,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             normal.a /= 2;
             spriteRenderer.color = normal;
         }
+
+        public void Destroy () => Destroy(gameObject);
     }
 }

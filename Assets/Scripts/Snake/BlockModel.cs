@@ -10,6 +10,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action<IBlockModel> OnCollected;
         public event Action<Transform> OnAttached;
         public event Action OnBenefitRemoved;
+        public event Action OnDestroyed;
 
         public Vector2Int Position
         {
@@ -60,6 +61,11 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             HasBenefit = false;
             OnBenefitRemoved?.Invoke();
+        }
+
+        public void Destroy ()
+        {
+            OnDestroyed?.Invoke();
         }
     }
 }

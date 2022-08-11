@@ -36,5 +36,16 @@ namespace LeandroExhumed.SnakeGame.Grid
             array[position.x, position.y] = node;
             OnNodeChanged?.Invoke(position);
         }
+
+        public void Clear ()
+        {
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                for (int y = 0; y < array.GetLength(1); y++)
+                {
+                    array[x, y] = default;
+                }
+            }
+        }
     }
 }
