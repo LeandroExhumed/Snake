@@ -16,6 +16,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public event Action<ISnakeModel, IBlockModel> OnHit;
         public event Action OnDestroyed;
 
+        public int ID => data.ID;
         public Vector2Int Position => Head.Position;
         public Vector2Int Direction { get; private set; }
         public float TimeToMove { get; private set; }
@@ -43,6 +44,9 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input)
         {
+            Direction = startDirection;
+            TimeToMove = data.Speed;
+
             for (int i = 0; i < data.StartingBlocks.Length; i++)
             {
                 Vector2Int blockPosition = new(
@@ -51,14 +55,14 @@ namespace LeandroExhumed.SnakeGame.Snake
                 AttachBlock(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition, true);
             }
 
-            Direction = startDirection;
-            TimeToMove = data.Speed;
-
             OnInitialized.Invoke(input);
         }
 
         public void Initialize (SnakePersistentData persistentData, IMovementRequester input)
         {
+            Direction = persistentData.Direction;
+            TimeToMove = persistentData.TimeToMove;
+
             persistentData.Blocks = persistentData.Blocks.Reverse().ToArray();
             for (int i = 0; i < persistentData.Blocks.Length; i++)
             {
@@ -67,9 +71,6 @@ namespace LeandroExhumed.SnakeGame.Snake
                     persistentData.Blocks[i].Position,
                     persistentData.Blocks[i].HasBenefit);
             }
-
-            Direction = persistentData.Direction;
-            TimeToMove = persistentData.TimeToMove;
 
             OnInitialized.Invoke(input);
         }
@@ -149,7 +150,10 @@ namespace LeandroExhumed.SnakeGame.Snake
         private void AttachBlock (IBlockModel block, Vector2Int position, bool hasBenefit)
         {
             block.Initialize(position, hasBenefit, this);
-            block.ApplyEffect();
+            if (hasBenefit)
+            {
+                block.ApplyEffect();
+            }
             block.OnPositionChanged += HandleAttachedBlockPositionChanged;
 
             attachedBlocks.Push(block);

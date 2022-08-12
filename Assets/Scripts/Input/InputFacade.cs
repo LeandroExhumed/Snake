@@ -3,14 +3,20 @@ using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Input
 {
-    public class InputFacade : IMovementRequester
+    public class InputFacade : IPlayerInput
     {
         public event Action<int> OnMovementRequested;
+
+        public char LeftKey { get; private set; }
+        public char RightKey { get; private set; }
 
         private readonly InputAction action;
 
         public InputFacade (char leftKey, char rightKey)
         {
+            LeftKey = leftKey;
+            RightKey = rightKey;
+
             action = new("Move");
             action.AddCompositeBinding("1DAxis")
                 .With("Negative", $"<Keyboard>/{leftKey}")

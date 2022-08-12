@@ -53,7 +53,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void HandleRewind ()
         {
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
             view.PlayRewindEffect();
         }
 

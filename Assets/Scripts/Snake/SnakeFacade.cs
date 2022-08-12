@@ -33,6 +33,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             remove => model.OnDestroyed -= value;
         }
 
+        public int ID => model.ID;
         public Vector2Int Position => model.Position;
         public Vector2Int Direction => model.Direction;
         public float TimeToMove => model.TimeToMove;

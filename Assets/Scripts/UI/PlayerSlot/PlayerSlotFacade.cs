@@ -1,4 +1,5 @@
 ﻿using LeandroExhumed.SnakeGame.Input;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 using UnityEngine;
 using Zenject;
@@ -7,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 {
     public class PlayerSlotFacade : MonoBehaviour, IPlayerSlotModel
     {
-        public event Action<IMovementRequester> OnEnabled
+        public event Action<IPlayerInput> OnEnabled
         {
             add => model.OnEnabled += value;
             remove => model.OnEnabled -= value;
@@ -17,7 +18,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             add => model.OnSnakeShown += value;
             remove => model.OnSnakeShown -= value;
         }
-        public event Action<int, int, IMovementRequester> OnSnakeSelected
+        public event Action<int, int, IPlayerInput> OnSnakeSelected
         {
             add => model.OnSnakeSelected += value;
             remove => model.OnSnakeSelected -= value;
@@ -44,7 +45,9 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         public void Initialize (int playerNumber) => model.Initialize(playerNumber);
 
-        public void Enable (IMovementRequester input) => model.Enable(input);
+        public void Enable (IPlayerInput input) => model.Enable(input);
+
+        public void Enable (ISnakeModel snake) => model.Enable(snake);
 
         public void ShowNextSnake () => model.ShowNextSnake();
 

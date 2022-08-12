@@ -55,7 +55,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void AddPlayer (char leftKey, char rightKey) => model.AddPlayer(leftKey, rightKey);
 
-        public void Play (int selectedSnakeID, int playerNumber, IMovementRequester input)
+        public void Play (int selectedSnakeID, int playerNumber, IPlayerInput input)
             => model.Play(selectedSnakeID, playerNumber, input);
 
         public void Rewind () => model.Rewind();

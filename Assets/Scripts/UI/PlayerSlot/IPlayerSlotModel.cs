@@ -1,4 +1,5 @@
 ﻿using LeandroExhumed.SnakeGame.Input;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 
 namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
@@ -7,13 +8,14 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
     {
         SlotState State { get; }
 
-        event Action<IMovementRequester> OnEnabled;
+        event Action<IPlayerInput> OnEnabled;
         event Action<int[]> OnSnakeShown;
-        event Action<int, int, IMovementRequester> OnSnakeSelected;
+        event Action<int, int, IPlayerInput> OnSnakeSelected;
         event Action OnDisabled;
 
         void Initialize (int playerNumber);
-        void Enable (IMovementRequester input);
+        void Enable (IPlayerInput input);
+        void Enable (ISnakeModel snake);
         void ShowPreviousSnake ();
         void ShowNextSnake ();
         void Confirm ();

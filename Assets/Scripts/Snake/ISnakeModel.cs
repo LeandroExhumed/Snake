@@ -13,6 +13,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         event Action<ISnakeModel, IBlockModel> OnHit;
         event Action OnDestroyed;
 
+        int ID { get; }
         Vector2Int Position { get; }
         Vector2Int Direction { get; }
         float TimeToMove { get; }

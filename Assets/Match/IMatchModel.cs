@@ -16,7 +16,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         void Initialize ();
         void AddPlayer (char leftKey, char rightKey);
-        void Play (int selectedSnakeID, int playerNumber, IMovementRequester input);
+        void Play (int selectedSnakeID, int playerNumber, IPlayerInput input);
         void Rewind ();
     }
 }

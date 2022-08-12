@@ -7,9 +7,9 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 {
     public class PlayerSlotModel : IPlayerSlotModel
     {
-        public event Action<IMovementRequester> OnEnabled;
+        public event Action<IPlayerInput> OnEnabled;
         public event Action<int[]> OnSnakeShown;
-        public event Action<int, int, IMovementRequester> OnSnakeSelected;
+        public event Action<int, int, IPlayerInput> OnSnakeSelected;
         public event Action OnDisabled;
 
         public SlotState State { get; private set; }
@@ -17,7 +17,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private int playerNumber;
 
         private int currentSnake = 0;
-        private IMovementRequester input;
+        private IPlayerInput input;
 
         private readonly SnakeData[] snakes;
 
@@ -31,7 +31,16 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             this.playerNumber = playerNumber;
         }
 
-        public void Enable (IMovementRequester input)
+        public void Enable (ISnakeModel snake)
+        {
+            State = SlotState.Playing;
+            currentSnake = Array.FindIndex(snakes, x => x.ID == snake.ID);
+            ShowSnake();
+
+            OnEnabled?.Invoke(input);
+        }
+
+        public void Enable (IPlayerInput input)
         {
             this.input = input;
 
