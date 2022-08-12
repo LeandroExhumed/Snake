@@ -46,8 +46,16 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
             view.SetKeysIconsActive(true);
             view.SetSnakePreviewActive(true);
-            view.SetArrowsActive(true);
-            view.SetSelectSnakeTextActive(true);
+            if (model.State == SlotState.Selection)
+            {
+                view.SetArrowsActive(true);
+                view.SetSelectSnakeTextActive(true);
+            }
+            else
+            {
+                view.SetOkIconActive(true);
+            }
+            
         }
 
         private void HandleSnakeShown (int[] blockIDs)

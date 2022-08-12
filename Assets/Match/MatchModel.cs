@@ -74,16 +74,17 @@ namespace LeandroExhumed.SnakeGame.Match
             for (int i = 0; i < data.Snakes.Count; i++)
             {
                 ISnakeModel snake = snakeFactory.Create(data.Snakes[i].ID);
-                if (data.Players.FirstOrDefault(x => x.Snake == data.Snakes[i].Position) != null)
+                PlayerPersistentData player = data.Players.FirstOrDefault(x => x.Snake == data.Snakes[i].Position);
+                if (player != null)
                 {
                     IPlayerInput input = new InputFacade(
-                        data.Players[i].Input.LeftKey, data.Players[i].Input.RightKey);
+                        player.Input.LeftKey, player.Input.RightKey);
                     input.Initialize();
-                    playerSlots[data.Players[i].Number - 1].Enable(snake);
+                    playerSlots[player.Number - 1].Enable(snake);
                     snake.Initialize(data.Snakes[i], input);
                     snake.OnPositionChanged += HandleSnakePositionChanged;
 
-                    players.Add(snake, new Player(data.Players[i].Number, input));
+                    players.Add(snake, new Player(player.Number, input));
                 }
                 else
                 {

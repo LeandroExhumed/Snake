@@ -11,6 +11,7 @@ namespace LeandroExhumed.SnakeGame.Collectables
         public override void ApplyEffect ()
         {
             owner.CollectEnginePower(this, speedAddition);
+            RemoveBenefit();
         }
     }
 }
