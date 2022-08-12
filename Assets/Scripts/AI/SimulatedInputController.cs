@@ -23,11 +23,17 @@ namespace LeandroExhumed.SnakeGame.AI
         {
             model.OnPathChanged += HandlePathChanged;
             levelGrid.OnNodeChanged += HandleLevelGridNodeChanged;
+            model.OnDestroyed += HandleDestroyed;
         }
 
         private void HandlePathChanged (List<PathNode> path)
         {
             view.SetPath(path?.ToArray());
+        }
+
+        private void HandleDestroyed ()
+        {
+            view.Destroy();
         }
 
         private void HandleLevelGridNodeChanged (Vector2Int nodePosition)
@@ -39,6 +45,7 @@ namespace LeandroExhumed.SnakeGame.AI
         {
             model.OnPathChanged -= HandlePathChanged;
             levelGrid.OnNodeChanged -= HandleLevelGridNodeChanged;
+            model.OnDestroyed -= HandleDestroyed;
         }
     }
 }

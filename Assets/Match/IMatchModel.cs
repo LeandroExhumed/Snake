@@ -1,14 +1,14 @@
 ﻿using LeandroExhumed.SnakeGame.Input;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
     public interface IMatchModel
     {
         event Action OnInitialized;
-        event Action<Vector2Int> OnBlockGenerated;
+        event Action<IBlockModel> OnBlockGenerated;
         event Action<int, Vector2Int> OnSnakePositionChanged;
         event Action<int> OnPlayerLeft;
         event Action OnRewind;

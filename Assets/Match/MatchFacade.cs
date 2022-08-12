@@ -1,4 +1,5 @@
 using LeandroExhumed.SnakeGame.Input;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 using UnityEngine;
 using Zenject;
@@ -24,7 +25,7 @@ namespace LeandroExhumed.SnakeGame.Match
             add => model.OnInitialized += value;
             remove => model.OnInitialized -= value;
         }
-        public event Action<Vector2Int> OnBlockGenerated
+        public event Action<IBlockModel> OnBlockGenerated
         {
             add => model.OnBlockGenerated += value;
             remove => model.OnBlockGenerated -= value;

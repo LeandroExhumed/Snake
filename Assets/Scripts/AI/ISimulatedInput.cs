@@ -7,12 +7,15 @@ using Zenject;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
-    public interface ISimulatedInput : IMovementRequester
+    public interface ISimulatedInput : IMovementRequester, IDisposable
     {
         event Action<List<PathNode>> OnPathChanged;
+        event Action OnDestroyed;
 
         void Initialize (ISnakeModel snake);
         void HandleGridNodeChanged (Vector2Int nodePosition);
+        void HandleBlockCollected (IBlockModel block);
+        void Destroy ();
 
         public class Factory : PlaceholderFactory<ISimulatedInput> { }
     }

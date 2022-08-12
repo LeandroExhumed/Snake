@@ -154,6 +154,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             attachedBlocks.Push(block);
 
+            levelGrid.SetNode(position, block);
+
             OnBlockAttached?.Invoke(block);
         }
 

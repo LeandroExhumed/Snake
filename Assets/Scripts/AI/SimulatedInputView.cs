@@ -14,6 +14,8 @@ namespace LeandroExhumed.SnakeGame.AI
             this.path = path;
         }
 
+        public void Destroy () => Destroy(gameObject);
+
         private void OnDrawGizmos ()
         {
             if (!debug || path == null)

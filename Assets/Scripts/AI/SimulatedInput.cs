@@ -11,6 +11,7 @@ namespace LeandroExhumed.SnakeGame.AI
     {
         public event Action<int> OnMovementRequested;
         public event Action<List<PathNode>> OnPathChanged;
+        public event Action OnDestroyed;
 
         private List<PathNode> Path
         {
@@ -27,7 +28,7 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private List<PathNode> path;
         private int targetNode = 0;
-        private Vector2Int block;
+        private IBlockModel targetBlock;
         private bool reasonedAboutNewBlock = false;
 
         private readonly AIData data;
@@ -75,6 +76,19 @@ namespace LeandroExhumed.SnakeGame.AI
             }
         }
 
+        public void HandleBlockCollected (IBlockModel block)
+        {
+            if (targetBlock.IsEqual(block))
+            {
+                targetBlock = null;
+            }
+        }
+
+        public void Destroy ()
+        {
+            OnDestroyed?.Invoke();
+        }
+
         private void FindPath (Vector2Int end)
         {
             Path = pathFinding.FindPath(snake.Position, end);
@@ -90,6 +104,11 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private IEnumerator ThinkAboutNewPath (float reasoningSpeed)
         {
+            if (reasonedAboutNewBlock)
+            {
+                yield return null;
+            }
+
             Path = null;
             yield return new WaitForSeconds(reasoningSpeed);
             reasonedAboutNewBlock = true;
@@ -101,7 +120,7 @@ namespace LeandroExhumed.SnakeGame.AI
             {
                 if (reasonedAboutNewBlock)
                 {
-                    FindPath(block);
+                    FindPath(targetBlock.Position);
                 }
                 else
                 {
@@ -138,14 +157,29 @@ namespace LeandroExhumed.SnakeGame.AI
             monoBehaviour.StartCoroutine(RequestMovementInput(input));
         }
 
-        private void HandleBlockGenerated (Vector2Int position)
+        private void HandleBlockGenerated (IBlockModel block)
         {
-            block = position;
+            if (targetBlock != null)
+            {
+                float currentDistance = Vector2Int.Distance(snake.Position, targetBlock.Position);
+                if (currentDistance < Vector2Int.Distance(snake.Position, block.Position))
+                {
+                    return;
+                }
+            }
+
+            targetBlock = block;
             reasonedAboutNewBlock = false;
             float reasoningTime = UnityEngine.Random.Range(
                 data.MinReactionSpeedRegardingNewBlockGenerated,
                 data.MaxReactionSpeedRegardingNewBlockGenerated);
             monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
+        }
+
+        public void Dispose ()
+        {
+            snake.OnPositionChanged -= HandlePositionChanged;
+            match.OnBlockGenerated -= HandleBlockGenerated;
         }
     }
 }
