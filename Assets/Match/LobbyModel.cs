@@ -34,6 +34,18 @@ namespace LeandroExhumed.SnakeGame.Match
             }
         }
 
+        public void ReturnKeys (char leftKey, char rightKey)
+        {
+            unavailableKeys.Remove(leftKey);
+            unavailableKeys.Remove(rightKey);
+        }
+
+        public void RecoverKeys (char leftKey, char rightKey)
+        {
+            unavailableKeys.Add(leftKey);
+            unavailableKeys.Add(rightKey);
+        }
+
         private void HandleAnyKeyHeld (InputAction.CallbackContext obj)
         {
             if (unavailableKeys.Contains(GetKey(obj)))

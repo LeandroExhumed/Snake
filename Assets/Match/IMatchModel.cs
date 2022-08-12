@@ -10,8 +10,9 @@ namespace LeandroExhumed.SnakeGame.Match
         event Action OnInitialized;
         event Action<IBlockModel> OnBlockGenerated;
         event Action<int, Vector2Int> OnSnakePositionChanged;
-        event Action<int> OnPlayerLeft;
+        event Action<int, char, char> OnPlayerLeft;
         event Action OnRewind;
+        event Action<char, char> OnPlayerReturned;
         event Action<int> OnOver;
 
         void Initialize ();

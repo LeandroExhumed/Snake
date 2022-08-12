@@ -14,9 +14,10 @@ namespace LeandroExhumed.SnakeGame.Match
     {
         public event Action OnInitialized;
         public event Action<IBlockModel> OnBlockGenerated;
-        public event Action<int> OnPlayerLeft;
+        public event Action<int, char, char> OnPlayerLeft;
         public event Action<int, Vector2Int> OnSnakePositionChanged;
         public event Action OnRewind;
+        public event Action<char, char> OnPlayerReturned;
         public event Action<int> OnOver;
 
         private int snakesPerMatch = 2;
@@ -62,6 +63,7 @@ namespace LeandroExhumed.SnakeGame.Match
             for (int i = 0; i < playerSlots.Length; i++)
             {
                 playerSlots[i].Initialize(i + 1);
+                playerSlots[i].OnSnakeSelected += HandleSelectionConfirmed;
             }
             OnInitialized?.Invoke();
         }
@@ -85,6 +87,8 @@ namespace LeandroExhumed.SnakeGame.Match
                     snake.OnPositionChanged += HandleSnakePositionChanged;
 
                     players.Add(snake, new Player(player.Number, input));
+
+                    OnPlayerReturned?.Invoke(input.LeftKey, input.RightKey);
                 }
                 else
                 {
@@ -129,7 +133,6 @@ namespace LeandroExhumed.SnakeGame.Match
                 InputFacade input = new(leftKey, rightKey);
                 input.Initialize();
                 slot.Enable(input);
-                slot.OnSnakeSelected += HandleSelectionConfirmed;
             }
         }
 
@@ -267,13 +270,13 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             if (players.ContainsKey(snake))
             {
-                int playerNumber = players[snake].Number;
-                playerSlots[playerNumber - 1].Disable();
+                Player player = players[snake];
+                playerSlots[player.Number - 1].Disable();
                 players.Remove(snake);
 
                 snake.OnPositionChanged -= HandleSnakePositionChanged;
 
-                OnPlayerLeft?.Invoke(playerNumber);
+                OnPlayerLeft?.Invoke(player.Number, player.Input.LeftKey, player.Input.RightKey);
             }
             else
             {
