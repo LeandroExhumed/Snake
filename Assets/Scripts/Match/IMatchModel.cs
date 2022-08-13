@@ -1,5 +1,4 @@
 ﻿using LeandroExhumed.SnakeGame.Block;
-using LeandroExhumed.SnakeGame.Input;
 using System;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ namespace LeandroExhumed.SnakeGame.Match
 
         void Initialize ();
         void AddPlayer (char leftKey, char rightKey);
-        void Play (int selectedSnakeID, int playerNumber, IPlayerInput input);
         void Rewind ();
     }
 }

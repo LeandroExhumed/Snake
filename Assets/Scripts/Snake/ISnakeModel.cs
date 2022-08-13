@@ -22,7 +22,6 @@ namespace LeandroExhumed.SnakeGame.Snake
         void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input);
         void Initialize (SnakePersistentData persistentData, IGameInput input);
         void LookTo (int direction);
-        void Grow (IBlockModel block);
         void Tick ();
         void Save (SnakePersistentData persistentData);
         void Destroy ();

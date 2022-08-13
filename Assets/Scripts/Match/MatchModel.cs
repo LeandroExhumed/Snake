@@ -22,19 +22,15 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action<int> OnOver;
 
         private int snakesPerMatch = 2;
-        private readonly Vector2Int[] spawnPositions =
-        {
-            new Vector2Int(3, 1),
-            new Vector2Int(27, 29)
-        };
 
-        private Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
         private IBlockModel currentRewindResponsible;
 
         private readonly Dictionary<ISnakeModel, Player> players = new();
         private readonly List<ISnakeModel> snakes = new();
         private readonly List<IBlockModel> blocks = new();
         private readonly Dictionary<ISnakeModel, ISimulatedInput> simulatedInputs = new();
+
+        private readonly Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
 
         private readonly IGridModel<INode> grid;
 
@@ -137,12 +133,6 @@ namespace LeandroExhumed.SnakeGame.Match
             }
         }
 
-        public void Play (int selectedSnakeID, int playerNumber, IPlayerInput input)
-        {
-            GenerateSnake(selectedSnakeID, playerNumber, input);
-            GenerateRandomBlock();
-        }
-
         private void GenerateSnake (int playableSnakeID, int playerNumber, IPlayerInput input)
         {
             for (int i = 0; i < snakesPerMatch; i++)
@@ -200,6 +190,12 @@ namespace LeandroExhumed.SnakeGame.Match
             blocks.Add(block);
 
             OnBlockGenerated?.Invoke(block);
+        }
+
+        private void Play (int selectedSnakeID, int playerNumber, IPlayerInput input)
+        {
+            GenerateSnake(selectedSnakeID, playerNumber, input);
+            GenerateRandomBlock();
         }
 
         private void HandleSelectionConfirmed (int selectedSnakeID, int playerNumber, IPlayerInput input)
@@ -264,7 +260,7 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 spawnPosition = new(UnityEngine.Random.Range(0, grid.Width), UnityEngine.Random.Range(0, grid.Height));
             } while (grid.GetNode(spawnPosition) != null);
-            GenerateBlock(blockFactory.Create(4), spawnPosition);
+            GenerateBlock(blockFactory.CreateRandomly(1), spawnPosition);
         }
 
         private void RemoveSnake (ISnakeModel snake)

@@ -1,5 +1,4 @@
 using LeandroExhumed.SnakeGame.Block;
-using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Input;
 using System;
@@ -86,12 +85,6 @@ namespace LeandroExhumed.SnakeGame.Snake
             {
                 Direction = new Vector2Int(Direction.y, -Direction.x);
             }
-        }
-
-        public void Grow (IBlockModel block)
-        {
-            TimeToMove += speedDecreaseOnLoad;
-            AttachBlock(block, Position, block.HasBenefit);
         }
 
         public void CollectBatteringRam (IBlockModel block)
@@ -210,7 +203,7 @@ namespace LeandroExhumed.SnakeGame.Snake
                 {
                     if (block.IsAttached)
                     {
-                        if (Head is BatteringRamBlockModel batteringRam && batteringRam.HasBenefit)
+                        if (Head is IBatteringRamBlockModel batteringRam && batteringRam.HasBenefit)
                         {
                             Head.RemoveBenefit();
                         }
@@ -233,11 +226,13 @@ namespace LeandroExhumed.SnakeGame.Snake
                         block.BeCollected();
                     }
                 }
-                else if (targetNode is ICollectableModel collectable)
-                {
-                    collectable.BeCollected();
-                }
             }
+        }
+
+        private void Grow (IBlockModel block)
+        {
+            TimeToMove += speedDecreaseOnLoad;
+            AttachBlock(block, Position, block.HasBenefit);
         }
 
         private void HandleAttachedBlockPositionChanged (INode block, Vector2Int value)
