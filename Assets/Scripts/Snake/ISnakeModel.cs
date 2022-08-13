@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public interface ISnakeModel : ICollector
     {
-        event Action<IMovementRequester> OnInitialized;
+        event Action<IGameInput> OnInitialized;
         event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         event Action<IBlockModel> OnBlockAttached;
         event Action<ISnakeModel, IBlockModel> OnHit;
@@ -19,8 +19,8 @@ namespace LeandroExhumed.SnakeGame.Snake
         Vector2Int Direction { get; }
         float TimeToMove { get; }
 
-        void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input);
-        void Initialize (SnakePersistentData persistentData, IMovementRequester input);
+        void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input);
+        void Initialize (SnakePersistentData persistentData, IGameInput input);
         void LookTo (int direction);
         void Grow (IBlockModel block);
         void Tick ();

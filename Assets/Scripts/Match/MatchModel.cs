@@ -80,7 +80,7 @@ namespace LeandroExhumed.SnakeGame.Match
                 PlayerPersistentData player = data.Players.FirstOrDefault(x => x.Snake == data.Snakes[i].Position);
                 if (player != null)
                 {
-                    IPlayerInput input = new InputFacade(
+                    IPlayerInput input = new PlayerInput(
                         player.Input.LeftKey, player.Input.RightKey);
                     input.Initialize();
                     playerSlots[player.Number - 1].Enable(snake);
@@ -117,7 +117,7 @@ namespace LeandroExhumed.SnakeGame.Match
             }
         }
 
-        private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IMovementRequester input)
+        private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IGameInput input)
         {
             ISnakeModel snake = snakeFactory.Create(id);
             snake.Initialize(position, direction, input);
@@ -131,7 +131,7 @@ namespace LeandroExhumed.SnakeGame.Match
             IPlayerSlotModel slot = playerSlots.FirstOrDefault(x => x.State == SlotState.Waiting);
             if (slot != null)
             {
-                InputFacade input = new(leftKey, rightKey);
+                PlayerInput input = new(leftKey, rightKey);
                 input.Initialize();
                 slot.Enable(input);
             }
@@ -150,7 +150,7 @@ namespace LeandroExhumed.SnakeGame.Match
                 ISnakeModel snake;
                 Vector2Int startPosition;
                 Vector2Int startDirection;
-                IMovementRequester _input;
+                IGameInput _input;
                 if (i % 2 == 0)
                 {
                     snake = snakeFactory.Create(playableSnakeID);

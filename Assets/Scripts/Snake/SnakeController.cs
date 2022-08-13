@@ -9,7 +9,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly ISnakeModel model;
         private readonly SnakeView view;
 
-        private IMovementRequester Input
+        private IGameInput Input
         {
             get => input;
             set
@@ -24,7 +24,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             }
         }
 
-        private IMovementRequester input;
+        private IGameInput input;
 
         public SnakeController (ISnakeModel model, SnakeView view)
         {
@@ -41,7 +41,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             view.OnUpdate += HandleViewUpdate;
         }
 
-        private void HandleInitialized (IMovementRequester input)
+        private void HandleInitialized (IGameInput input)
         {
             Input = input;
         }

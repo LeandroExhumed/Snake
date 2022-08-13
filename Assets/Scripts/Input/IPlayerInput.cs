@@ -1,6 +1,6 @@
 ﻿namespace LeandroExhumed.SnakeGame.Input
 {
-    public interface IPlayerInput : IMovementRequester
+    public interface IPlayerInput : IGameInput
     {
         char LeftKey { get; }
         char RightKey { get; }

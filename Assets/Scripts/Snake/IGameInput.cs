@@ -2,7 +2,7 @@
 
 namespace LeandroExhumed.SnakeGame.Input
 {
-    public interface IMovementRequester
+    public interface IGameInput
     {
         event Action<int> OnMovementRequested;
 

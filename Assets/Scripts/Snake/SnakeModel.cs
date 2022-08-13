@@ -11,7 +11,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeModel : ISnakeModel
     {
-        public event Action<IMovementRequester> OnInitialized;
+        public event Action<IGameInput> OnInitialized;
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnBlockAttached;
         public event Action<ISnakeModel, IBlockModel> OnHit;
@@ -43,7 +43,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             this.levelGrid = levelGrid;
         }
 
-        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input)
+        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input)
         {
             Direction = startDirection;
             TimeToMove = data.Speed;
@@ -59,7 +59,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             OnInitialized.Invoke(input);
         }
 
-        public void Initialize (SnakePersistentData persistentData, IMovementRequester input)
+        public void Initialize (SnakePersistentData persistentData, IGameInput input)
         {
             Direction = persistentData.Direction;
             TimeToMove = persistentData.TimeToMove;

@@ -8,7 +8,7 @@ using Zenject;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
-    public interface ISimulatedInput : IMovementRequester, IDisposable
+    public interface ISimulatedInput : IGameInput, IDisposable
     {
         event Action<List<PathNode>> OnPathChanged;
         event Action OnDestroyed;

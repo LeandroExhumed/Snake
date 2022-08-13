@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeFacade : MonoBehaviour, ISnakeModel
     {
-        public event Action<IMovementRequester> OnInitialized
+        public event Action<IGameInput> OnInitialized
         {
             add => model.OnInitialized += value;
             remove => model.OnInitialized -= value;
@@ -51,10 +51,10 @@ namespace LeandroExhumed.SnakeGame.Snake
             controller.Setup();
         }
 
-        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IMovementRequester input)
+        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input)
             => model.Initialize(startPosition, startDirection, input);
 
-        public void Initialize (SnakePersistentData persistentData, IMovementRequester input)
+        public void Initialize (SnakePersistentData persistentData, IGameInput input)
             => model.Initialize(persistentData, input);
 
         public void LookTo (int direction) => model.LookTo(direction);
