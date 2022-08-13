@@ -215,6 +215,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
                             isAlive = false;
 
+                            Debug.Log("Died by hit " + block.GetType() + " on position " + block.Position);
                             OnHit?.Invoke(this, timeTravelBlock);
                             timeTravelBlock = null;
                         }

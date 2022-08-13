@@ -23,6 +23,7 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             model.OnInitialized += HandleInitialized;
             model.OnSnakePositionChanged += HandleSnakePositionChanged;
+            model.OnSnakeDied += HandleSnakeDied;
             model.OnPlayerLeft += HandlePlayerLeft;
             model.OnRewind += HandleRewind;
             model.OnPlayerReturned += HandlePlayerReturned;
@@ -40,6 +41,12 @@ namespace LeandroExhumed.SnakeGame.Match
         private void HandleSnakePositionChanged (int player, Vector2Int position)
         {
             view.SyncGuidePosition(player, position);
+        }
+
+        private void HandleSnakeDied (Vector2Int position)
+        {
+            view.ZoomIntoSnake(position);
+            view.PlayDeathEffect();
         }
 
         private void HandleInitialized ()
@@ -79,6 +86,7 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             model.OnInitialized -= HandleInitialized;
             model.OnSnakePositionChanged -= HandleSnakePositionChanged;
+            model.OnSnakeDied -= HandleSnakeDied;
             model.OnPlayerLeft -= HandlePlayerLeft;
             model.OnRewind -= HandleRewind;
             model.OnPlayerReturned -= HandlePlayerReturned;

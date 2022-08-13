@@ -15,8 +15,9 @@ namespace LeandroExhumed.SnakeGame.Match
     {
         public event Action OnInitialized;
         public event Action<IBlockModel> OnBlockGenerated;
-        public event Action<int, char, char> OnPlayerLeft;
         public event Action<int, Vector2Int> OnSnakePositionChanged;
+        public event Action<Vector2Int> OnSnakeDied;
+        public event Action<int, char, char> OnPlayerLeft;
         public event Action OnRewind;
         public event Action<char, char> OnPlayerReturned;
         public event Action<int> OnOver;
@@ -205,28 +206,8 @@ namespace LeandroExhumed.SnakeGame.Match
             Play(selectedSnakeID, playerNumber, input);
         }
 
-        private void End ()
-        {
-            Debug.Log("You died!");
-        }
-
         public void Save (IBlockModel timeTravelBlock)
         {
-            //for (int i = 0; i < snakes.Count; i++)
-            //{
-            //    SnakePersistentData snakeData = new();
-            //    snakes[i].Save(snakeData);
-
-            //    persistentData.Snakes.Add(snakeData);
-            //}
-
-            //foreach (var item in players.ToArray())
-            //{
-            //    item.Key.Save(snake);
-            //    PlayerPersistentData player = new(item.Value, new InputPersistentData('q', 'e'), snake);
-            //    persistentData.Players.Add(item.Value, player);
-            //}
-
             MatchPersistentData data = new();
             for (int i = 0; i < blocks.Count; i++)
             {
@@ -330,11 +311,12 @@ namespace LeandroExhumed.SnakeGame.Match
 
             RemoveSnake(snake);
 
+            OnSnakeDied?.Invoke(snake.Position);
+
             if (snakes.Count == 1)
             {
                 int playerNumber = players.TryGetValue(snake, out Player player) ? player.Number : 0;
                 OnOver?.Invoke(playerNumber);
-                End();
             }
         }
 

@@ -22,6 +22,11 @@ namespace LeandroExhumed.SnakeGame.Match
             add => model.OnSnakePositionChanged += value;
             remove => model.OnSnakePositionChanged -= value;
         }
+        public event Action<Vector2Int> OnSnakeDied
+        {
+            add => model.OnSnakeDied += value;
+            remove => model.OnSnakeDied -= value;
+    }
         public event Action<int, char, char> OnPlayerLeft
         {
             add => model.OnPlayerLeft += value;
