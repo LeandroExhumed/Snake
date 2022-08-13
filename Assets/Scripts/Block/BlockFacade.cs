@@ -35,6 +35,7 @@ namespace LeandroExhumed.SnakeGame.Block
         }
 
         public int ID => model.ID;
+        public float MoveCost => model.MoveCost;
         public Vector2Int Position { get => model.Position; set => model.Position = value; }
         public bool IsAttached => model.IsAttached;
         public bool HasBenefit => model.HasBenefit;

@@ -24,6 +24,7 @@ namespace LeandroExhumed.SnakeGame.Block
         }
 
         public int ID => data.ID;
+        public float MoveCost => data.MoveCost;
         public bool IsAttached { get; private set; }
         public bool HasBenefit
         {

@@ -8,13 +8,14 @@ namespace LeandroExhumed.SnakeGame.Snake
     {
         public int ID => id;
         public BlockData[] StartingBlocks => startingBlocks;
-        public float Speed => speed;
+        public float BaseMoveRate => baseMoveRate;
 
         [SerializeField]
         private int id;
         [SerializeField]
         private BlockData[] startingBlocks;
         [SerializeField]
-        private float speed;
+        [Tooltip("Move rate without considering any block benefit.")]
+        private float baseMoveRate = 0.25f;
     }
 }

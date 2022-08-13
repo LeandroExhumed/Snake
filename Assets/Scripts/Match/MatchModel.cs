@@ -21,7 +21,8 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action<char, char> OnPlayerReturned;
         public event Action<int> OnOver;
 
-        private int snakesPerMatch = 2;
+        private readonly MatchData data;
+        private readonly IGridModel<INode> levelGrid;
 
         private IBlockModel currentRewindResponsible;
 
@@ -32,7 +33,6 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private readonly Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
 
-        private readonly IGridModel<INode> grid;
 
         private readonly IPlayerSlotModel[] playerSlots;
 
@@ -41,13 +41,15 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly ISimulatedInput.Factory simulatedInputFactory;
 
         public MatchModel (
-            IGridModel<INode> grid,
+            MatchData data,
+            IGridModel<INode> levelGrid,
             IPlayerSlotModel[] playerSlots,
             SnakeFactory snakeFactory,
             BlockFactory blockFactory,
             ISimulatedInput.Factory simulatedInputFactory)
         {
-            this.grid = grid;
+            this.data = data;
+            this.levelGrid = levelGrid;
             this.playerSlots = playerSlots;
             this.snakeFactory = snakeFactory;
             this.blockFactory = blockFactory;
@@ -56,7 +58,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize ()
         {
-            grid.Initialize();
+            levelGrid.Initialize();
             for (int i = 0; i < playerSlots.Length; i++)
             {
                 playerSlots[i].Initialize(i + 1);
@@ -135,17 +137,17 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void GenerateSnake (int playableSnakeID, int playerNumber, IPlayerInput input)
         {
-            for (int i = 0; i < snakesPerMatch; i++)
+            for (int i = 0; i < data.AISnakesPerPlayer + 1; i++)
             {
                 ISnakeModel snake;
                 Vector2Int startPosition;
                 Vector2Int startDirection;
                 IGameInput _input;
-                if (i % 2 == 0)
+                if (i == 0)
                 {
                     snake = snakeFactory.Create(playableSnakeID);
                     snake.OnPositionChanged += HandleSnakePositionChanged;
-                    startPosition = GetSafeSpawnPosition(new Vector2Int(3, grid.Height - 2));
+                    startPosition = GetSafeSpawnPosition(new Vector2Int(3, levelGrid.Height - 2));
                     startDirection = Vector2Int.right;
                     _input = input;
 
@@ -154,7 +156,7 @@ namespace LeandroExhumed.SnakeGame.Match
                 else
                 {
                     snake = snakeFactory.Create(4);
-                    startPosition = GetSafeSpawnPosition(new Vector2Int(grid.Width - 3, grid.Height - 2));
+                    startPosition = GetSafeSpawnPosition(new Vector2Int(levelGrid.Width - 3, levelGrid.Height - 2));
                     startDirection = Vector2Int.left;
                     ISimulatedInput simulatedInput = simulatedInputFactory.Create();
                     simulatedInput.Initialize(snake);
@@ -176,7 +178,7 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 position = new Vector2Int(idealPosition.x, y);
                 y -= 2;
-            } while (grid.GetNode(position) != null && y > 0);
+            } while (levelGrid.GetNode(position) != null && y > 0);
 
             return position;
         }
@@ -185,7 +187,7 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             block.Initialize(position, true);
             block.OnCollected += HandleBlockCollected;
-            grid.SetNode(block.Position, block);
+            levelGrid.SetNode(block.Position, block);
 
             blocks.Add(block);
 
@@ -258,8 +260,8 @@ namespace LeandroExhumed.SnakeGame.Match
             Vector2Int spawnPosition;
             do
             {
-                spawnPosition = new(UnityEngine.Random.Range(0, grid.Width), UnityEngine.Random.Range(0, grid.Height));
-            } while (grid.GetNode(spawnPosition) != null);
+                spawnPosition = new(UnityEngine.Random.Range(0, levelGrid.Width), UnityEngine.Random.Range(0, levelGrid.Height));
+            } while (levelGrid.GetNode(spawnPosition) != null);
             GenerateBlock(blockFactory.CreateRandomly(1), spawnPosition);
         }
 
@@ -287,7 +289,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void Clear ()
         {
-            grid.Clear();
+            levelGrid.Clear();
 
             for (int i = 0; i < snakes.Count; i++)
             {
@@ -352,7 +354,7 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 item.Value.HandleBlockCollected(block);
             }
-            grid.SetNode(block.Position, null);
+            levelGrid.SetNode(block.Position, null);
             blocks.Remove(block);
             GenerateRandomBlock();
         }

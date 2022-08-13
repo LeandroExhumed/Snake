@@ -14,6 +14,7 @@ namespace LeandroExhumed.SnakeGame.Block
         event Action OnDestroyed;
 
         int ID { get; }
+        float MoveCost { get; }
         bool IsAttached { get; }
         bool HasBenefit { get; }
 

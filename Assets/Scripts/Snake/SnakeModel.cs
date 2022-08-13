@@ -26,7 +26,6 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly Stack<IBlockModel> attachedBlocks = new();
 
         private float timer = 0f;
-        private float speedDecreaseOnLoad = 0.05f;
         private bool isAlive = true;
         private IBlockModel timeTravelBlock;
 
@@ -45,7 +44,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input)
         {
             Direction = startDirection;
-            TimeToMove = data.Speed;
+            TimeToMove = data.BaseMoveRate;
 
             for (int i = 0; i < data.StartingBlocks.Length; i++)
             {
@@ -231,7 +230,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void Grow (IBlockModel block)
         {
-            TimeToMove += speedDecreaseOnLoad;
+            TimeToMove += block.MoveCost;
             AttachBlock(block, Position, block.HasBenefit);
         }
 
