@@ -1,4 +1,5 @@
-﻿using LeandroExhumed.SnakeGame.Snake;
+﻿using LeandroExhumed.SnakeGame.Block;
+using LeandroExhumed.SnakeGame.Snake;
 using System.Collections.Generic;
 
 namespace LeandroExhumed.SnakeGame.Match

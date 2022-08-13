@@ -1,6 +1,4 @@
-﻿using LeandroExhumed.SnakeGame.Snake;
-
-namespace LeandroExhumed.SnakeGame.Collectables
+﻿namespace LeandroExhumed.SnakeGame.Block
 {
     public class TimeTravelBlockModel : BlockModel
     {

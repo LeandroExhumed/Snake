@@ -1,5 +1,5 @@
-﻿using LeandroExhumed.SnakeGame.Input;
-using LeandroExhumed.SnakeGame.Snake;
+﻿using LeandroExhumed.SnakeGame.Block;
+using LeandroExhumed.SnakeGame.Input;
 using System;
 using UnityEngine;
 

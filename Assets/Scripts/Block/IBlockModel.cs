@@ -1,9 +1,10 @@
 ﻿using LeandroExhumed.SnakeGame.Grid;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 using UnityEngine;
 using Zenject;
 
-namespace LeandroExhumed.SnakeGame.Snake
+namespace LeandroExhumed.SnakeGame.Block
 {
     public interface IBlockModel : INode
     {

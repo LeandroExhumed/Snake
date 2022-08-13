@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LeandroExhumed.SnakeGame.Snake
+namespace LeandroExhumed.SnakeGame.Block
 {
     public class BlockFactory
     {

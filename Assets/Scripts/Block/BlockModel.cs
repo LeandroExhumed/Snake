@@ -1,8 +1,9 @@
 ﻿using LeandroExhumed.SnakeGame.Grid;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 using UnityEngine;
 
-namespace LeandroExhumed.SnakeGame.Snake
+namespace LeandroExhumed.SnakeGame.Block
 {
     public class BlockModel : IBlockModel
     {

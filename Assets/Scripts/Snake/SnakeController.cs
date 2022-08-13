@@ -1,4 +1,5 @@
-﻿using LeandroExhumed.SnakeGame.Input;
+﻿using LeandroExhumed.SnakeGame.Block;
+using LeandroExhumed.SnakeGame.Input;
 using System;
 
 namespace LeandroExhumed.SnakeGame.Snake

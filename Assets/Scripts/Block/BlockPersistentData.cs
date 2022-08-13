@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace LeandroExhumed.SnakeGame.Snake
+namespace LeandroExhumed.SnakeGame.Block
 {
     [Serializable]
     public class BlockPersistentData

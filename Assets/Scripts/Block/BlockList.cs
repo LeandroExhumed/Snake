@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LeandroExhumed.SnakeGame.Snake
+namespace LeandroExhumed.SnakeGame.Block
 {
     [CreateAssetMenu(fileName = "BlockList", menuName = "Data/Block List")]
     public class BlockList : ScriptableObject

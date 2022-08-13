@@ -1,4 +1,4 @@
-﻿namespace LeandroExhumed.SnakeGame.Snake
+﻿namespace LeandroExhumed.SnakeGame.Block
 {
     public class DefaultBlockContainer : BlockContainer
     {

@@ -1,4 +1,6 @@
-﻿namespace LeandroExhumed.SnakeGame.Snake
+﻿using LeandroExhumed.SnakeGame.Block;
+
+namespace LeandroExhumed.SnakeGame.Snake
 {
     public interface ICollector
     {

@@ -1,4 +1,5 @@
-﻿using LeandroExhumed.SnakeGame.Snake;
+﻿using LeandroExhumed.SnakeGame.Block;
+using LeandroExhumed.SnakeGame.Snake;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

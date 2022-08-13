@@ -1,6 +1,6 @@
 using LeandroExhumed.SnakeGame.AI;
+using LeandroExhumed.SnakeGame.Block;
 using LeandroExhumed.SnakeGame.Grid;
-using LeandroExhumed.SnakeGame.Input;
 using LeandroExhumed.SnakeGame.Snake;
 using LeandroExhumed.SnakeGame.UI.PlayerSlot;
 using UnityEngine;

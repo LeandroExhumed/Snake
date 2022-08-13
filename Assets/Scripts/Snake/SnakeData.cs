@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using LeandroExhumed.SnakeGame.Block;
+using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {

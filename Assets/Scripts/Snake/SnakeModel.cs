@@ -1,3 +1,4 @@
+using LeandroExhumed.SnakeGame.Block;
 using LeandroExhumed.SnakeGame.Collectables;
 using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Input;
