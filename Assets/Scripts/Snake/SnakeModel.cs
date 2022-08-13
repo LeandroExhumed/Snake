@@ -158,25 +158,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void Move (Vector2Int direction)
         {
-            Vector2Int lastPosition = Head.Position + direction;
-            // TODO: Improve this.
-            if (lastPosition.x == levelGrid.Width)
-            {
-                lastPosition.x = 0;
-            }
-            else if (lastPosition.x < 0)
-            {
-                lastPosition.x = levelGrid.Width - 1;
-            }
-            if (lastPosition.y == levelGrid.Height)
-            {
-                lastPosition.y = 0;
-            }
-            else if (lastPosition.y < 0)
-            {
-                lastPosition.y = levelGrid.Height - 1;
-            }
-
+            Vector2Int lastPosition = GetDestinationPosition(direction);
             HandleDestination(lastPosition);
 
             foreach (IBlockModel item in attachedBlocks.ToList())
@@ -187,46 +169,80 @@ namespace LeandroExhumed.SnakeGame.Snake
             }
 
             levelGrid.SetNode(lastPosition, null);
-
             timer = 0f;
 
+            if (!isAlive)
+            {
+                return;
+            }
+
             OnPositionChanged?.Invoke(this, Position);
+        }
+
+        private Vector2Int GetDestinationPosition (Vector2Int direction)
+        {
+            Vector2Int destination = Head.Position + direction;
+            if (destination.x == levelGrid.Width)
+            {
+                destination.x = 0;
+            }
+            else if (destination.x < 0)
+            {
+                destination.x = levelGrid.Width - 1;
+            }
+            if (destination.y == levelGrid.Height)
+            {
+                destination.y = 0;
+            }
+            else if (destination.y < 0)
+            {
+                destination.y = levelGrid.Height - 1;
+            }
+
+            return destination;
         }
 
         private void HandleDestination (Vector2Int value)
         {
             INode targetNode = levelGrid.GetNode(value);
-            if (targetNode != null)
+            if (targetNode != null && targetNode is IBlockModel block)
             {
-                if (targetNode is IBlockModel block)
+                if (block.IsAttached)
                 {
-                    if (block.IsAttached)
+                    if (Head is IBatteringRamBlockModel batteringRam && batteringRam.HasBenefit)
                     {
-                        if (Head is IBatteringRamBlockModel batteringRam && batteringRam.HasBenefit)
-                        {
-                            Head.RemoveBenefit();
-                        }
-                        else
-                        {
-                            if (timeTravelBlock != null)
-                            {
-                                timeTravelBlock.RemoveBenefit();
-                            }
-
-                            isAlive = false;
-
-                            Debug.Log("Died by hit " + block.GetType() + " on position " + block.Position);
-                            OnHit?.Invoke(this, timeTravelBlock);
-                            timeTravelBlock = null;
-                        }
+                        Head.RemoveBenefit();
                     }
                     else
                     {
-                        Grow(block);
-                        block.BeCollected();
+                        HandleDeath(block);
                     }
                 }
+                else
+                {
+                    Grow(block);
+                    block.BeCollected();
+                }
             }
+        }
+
+        private void HandleDeath (IBlockModel block)
+        {
+            if (timeTravelBlock != null)
+            {
+                timeTravelBlock.RemoveBenefit();
+            }
+
+            isAlive = false;
+
+            foreach (IBlockModel item in attachedBlocks.ToList())
+            {
+                levelGrid.SetNode(item.Position, null);
+            }
+
+            Debug.Log("Died by hit " + block.GetType() + " on position " + block.Position);
+            OnHit?.Invoke(this, timeTravelBlock);
+            timeTravelBlock = null;
         }
 
         private void Grow (IBlockModel block)
