@@ -12,6 +12,13 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly List<char> unavailableKeys = new();
         private readonly List<char> currentHeldKeys = new();
 
+        private readonly MatchData data;
+
+        public LobbyModel (MatchData data)
+        {
+            this.data = data;
+        }
+
         public void Initialize ()
         {
             char[] qwertyKeys =
@@ -26,7 +33,8 @@ namespace LeandroExhumed.SnakeGame.Match
             for (int i = 0; i < qwertyKeys.Length; i++)
             {
                 actions[i] = new InputAction();
-                actions[i].AddBinding($"<Keyboard>/{qwertyKeys[i]}").WithInteraction("hold(duration=2)");
+                actions[i].AddBinding($"<Keyboard>/{qwertyKeys[i]}")
+                    .WithInteraction($"hold(duration={data.KeyHoldDuration})");
                 actions[i].Enable();
 
                 actions[i].performed += HandleAnyKeyHeld;

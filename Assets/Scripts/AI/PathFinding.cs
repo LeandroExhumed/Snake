@@ -13,11 +13,14 @@ namespace LeandroExhumed.SnakeGame.AI
         private List<PathNode> openList;
         private List<PathNode> closedList;
 
+        private readonly AIData data;
+
         private readonly IGridModel<INode> levelGrid;
         private readonly GridModel<PathNode> grid;
 
-        public PathFinding (IGridModel<INode> levelGrid)
+        public PathFinding (AIData data, IGridModel<INode> levelGrid)
         {
+            this.data = data;
             this.levelGrid = levelGrid;
 
             grid = new GridModel<PathNode>(levelGrid.Width, levelGrid.Height);
@@ -115,9 +118,23 @@ namespace LeandroExhumed.SnakeGame.AI
         {
             int xDistance = Mathf.Abs(a.Position.x - b.Position.x);
             int yDistance = Mathf.Abs(a.Position.y - b.Position.y);
-            int remaining = Mathf.Abs(xDistance - yDistance);
 
-            return Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+            int shortestDistance = Mathf.Min(xDistance, yDistance);
+            if (Random.value >= data.BestPathFindingRate)
+            {
+                return shortestDistance;
+            }
+            else
+            {
+                if (Random.value >= data.Luck)
+                {
+                    return shortestDistance;
+                }
+                else
+                {
+                    return Mathf.Max(xDistance, yDistance);
+                }
+            }            
         }
 
         private PathNode GetLowestFCostNode (List<PathNode> pathNodeList)

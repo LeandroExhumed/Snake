@@ -171,10 +171,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             levelGrid.SetNode(lastPosition, null);
             timer = 0f;
 
-            if (!isAlive)
-            {
-                return;
-            }
+            
 
             OnPositionChanged?.Invoke(this, Position);
         }
@@ -237,6 +234,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             foreach (IBlockModel item in attachedBlocks.ToList())
             {
+                item.OnPositionChanged -= HandleAttachedBlockPositionChanged;
                 levelGrid.SetNode(item.Position, null);
             }
 

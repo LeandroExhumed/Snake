@@ -24,8 +24,8 @@ namespace LeandroExhumed.SnakeGame.AI
             }
         }
 
-        private const float MIN_INPUT_SPEED = 0.05F;
-        private const float MAX_INPUT_SPEED = 0.2F;
+        private const float MIN_INPUT_SPEED = 0.5F;
+        private const float MAX_INPUT_SPEED = 2F;
 
         private List<PathNode> path;
         private int targetNode = 0;
@@ -71,8 +71,8 @@ namespace LeandroExhumed.SnakeGame.AI
             if (nodePosition != snake.Position && pathindex > targetNode)
             {
                 float reasoningTime = UnityEngine.Random.Range(
-                    data.MinReactionSpeedRegardingPathObstructed,
-                    data.MaxReactionSpeedRegardingPathObstructed);
+                    data.MinReasoningTimeToPlanPathAfterObstruction,
+                    data.MaxReasoningTimeToPlanPathAfterObstruction);
                 monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
             }
         }
@@ -172,8 +172,8 @@ namespace LeandroExhumed.SnakeGame.AI
             targetBlock = block;
             reasonedAboutNewBlock = false;
             float reasoningTime = UnityEngine.Random.Range(
-                data.MinReactionSpeedRegardingNewBlockGenerated,
-                data.MaxReactionSpeedRegardingNewBlockGenerated);
+                data.MinReasoningTimeToPlanPathToBlock,
+                data.MaxReasoningTimeToPlanPathToBlock);
             monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
         }
 

@@ -6,11 +6,24 @@ namespace LeandroExhumed.SnakeGame.AI
     [CreateAssetMenu(fileName = "AI", menuName = "Data/AI")]
     public class AIData : ScriptableObject
     {
-        public float MinReactionSpeedRegardingNewBlockGenerated => reasoningTimeToPlanPathToBlock.Min;
-        public float MaxReactionSpeedRegardingNewBlockGenerated => reasoningTimeToPlanPathToBlock.Max;
-        public float MinReactionSpeedRegardingPathObstructed => reasoningTimeToPlanPathAfterObstruction.Min;
-        public float MaxReactionSpeedRegardingPathObstructed => reasoningTimeToPlanPathAfterObstruction.Max;
+        public float BestPathFindingRate => bestPathFindingRate;
+        public float Luck => luck;
+        public float MinReasoningTimeToPlanPathToBlock => reasoningTimeToPlanPathToBlock.Min;
+        public float MaxReasoningTimeToPlanPathToBlock => reasoningTimeToPlanPathToBlock.Max;
+        public float MinReasoningTimeToPlanPathAfterObstruction => reasoningTimeToPlanPathAfterObstruction.Min;
+        public float MaxReasoningTimeToPlanPathAfterObstruction => reasoningTimeToPlanPathAfterObstruction.Max;
 
+        [Header("Path finding")]
+        [SerializeField]
+        [Range(0f, 1f)]
+        [Tooltip("Probability(0 - 1) of finding the most optimized path to the target.")]
+        private float bestPathFindingRate = 0.5f;
+        [SerializeField]
+        [Range(0f, 1f)]
+        [Tooltip("Probability(0 - 1) of choosing the most optimized path to the target after miscalculating.")]
+        private float luck = 0.5f;
+
+        [Header("Reasoning time")]
         [SerializeField]
         [Tooltip("How fast(in seconds) the AI will plan a path to the new block.")]
         private MinMaxField reasoningTimeToPlanPathToBlock;
