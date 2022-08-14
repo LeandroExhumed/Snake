@@ -10,9 +10,9 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly IMatchModel model;
         private readonly MatchView view;
 
-        private readonly LobbyModel lobby;
+        private readonly ILobbyModel lobby;
 
-        public MatchController (IMatchModel model, MatchView view, LobbyModel lobby)
+        public MatchController (IMatchModel model, MatchView view, ILobbyModel lobby)
         {
             this.model = model;
             this.view = view;
@@ -21,12 +21,10 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Setup ()
         {
-            model.OnInitialized += HandleInitialized;
             model.OnSnakePositionChanged += HandleSnakePositionChanged;
             model.OnSnakeDied += HandleSnakeDied;
             model.OnPlayerLeft += HandlePlayerLeft;
             model.OnRewind += HandleRewind;
-            model.OnPlayerReturned += HandlePlayerReturned;
             model.OnOver += HandleOver;
             view.OnRewindEffectOver += HandleRewindEffectOver;
             lobby.OnNewPlayerJoined += HandleNewPlayerJoined;
@@ -49,14 +47,8 @@ namespace LeandroExhumed.SnakeGame.Match
             view.PlayDeathEffect();
         }
 
-        private void HandleInitialized ()
-        {
-            lobby.Initialize();
-        }
-
         private void HandlePlayerLeft (int playerNumber, char leftKey, char rightKey)
         {
-            lobby.ReturnKeys(leftKey, rightKey);
             view.RemoveGuide(playerNumber);
         }
 
@@ -64,11 +56,6 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             //Time.timeScale = 0;
             view.PlayRewindEffect();
-        }
-
-        private void HandlePlayerReturned (char leftKey, char rightKey)
-        {
-            lobby.RecoverKeys(leftKey, rightKey);
         }
 
         private void HandleRewindEffectOver ()
@@ -84,12 +71,10 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Dispose ()
         {
-            model.OnInitialized -= HandleInitialized;
             model.OnSnakePositionChanged -= HandleSnakePositionChanged;
             model.OnSnakeDied -= HandleSnakeDied;
             model.OnPlayerLeft -= HandlePlayerLeft;
             model.OnRewind -= HandleRewind;
-            model.OnPlayerReturned -= HandlePlayerReturned;
             model.OnOver -= HandleOver;
             view.OnRewindEffectOver -= HandleRewindEffectOver;
             lobby.OnNewPlayerJoined -= HandleNewPlayerJoined;

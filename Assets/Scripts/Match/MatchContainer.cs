@@ -1,6 +1,5 @@
 using LeandroExhumed.SnakeGame.AI;
 using LeandroExhumed.SnakeGame.Block;
-using LeandroExhumed.SnakeGame.Grid;
 using LeandroExhumed.SnakeGame.Snake;
 using LeandroExhumed.SnakeGame.UI.PlayerSlot;
 using UnityEngine;
@@ -11,29 +10,19 @@ namespace LeandroExhumed.SnakeGame.Match
     public class MatchContainer : MonoInstaller
     {
         [SerializeField]
-        private MatchData matchData;
-
-        [SerializeField]
-        private SnakeList snakeList;
-        [SerializeField]
         private BlockList blockList;
-
-        [SerializeField]
-        private GridFacade levelGrid;
 
         [SerializeField]
         private PlayerSlotFacade[] playerSlots;
 
+        [Inject]
+        private readonly SnakeData[] snakes;
+
         public override void InstallBindings ()
         {
             ResolveMVC();
-            Container.Bind<LobbyModel>().AsSingle();
-            Container.BindInstance(matchData).AsSingle();
-
-            Container.Bind<IGridModel<INode>>().FromInstance(levelGrid);
-            Container.BindInstance(snakeList.Snakes).AsSingle();
+            
             ResolveFactories();
-
             Container.Bind<IPlayerSlotModel[]>().FromInstance(playerSlots).AsSingle();
         }
 
@@ -48,9 +37,9 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             Container.BindFactory<ISimulatedInput, ISimulatedInput.Factory>()
                 .FromComponentInNewPrefabResource("SimulatedInput");
-            for (int i = 0; i < snakeList.Snakes.Length; i++)
+            for (int i = 0; i < snakes.Length; i++)
             {
-                string resource = string.Concat("Snakes/", snakeList.Snakes[i].ID);
+                string resource = string.Concat("Snakes/", snakes[i].ID);
                 Container.BindFactory<ISnakeModel, ISnakeModel.Factory>().FromComponentInNewPrefabResource(resource)
                     .AsCached();
             }

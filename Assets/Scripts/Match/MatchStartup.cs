@@ -5,17 +5,17 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchStartup : MonoBehaviour
     {
-        private IMatchModel match;
+        private ILobbyModel lobby;
 
         [Inject]
-        public void Constructor (IMatchModel match)
+        public void Constructor (ILobbyModel lobby)
         {
-            this.match = match;
+            this.lobby = lobby;
         }
 
         private void Start ()
         {
-            match.Initialize();
+            lobby.Initialize();
         }
     }
 }

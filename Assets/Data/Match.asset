@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Match
   m_EditorClassIdentifier: 
   boardSize: {x: 70, y: 50}
+  keyHoldDuration: 2
   aiSnakesPerPlayer: 1

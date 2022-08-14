@@ -59,7 +59,6 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize ()
         {
-            levelGrid.Initialize();
             for (int i = 0; i < playerSlots.Length; i++)
             {
                 playerSlots[i].Initialize(i + 1);

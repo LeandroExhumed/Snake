@@ -1,25 +1,36 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Grid;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
-    public class LobbyModel
+    public class LobbyModel : ILobbyModel
     {
+        public event Action<int> OnInitialized;
         public event Action<char, char> OnNewPlayerJoined;
 
+        private int KeyHoldDuration => data.KeyHoldDuration;
         private readonly List<char> unavailableKeys = new();
         private readonly List<char> currentHeldKeys = new();
 
         private readonly MatchData data;
 
-        public LobbyModel (MatchData data)
+        private readonly IGridModel<INode> levelGrid;
+
+        public LobbyModel (MatchData data, IGridModel<INode> levelGrid)
         {
             this.data = data;
+            this.levelGrid = levelGrid;
         }
 
         public void Initialize ()
+        {
+            levelGrid.Initialize();
+            OnInitialized?.Invoke(KeyHoldDuration);
+        }
+
+        public void StartListeningToInput ()
         {
             char[] qwertyKeys =
             {
@@ -34,12 +45,14 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 actions[i] = new InputAction();
                 actions[i].AddBinding($"<Keyboard>/{qwertyKeys[i]}")
-                    .WithInteraction($"hold(duration={data.KeyHoldDuration})");
+                    .WithInteraction($"hold(duration={KeyHoldDuration})");
                 actions[i].Enable();
 
                 actions[i].performed += HandleAnyKeyHeld;
                 actions[i].canceled += HandleAnyKeyReleased;
             }
+
+            OnInitialized?.Invoke(data.KeyHoldDuration);
         }
 
         public void ReturnKeys (char leftKey, char rightKey)
