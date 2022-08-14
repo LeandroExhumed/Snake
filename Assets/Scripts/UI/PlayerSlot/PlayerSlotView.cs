@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -11,9 +12,11 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         public event Action OnConfirmationKeyPressed;
 
         [SerializeField]
-        private Image leftKeyImage;
+        private GameObject keysGroup;
         [SerializeField]
-        private Image rightKeyImage;
+        private TextMeshProUGUI leftKeyText;
+        [SerializeField]
+        private TextMeshProUGUI rightKeyText;
 
         [SerializeField]
         private GameObject snakePreview;
@@ -31,19 +34,15 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         [SerializeField]
         private GameObject checkMarkIcon;
 
-        private const float ARROW_HIGHLIGHT_DURATION = 0.5F;
+        private const float ARROW_HIGHLIGHT_DURATION = 0.2F;
 
         public void SetInputKeys (char leftKey, char rightKey)
         {
-            leftKeyImage.sprite = GetKeySprite(leftKey);
-            rightKeyImage.sprite = GetKeySprite(rightKey);
+            leftKeyText.text = leftKey.ToString().ToUpper();
+            rightKeyText.text = rightKey.ToString().ToUpper();
         }
 
-        public void SetKeysIconsActive (bool value)
-        {
-            leftKeyImage.gameObject.SetActive(value);
-            rightKeyImage.gameObject.SetActive(value);
-        }
+        public void SetKeysIconsActive (bool value) => keysGroup.SetActive(value);
 
         public void SetSnakePreviewActive (bool value) => snakePreview.SetActive(value);
 
@@ -85,12 +84,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         private Sprite GetSnakeBlockSprite (int blockID)
         {
-            return Resources.Load<Sprite>($"Sprites/Blocks/{blockID}");
-        }
-
-        private Sprite GetKeySprite (char key)
-        {
-            return Resources.Load<Sprite>($"Sprites/Keys/{key}");
+            return Resources.Load<Sprite>($"Textures/Blocks/{blockID}");
         }
 
         private IEnumerator ArrowHightlightingRoutine (Image arrow)

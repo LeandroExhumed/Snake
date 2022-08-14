@@ -6,6 +6,11 @@ namespace LeandroExhumed.SnakeGame.Block
     {
         [SerializeField]
         private SpriteRenderer spriteRenderer;
+        [SerializeField]
+        private Sprite brokenSprite;
+
+        [SerializeField]
+        private GameObject explosionVFX;
 
         public Vector2 Position
         {
@@ -17,9 +22,12 @@ namespace LeandroExhumed.SnakeGame.Block
 
         public void SetNoBenefitVisual ()
         {
-            Color normal = spriteRenderer.color;
-            normal.a /= 2;
-            spriteRenderer.color = normal;
+            spriteRenderer.sprite = brokenSprite;
+        }
+
+        public void PlayExplosionVFX ()
+        {
+            explosionVFX.SetActive(true);
         }
 
         public void Destroy () => Destroy(gameObject);

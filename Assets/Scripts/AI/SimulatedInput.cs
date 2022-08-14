@@ -70,6 +70,7 @@ namespace LeandroExhumed.SnakeGame.AI
             int pathindex = Path.FindIndex(x => x.Position == nodePosition);
             if (nodePosition != snake.Position && pathindex > targetNode)
             {
+                reasonedAboutNewBlock = false;
                 float reasoningTime = UnityEngine.Random.Range(
                     data.MinReasoningTimeToPlanPathAfterObstruction,
                     data.MaxReasoningTimeToPlanPathAfterObstruction);

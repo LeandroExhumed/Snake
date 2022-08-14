@@ -11,6 +11,7 @@ namespace LeandroExhumed.SnakeGame.Block
         event Action<IBlockModel> OnCollected;
         event Action<Transform> OnAttached;
         event Action OnBenefitRemoved;
+        event Action OnHit;
         event Action OnDestroyed;
 
         int ID { get; }
@@ -23,6 +24,7 @@ namespace LeandroExhumed.SnakeGame.Block
         void ApplyEffect ();
         void Attach (Transform owner);
         void RemoveBenefit ();
+        void GetHit ();
         void Destroy ();
         bool IsEqual (IBlockModel other);
 

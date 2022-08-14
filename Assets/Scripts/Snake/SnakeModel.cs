@@ -225,6 +225,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleDeath (IBlockModel block)
         {
+            Head.GetHit();
+
             if (timeTravelBlock != null)
             {
                 timeTravelBlock.RemoveBenefit();
@@ -238,7 +240,6 @@ namespace LeandroExhumed.SnakeGame.Snake
                 levelGrid.SetNode(item.Position, null);
             }
 
-            Debug.Log("Died by hit " + block.GetType() + " on position " + block.Position);
             OnHit?.Invoke(this, timeTravelBlock);
             timeTravelBlock = null;
         }

@@ -113,6 +113,8 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 GenerateRandomBlock();
             }
+
+            persistentData.Remove(currentRewindResponsible);
         }
 
         private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IGameInput input)
@@ -314,7 +316,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
             if (snakes.Count == 1)
             {
-                int playerNumber = players.TryGetValue(snake, out Player player) ? player.Number : 0;
+                int playerNumber = players.TryGetValue(snakes[0], out Player player) ? player.Number : 0;
                 OnOver?.Invoke(playerNumber);
             }
         }

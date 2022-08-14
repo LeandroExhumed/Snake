@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f516499fa8f697e49a646ccd67a6a1e9, type: 3}
   m_Name: AI
   m_EditorClassIdentifier: 
-  bestPathFindingRate: 0.75
+  bestPathFindingRate: 1
   luck: 0.5
   reasoningTimeToPlanPathToBlock:
     Min: 0.1
     Max: 0.5
   reasoningTimeToPlanPathAfterObstruction:
-    Min: 0.1
-    Max: 0.5
+    Min: 0.25
+    Max: 0.75

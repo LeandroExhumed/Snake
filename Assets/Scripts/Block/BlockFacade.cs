@@ -28,6 +28,11 @@ namespace LeandroExhumed.SnakeGame.Block
             add => model.OnBenefitRemoved += value;
             remove => model.OnBenefitRemoved -= value;
         }
+        public event Action OnHit
+        {
+            add => model.OnHit += value;
+            remove => model.OnHit -= value;
+        }
         public event Action OnDestroyed
         {
             add => model.OnDestroyed += value;
@@ -63,6 +68,8 @@ namespace LeandroExhumed.SnakeGame.Block
         public void Attach (Transform owner) => model.Attach(owner);
 
         public void RemoveBenefit () => model.RemoveBenefit();
+
+        public void GetHit () => model.GetHit();
 
         public void Destroy () => model.Destroy();
 

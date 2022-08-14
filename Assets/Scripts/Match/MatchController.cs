@@ -43,7 +43,6 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void HandleSnakeDied (Vector2Int position)
         {
-            view.ZoomIntoSnake(position);
             view.PlayDeathEffect();
         }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
@@ -16,21 +17,18 @@ namespace LeandroExhumed.SnakeGame.Match
         private Vector2 guideOffset;
 
         [SerializeField]
+        private float shakeDuration = 0.15f;
+        [SerializeField]
+        private Vector3 shakeMagnitude = new(0.1f, 0.1f);
+        [SerializeField]
+        private CameraShake cameraShake;
+        [SerializeField]
         private Transform canvas;
 
         private readonly Dictionary<int, TextMeshProUGUI> guides = new();
 
-        private const float CAMERA_SIZE_ON_ZOOM = 15F;
-        private const float DYING_SNAKE_HIGHLIGHTED_DURATION = 2F;
-        private const float ZOOMING_DURATION = 0.05F;
-        private Vector3 originalCameraPosition;
-        private float originalOrtographicSize;
-
-        private void Start ()
-        {
-            originalCameraPosition = Camera.main.transform.position;
-            originalOrtographicSize = Camera.main.orthographicSize;
-        }
+        private const float SLOW_MOTION_TIME_SCALE = 0.1F;
+        private const float SLOW_MOTION_DURATION = 2F;
 
         public void SyncGuidePosition (int player, Vector2Int targetPosition)
         {
@@ -48,11 +46,6 @@ namespace LeandroExhumed.SnakeGame.Match
         public void PlayDeathEffect ()
         {
             StartCoroutine(DeathEffectRoutine());
-        }
-
-        public void ZoomIntoSnake (Vector2Int position)
-        {
-            StartCoroutine(SmoothLerp(new(position.x, position.y, Camera.main.transform.position.z), originalOrtographicSize - CAMERA_SIZE_ON_ZOOM, ZOOMING_DURATION));
         }
 
         public void SetWinnerMessage (string winner)
@@ -81,27 +74,12 @@ namespace LeandroExhumed.SnakeGame.Match
             return Resources.Load<TextMeshProUGUI>("Guide");
         }
 
-        private IEnumerator SmoothLerp (Vector3 targetPosition, float targetSize, float time)
-        {
-            Vector3 startingPos = Camera.main.transform.position;
-            float startingSize = Camera.main.orthographicSize;
-            float elapsedTime = 0;
-
-            while (elapsedTime < time)
-            {
-                Camera.main.transform.position = Vector3.Lerp(startingPos, targetPosition, (elapsedTime / time));
-                Camera.main.orthographicSize = Mathf.Lerp(startingSize, targetSize, (elapsedTime / time));
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-        }
-
         private IEnumerator DeathEffectRoutine ()
         {
-            Time.timeScale = 0.1f;
-            yield return new WaitForSecondsRealtime(DYING_SNAKE_HIGHLIGHTED_DURATION);
+            Time.timeScale = SLOW_MOTION_TIME_SCALE;
+            cameraShake.Shake(shakeDuration, shakeMagnitude);
+            yield return new WaitForSecondsRealtime(SLOW_MOTION_DURATION);
             Time.timeScale = 1f;
-            StartCoroutine(SmoothLerp(originalCameraPosition, originalOrtographicSize, ZOOMING_DURATION));
         }
         
         private IEnumerator RewindEffectRoutine ()

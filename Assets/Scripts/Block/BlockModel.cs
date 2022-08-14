@@ -11,6 +11,7 @@ namespace LeandroExhumed.SnakeGame.Block
         public event Action<IBlockModel> OnCollected;
         public event Action<Transform> OnAttached;
         public event Action OnBenefitRemoved;
+        public event Action OnHit;
         public event Action OnDestroyed;
 
         public Vector2Int Position
@@ -74,6 +75,11 @@ namespace LeandroExhumed.SnakeGame.Block
         public void RemoveBenefit ()
         {
             HasBenefit = false;
+        }
+
+        public void GetHit ()
+        {
+            OnHit?.Invoke();
         }
 
         public void Destroy ()

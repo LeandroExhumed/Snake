@@ -5,7 +5,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 {
     public class PlayerSlotController : IDisposable
     {
-        private IGameInput Input
+        private IPlayerInput Input
         {
             get => input;
             set
@@ -20,10 +20,12 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             }
         }
 
+        private bool IsOnSelection => model.State == SlotState.Selection;
+
         private readonly IPlayerSlotModel model;
         private readonly PlayerSlotView view;
 
-        private IGameInput input;
+        private IPlayerInput input;
 
         public PlayerSlotController (IPlayerSlotModel model, PlayerSlotView view)
         {
@@ -40,10 +42,11 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             view.OnConfirmationKeyPressed += HandleConfirmationKeyPressed;
         }
 
-        private void HandleEnabled (IGameInput input)
+        private void HandleEnabled (IPlayerInput input)
         {
             Input = input;
 
+            view.SetInputKeys(input.LeftKey, input.RightKey);
             view.SetKeysIconsActive(true);
             view.SetSnakePreviewActive(true);
             if (model.State == SlotState.Selection)
@@ -80,7 +83,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         private void HandleConfirmationKeyPressed ()
         {
-            if (model.State != SlotState.Selection)
+            if (!IsOnSelection)
             {
                 return;
             }
@@ -90,6 +93,11 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         private void HandleMovementRequested (int direction)
         {
+            if (!IsOnSelection)
+            {
+                return;
+            }
+
             if (direction > 0)
             {
                 model.ShowNextSnake();

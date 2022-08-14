@@ -54,6 +54,10 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             {
                 currentSnake = 0;
             }
+            else
+            {
+                currentSnake++;
+            }
 
             ShowSnake();
         }
@@ -63,6 +67,10 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             if (currentSnake == 0)
             {
                 currentSnake = snakes.Length - 1;
+            }
+            else
+            {
+                currentSnake--;
             }
 
             ShowSnake();

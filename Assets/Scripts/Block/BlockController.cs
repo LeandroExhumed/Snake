@@ -20,6 +20,7 @@ namespace LeandroExhumed.SnakeGame.Block
             model.OnPositionChanged += HandlePositionChanged;
             model.OnAttached += HandleAttached;
             model.OnBenefitRemoved += HandleBenefitRemoved;
+            model.OnHit += HandleHit;
             model.OnDestroyed += HandleDestroyed;
         }
 
@@ -38,6 +39,11 @@ namespace LeandroExhumed.SnakeGame.Block
             view.SetNoBenefitVisual();
         }
 
+        private void HandleHit ()
+        {
+            view.PlayExplosionVFX();
+        }
+
         private void HandleDestroyed ()
         {
             view.Destroy();
@@ -48,6 +54,7 @@ namespace LeandroExhumed.SnakeGame.Block
             model.OnPositionChanged -= HandlePositionChanged;
             model.OnAttached -= HandleAttached;
             model.OnBenefitRemoved -= HandleBenefitRemoved;
+            model.OnHit -= HandleHit;
             model.OnDestroyed -= HandleDestroyed;
         }
     }
