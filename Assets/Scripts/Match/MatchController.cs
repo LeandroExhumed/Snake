@@ -22,10 +22,11 @@ namespace LeandroExhumed.SnakeGame.Match
         public void Setup ()
         {
             model.OnSnakePositionChanged += HandleSnakePositionChanged;
-            model.OnSnakeDied += HandleSnakeDied;
+            model.OnSnakeHit += HandleSnakeHit;
             model.OnPlayerLeft += HandlePlayerLeft;
             model.OnRewind += HandleRewind;
             model.OnOver += HandleOver;
+            view.OnBlockFocusOver += HandleBlockFocusOver;
             view.OnRewindEffectOver += HandleRewindEffectOver;
             lobby.OnNewPlayerJoined += HandleNewPlayerJoined;
         }
@@ -41,9 +42,9 @@ namespace LeandroExhumed.SnakeGame.Match
             view.SyncGuidePosition(player, position);
         }
 
-        private void HandleSnakeDied (Vector2Int position)
+        private void HandleSnakeHit (Vector2Int position)
         {
-            view.PlayDeathEffect();
+            //view.PlayDeathEffect();
         }
 
         private void HandlePlayerLeft (int playerNumber, char leftKey, char rightKey)
@@ -51,15 +52,21 @@ namespace LeandroExhumed.SnakeGame.Match
             view.RemoveGuide(playerNumber);
         }
 
-        private void HandleRewind ()
+        private void HandleRewind (Vector2Int timeTravelBlockPosition)
         {
-            //Time.timeScale = 0;
+            view.FocusBlockHit(timeTravelBlockPosition);
+            
+        }
+
+        private void HandleBlockFocusOver ()
+        {
             view.PlayRewindEffect();
         }
 
         private void HandleRewindEffectOver ()
         {
             Time.timeScale = 1;
+            view.LeaveFocus();
             model.Rewind();
         }
 
@@ -71,7 +78,7 @@ namespace LeandroExhumed.SnakeGame.Match
         public void Dispose ()
         {
             model.OnSnakePositionChanged -= HandleSnakePositionChanged;
-            model.OnSnakeDied -= HandleSnakeDied;
+            model.OnSnakeHit -= HandleSnakeHit;
             model.OnPlayerLeft -= HandlePlayerLeft;
             model.OnRewind -= HandleRewind;
             model.OnOver -= HandleOver;

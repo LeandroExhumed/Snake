@@ -27,23 +27,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private IEnumerator SpriteBlinkingEffectRoutine ()
         {
-            SpriteRenderer[] bodyPartSprites = GetComponentsInChildren<SpriteRenderer>();
-            int blinksExecuted = 0;
-            while (blinksExecuted <= BLINK_AMOUNT)
-            {
-                for (int i = 0; i < bodyPartSprites.Length; i++)
-                {
-                    bodyPartSprites[i].color = Color.magenta;
-                }
-                yield return new WaitForSeconds(BLINK_RATE);
-                for (int i = 0; i < bodyPartSprites.Length; i++)
-                {
-                    bodyPartSprites[i].color = Color.yellow;
-                }
-                yield return new WaitForSeconds(BLINK_RATE);
-
-                blinksExecuted++;
-            }
+            yield return new WaitForSeconds(3);
 
             Destroy();
         }

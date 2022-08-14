@@ -16,15 +16,16 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action OnInitialized;
         public event Action<IBlockModel> OnBlockGenerated;
         public event Action<int, Vector2Int> OnSnakePositionChanged;
-        public event Action<Vector2Int> OnSnakeDied;
+        public event Action<Vector2Int> OnSnakeHit;
         public event Action<int, char, char> OnPlayerLeft;
-        public event Action OnRewind;
+        public event Action<Vector2Int> OnRewind;
         public event Action<char, char> OnPlayerReturned;
         public event Action<int> OnOver;
 
         private readonly MatchData data;
         private readonly IGridModel<INode> levelGrid;
 
+        private bool isOnRewindProcess = false;
         private IBlockModel currentRewindResponsible;
 
         private readonly Dictionary<ISnakeModel, Player> players = new();
@@ -33,7 +34,6 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly Dictionary<ISnakeModel, ISimulatedInput> simulatedInputs = new();
 
         private readonly Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
-
 
         private readonly IPlayerSlotModel[] playerSlots;
 
@@ -114,6 +114,7 @@ namespace LeandroExhumed.SnakeGame.Match
                 GenerateRandomBlock();
             }
 
+            isOnRewindProcess = false;
             persistentData.Remove(currentRewindResponsible);
         }
 
@@ -244,7 +245,7 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 spawnPosition = new(UnityEngine.Random.Range(0, levelGrid.Width), UnityEngine.Random.Range(0, levelGrid.Height));
             } while (levelGrid.GetNode(spawnPosition) != null);
-            GenerateBlock(blockFactory.CreateRandomly(1), spawnPosition);
+            GenerateBlock(blockFactory.Create(4), spawnPosition);
         }
 
         private void RemoveSnake (ISnakeModel snake)
@@ -301,18 +302,24 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void HandleSnakeHit (ISnakeModel snake, IBlockModel timeTravelBlock)
         {
+            if (isOnRewindProcess)
+            {
+                return;
+            }
+
+            OnSnakeHit?.Invoke(snake.Position);
+
             if (timeTravelBlock != null)
             {
+                isOnRewindProcess = true;
                 currentRewindResponsible = timeTravelBlock;
                 blocks.Remove(timeTravelBlock);
-                OnRewind?.Invoke();
+                OnRewind?.Invoke(timeTravelBlock.Position);
 
                 return;
             }
 
             RemoveSnake(snake);
-
-            OnSnakeDied?.Invoke(snake.Position);
 
             if (snakes.Count == 1)
             {

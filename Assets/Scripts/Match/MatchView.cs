@@ -9,6 +9,7 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchView : MonoBehaviour
     {
+        public event Action OnBlockFocusOver;
         public event Action OnRewindEffectOver;
 
         [SerializeField]
@@ -17,11 +18,23 @@ namespace LeandroExhumed.SnakeGame.Match
         private Vector2 guideOffset;
 
         [SerializeField]
+        private float cameraSizeDiffOnFocus = 15f;
+        [SerializeField]
+        private float cameraMovementSpeed = 0.05f;
+        [SerializeField]
         private float shakeDuration = 0.15f;
         [SerializeField]
         private Vector3 shakeMagnitude = new(0.1f, 0.1f);
         [SerializeField]
+        private new Camera camera;
+        [SerializeField]
         private CameraShake cameraShake;
+
+        [SerializeField]
+        private float rewindScreenDuration = 3f;
+        [SerializeField]
+        private GameObject rewindScreen;
+
         [SerializeField]
         private Transform canvas;
 
@@ -29,6 +42,15 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private const float SLOW_MOTION_TIME_SCALE = 0.1F;
         private const float SLOW_MOTION_DURATION = 2F;
+
+        private Vector3 originalCameraPosition;
+        private float originalCameraSize;
+
+        private void Start ()
+        {
+            originalCameraPosition = camera.transform.position;
+            originalCameraSize = camera.orthographicSize;
+        }
 
         public void SyncGuidePosition (int player, Vector2Int targetPosition)
         {
@@ -64,9 +86,22 @@ namespace LeandroExhumed.SnakeGame.Match
             guides.Remove(player);
         }
 
+        public void FocusBlockHit (Vector2Int position)
+        {
+            Vector3 targetPosition = new(position.x, position.y);
+            float targetCameraSize = camera.orthographicSize - cameraSizeDiffOnFocus;
+            StartCoroutine(SmoothLerp(targetPosition, targetCameraSize, cameraMovementSpeed));
+        }
+
         public void PlayRewindEffect ()
         {
             StartCoroutine(RewindEffectRoutine());
+        }
+
+        public void LeaveFocus ()
+        {
+            camera.transform.position = originalCameraPosition;
+            camera.orthographicSize = originalCameraSize;
         }
 
         private TextMeshProUGUI GetNewGuide ()
@@ -81,11 +116,32 @@ namespace LeandroExhumed.SnakeGame.Match
             yield return new WaitForSecondsRealtime(SLOW_MOTION_DURATION);
             Time.timeScale = 1f;
         }
-        
+
+        private IEnumerator SmoothLerp (Vector3 targetPosition, float targetSize, float time)
+        {
+            Vector3 startingPos = camera.transform.position;
+            float startingSize = camera.orthographicSize;
+            float elapsedTime = 0;
+
+            while (elapsedTime < time)
+            {
+                camera.transform.position = Vector3.Lerp(startingPos, targetPosition, (elapsedTime / time));
+                camera.orthographicSize = Mathf.Lerp(startingSize, targetSize, (elapsedTime / time));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            yield return new WaitForSecondsRealtime(SLOW_MOTION_DURATION);
+
+            OnBlockFocusOver?.Invoke();
+        }
+
         private IEnumerator RewindEffectRoutine ()
         {
-            yield return new WaitForSeconds(2f);
+            rewindScreen.SetActive(true);
+            yield return new WaitForSeconds(rewindScreenDuration);
             OnRewindEffectOver?.Invoke();
+            rewindScreen.SetActive(false);
         }
     }
 }

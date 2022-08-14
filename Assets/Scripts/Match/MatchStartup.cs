@@ -13,7 +13,7 @@ namespace LeandroExhumed.SnakeGame.Match
             this.lobby = lobby;
         }
 
-        private void Start ()
+        private void Awake ()
         {
             lobby.Initialize();
         }
