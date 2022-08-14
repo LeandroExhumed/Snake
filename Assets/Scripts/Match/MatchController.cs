@@ -24,7 +24,6 @@ namespace LeandroExhumed.SnakeGame.Match
             model.OnSnakePositionChanged += HandleSnakePositionChanged;
             model.OnSnakeHit += HandleSnakeHit;
             model.OnPlayerLeft += HandlePlayerLeft;
-            model.OnRewind += HandleRewind;
             model.OnOver += HandleOver;
             view.OnBlockFocusOver += HandleBlockFocusOver;
             view.OnRewindEffectOver += HandleRewindEffectOver;
@@ -42,20 +41,22 @@ namespace LeandroExhumed.SnakeGame.Match
             view.SyncGuidePosition(player, position);
         }
 
-        private void HandleSnakeHit (Vector2Int position)
+        private void HandleSnakeHit (Vector2Int? timeTravelBlockPosition)
         {
-            //view.PlayDeathEffect();
+            view.PlayDeathEffect();
+            if (timeTravelBlockPosition != null)
+            {
+                view.FocusBlockHit(timeTravelBlockPosition.Value);
+            }
+            else
+            {
+                view.ShakeCamera();
+            }
         }
 
         private void HandlePlayerLeft (int playerNumber, char leftKey, char rightKey)
         {
             view.RemoveGuide(playerNumber);
-        }
-
-        private void HandleRewind (Vector2Int timeTravelBlockPosition)
-        {
-            view.FocusBlockHit(timeTravelBlockPosition);
-            
         }
 
         private void HandleBlockFocusOver ()
@@ -80,8 +81,8 @@ namespace LeandroExhumed.SnakeGame.Match
             model.OnSnakePositionChanged -= HandleSnakePositionChanged;
             model.OnSnakeHit -= HandleSnakeHit;
             model.OnPlayerLeft -= HandlePlayerLeft;
-            model.OnRewind -= HandleRewind;
             model.OnOver -= HandleOver;
+            view.OnBlockFocusOver -= HandleBlockFocusOver;
             view.OnRewindEffectOver -= HandleRewindEffectOver;
             lobby.OnNewPlayerJoined -= HandleNewPlayerJoined;
         }

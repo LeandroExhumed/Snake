@@ -67,7 +67,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void PlayDeathEffect ()
         {
-            StartCoroutine(DeathEffectRoutine());
+            StartCoroutine(SlowMotionRoutine());
         }
 
         public void SetWinnerMessage (string winner)
@@ -86,9 +86,14 @@ namespace LeandroExhumed.SnakeGame.Match
             guides.Remove(player);
         }
 
+        public void ShakeCamera ()
+        {
+            cameraShake.Shake(shakeDuration, shakeMagnitude);
+        }
+
         public void FocusBlockHit (Vector2Int position)
         {
-            Vector3 targetPosition = new(position.x, position.y);
+            Vector3 targetPosition = new(position.x, position.y, camera.transform.position.z);
             float targetCameraSize = camera.orthographicSize - cameraSizeDiffOnFocus;
             StartCoroutine(SmoothLerp(targetPosition, targetCameraSize, cameraMovementSpeed));
         }
@@ -109,10 +114,9 @@ namespace LeandroExhumed.SnakeGame.Match
             return Resources.Load<TextMeshProUGUI>("Guide");
         }
 
-        private IEnumerator DeathEffectRoutine ()
+        private IEnumerator SlowMotionRoutine ()
         {
-            Time.timeScale = SLOW_MOTION_TIME_SCALE;
-            cameraShake.Shake(shakeDuration, shakeMagnitude);
+            Time.timeScale = SLOW_MOTION_TIME_SCALE;            
             yield return new WaitForSecondsRealtime(SLOW_MOTION_DURATION);
             Time.timeScale = 1f;
         }

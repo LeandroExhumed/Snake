@@ -16,9 +16,8 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action OnInitialized;
         public event Action<IBlockModel> OnBlockGenerated;
         public event Action<int, Vector2Int> OnSnakePositionChanged;
-        public event Action<Vector2Int> OnSnakeHit;
+        public event Action<Vector2Int?> OnSnakeHit;
         public event Action<int, char, char> OnPlayerLeft;
-        public event Action<Vector2Int> OnRewind;
         public event Action<char, char> OnPlayerReturned;
         public event Action<int> OnOver;
 
@@ -307,14 +306,13 @@ namespace LeandroExhumed.SnakeGame.Match
                 return;
             }
 
-            OnSnakeHit?.Invoke(snake.Position);
+            OnSnakeHit?.Invoke(timeTravelBlock?.Position);
 
             if (timeTravelBlock != null)
             {
                 isOnRewindProcess = true;
                 currentRewindResponsible = timeTravelBlock;
                 blocks.Remove(timeTravelBlock);
-                OnRewind?.Invoke(timeTravelBlock.Position);
 
                 return;
             }
