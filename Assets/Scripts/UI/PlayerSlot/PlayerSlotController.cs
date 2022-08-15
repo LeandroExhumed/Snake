@@ -22,6 +22,9 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         private bool IsOnSelection => model.State == SlotState.Selection;
 
+        private const string SELECT_SNAKE_MESSAGE = "Select your snake.";
+        private const string PLAYING_MESSAGE = "Playing.";
+
         private readonly IPlayerSlotModel model;
         private readonly PlayerSlotView view;
 
@@ -52,13 +55,14 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             if (model.State == SlotState.Selection)
             {
                 view.SetArrowsActive(true);
-                view.SetSelectSnakeTextActive(true);
+                view.SetSlotMessageText(SELECT_SNAKE_MESSAGE);
             }
             else
             {
-                view.SetOkIconActive(true);
+                view.SetSlotMessageText(PLAYING_MESSAGE);
             }
-            
+
+            view.SetSlotMessageActive(true);
         }
 
         private void HandleSnakeShown (int[] blockIDs)
@@ -69,16 +73,14 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private void HandleSnakeSelected (int selectedSnakeID, int playerNumber, IGameInputModel input)
         {
             view.SetArrowsActive(false);
-            view.SetSelectSnakeTextActive(false);
-            view.SetOkIconActive(true);
+            view.SetSlotMessageText(PLAYING_MESSAGE);
         }
 
         private void HandleDisabled ()
         {
             view.SetKeysIconsActive(false);
             view.SetSnakePreviewActive(false);
-            view.SetSelectSnakeTextActive(false);
-            view.SetOkIconActive(false);
+            view.SetSlotMessageActive(false);
         }
 
         private void HandleConfirmationKeyPressed ()

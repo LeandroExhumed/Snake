@@ -42,7 +42,7 @@ namespace LeandroExhumed.SnakeGame.Block
 
         protected ICollectorModel owner;
 
-        private readonly BlockData data;
+        protected readonly BlockData data;
 
         private Vector2Int position;
         private bool hasBenefit;

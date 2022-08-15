@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Snake
@@ -27,7 +28,25 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private IEnumerator SpriteBlinkingEffectRoutine ()
         {
-            yield return new WaitForSeconds(3);
+            SpriteRenderer[] bodyPartSprites = GetComponentsInChildren<SpriteRenderer>();
+            Color[] originalColors = bodyPartSprites.Select(x => x.color).ToArray();
+            int blinksExecuted = 0;
+
+            while (blinksExecuted <= BLINK_AMOUNT)
+            {
+                for (int i = 0; i < bodyPartSprites.Length; i++)
+                {
+                    bodyPartSprites[i].color = Color.red;
+                }
+                yield return new WaitForSeconds(BLINK_RATE);
+                for (int i = 0; i < bodyPartSprites.Length; i++)
+                {
+                    bodyPartSprites[i].color = originalColors[i];
+                }
+                yield return new WaitForSeconds(BLINK_RATE);
+
+                blinksExecuted++;
+            }
 
             Destroy();
         }

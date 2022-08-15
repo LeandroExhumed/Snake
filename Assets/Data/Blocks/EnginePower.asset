@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ef5c56f0dcfb724ea6b25e4d29ce4bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 31b366f0876423d47ba2eea731089c07, type: 3}
   m_Name: EnginePower
   m_EditorClassIdentifier: 
   id: 2
+  moveCost: 0.05
+  moveRateAddition: 0.075

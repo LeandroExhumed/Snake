@@ -31,8 +31,10 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             this.playerNumber = playerNumber;
         }
 
-        public void Enable (ISnakeModel snake)
+        public void Enable (ISnakeModel snake, IPlayerInputModel input)
         {
+            this.input = input;
+
             State = SlotState.Playing;
             currentSnake = Array.FindIndex(snakes, x => x.ID == snake.ID);
             ShowSnake();
@@ -45,6 +47,8 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             this.input = input;
 
             State = SlotState.Selection;
+            ShowSnake();
+
             OnEnabled?.Invoke(input);
         }
 

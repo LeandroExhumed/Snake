@@ -589,6 +589,7 @@ MonoBehaviour:
   keysGroup: {fileID: 6011742572544657242}
   leftKeyText: {fileID: 2157021198471888147}
   rightKeyText: {fileID: 3492869818623465616}
+  messageText: {fileID: 3552009251538073985}
   snakePreview: {fileID: 5663877490179917660}
   blockImages:
   - {fileID: 8500447626133377391}
@@ -597,8 +598,6 @@ MonoBehaviour:
   leftArrowImage: {fileID: 1555396849767595047}
   rightArrowImage: {fileID: 644184394072161573}
   highlightedArrowColor: {r: 1, g: 0.9535359, b: 0, a: 1}
-  selectSnakeText: {fileID: 3899480773345720882}
-  checkMarkIcon: {fileID: 112333017345712119}
 --- !u!1 &6501690204938971280
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,7 +896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427444647833074246, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
       propertyPath: m_Name
-      value: SelectSnakeText
+      value: MessageText
       objectReference: {fileID: 0}
     - target: {fileID: 3427444647833074246, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
       propertyPath: m_IsActive
@@ -994,11 +993,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4163254437081627322, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
   m_PrefabInstance: {fileID: 1841136228701552756}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3899480773345720882 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3427444647833074246, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
+--- !u!114 &3552009251538073985 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2938108638310971893, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
   m_PrefabInstance: {fileID: 1841136228701552756}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3830598899638158566
 PrefabInstance:
   m_ObjectHideFlags: 0

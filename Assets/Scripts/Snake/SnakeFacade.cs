@@ -59,9 +59,8 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         public void LookTo (int direction) => model.LookTo(direction);
 
-        public void CollectEnginePower (IBlockModel block, float speedAddition) => model.CollectEnginePower(block, speedAddition);
-
-        public void CollectBatteringRam (IBlockModel block) => model.CollectBatteringRam(block);
+        public void CollectEnginePower (IBlockModel block, float speedAddition)
+            => model.CollectEnginePower(block, speedAddition);
 
         public void CollectTimeTravel (IBlockModel block) => model.CollectTimeTravel(block);
 

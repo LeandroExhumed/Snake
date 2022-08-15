@@ -2,7 +2,7 @@
 
 namespace LeandroExhumed.SnakeGame.Block
 {
-    [CreateAssetMenu(fileName = "Block", menuName = "Data/Block")]
+    [CreateAssetMenu(fileName = "Default", menuName = "Data/Blocks/Default")]
     public class BlockData : ScriptableObject
     {
         public int ID => id;

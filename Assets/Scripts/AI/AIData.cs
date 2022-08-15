@@ -33,6 +33,7 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private void OnValidate ()
         {
+            bestPathFindingRate = Mathf.Max(0, bestPathFindingRate);
             ValidateFields(reasoningTimeToPlanPathToBlock);
             ValidateFields(reasoningTimeToPlanPathAfterObstruction);
         }

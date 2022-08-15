@@ -4,7 +4,7 @@
     {
         protected override void ResolveMVC ()
         {
-            Container.Bind<IBlockModel>().To<BatteringRamBlockModel>().AsSingle();
+            Container.Bind<IBlockModel>().To<BlockModel>().AsSingle();
             base.ResolveMVC();
         }
     }

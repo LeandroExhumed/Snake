@@ -19,6 +19,10 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private TextMeshProUGUI rightKeyText;
 
         [SerializeField]
+        private TextMeshProUGUI messageText;
+
+        [Header("Snake")]
+        [SerializeField]
         private GameObject snakePreview;
         [SerializeField]
         private Image[] blockImages;
@@ -27,12 +31,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         [SerializeField]
         private Image rightArrowImage;
         [SerializeField]
-        private Color highlightedArrowColor;
-
-        [SerializeField]
-        private GameObject selectSnakeText;
-        [SerializeField]
-        private GameObject checkMarkIcon;
+        private Color highlightedArrowColor;        
 
         private const float ARROW_HIGHLIGHT_DURATION = 0.2F;
 
@@ -70,9 +69,12 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             rightArrowImage.gameObject.SetActive(value);
         }
 
-        public void SetSelectSnakeTextActive (bool value) => selectSnakeText.SetActive(value);
+        public void SetSlotMessageActive (bool value) => messageText.gameObject.SetActive(value);
 
-        public void SetOkIconActive (bool value) => checkMarkIcon.SetActive(value);
+        public void SetSlotMessageText (string text)
+        {
+            messageText.text = text;
+        }
 
         private void Update ()
         {

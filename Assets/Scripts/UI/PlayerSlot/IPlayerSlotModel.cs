@@ -15,7 +15,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         void Initialize (int playerNumber);
         void Enable (IPlayerInputModel input);
-        void Enable (ISnakeModel snake);
+        void Enable (ISnakeModel snake, IPlayerInputModel input);
         void ShowPreviousSnake ();
         void ShowNextSnake ();
         void Confirm ();

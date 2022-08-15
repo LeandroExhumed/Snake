@@ -51,7 +51,7 @@ namespace LeandroExhumed.SnakeGame.Snake
                 Vector2Int blockPosition = new(
                     startPosition.x - ((data.StartingBlocks.Length - 1) - i) * startDirection.x,
                     startPosition.y);
-                AttachBlock(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition, true);
+                Grow(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition, true);
             }
 
             OnInitialized.Invoke(input);
@@ -84,10 +84,6 @@ namespace LeandroExhumed.SnakeGame.Snake
             {
                 Direction = new Vector2Int(Direction.y, -Direction.x);
             }
-        }
-
-        public void CollectBatteringRam (IBlockModel block)
-        {
         }
 
         public void CollectEnginePower (IBlockModel block, float speedAddition)
@@ -156,6 +152,12 @@ namespace LeandroExhumed.SnakeGame.Snake
             OnBlockAttached?.Invoke(block);
         }
 
+        private void Grow (IBlockModel block, Vector2Int position, bool hasBenefit)
+        {
+            TimeToMove += block.MoveCost;
+            AttachBlock(block, position, hasBenefit);
+        }
+
         private void Move (Vector2Int direction)
         {
             Vector2Int lastPosition = GetDestinationPosition(direction);
@@ -212,18 +214,18 @@ namespace LeandroExhumed.SnakeGame.Snake
                     }
                     else
                     {
-                        HandleDeath(block);
+                        HandleDeath();
                     }
                 }
                 else
                 {
-                    Grow(block);
+                    Grow(block, Position, block.HasBenefit);
                     block.BeCollected();
                 }
             }
         }
 
-        private void HandleDeath (IBlockModel block)
+        private void HandleDeath ()
         {
             Head.GetHit();
 
@@ -242,12 +244,6 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             OnHit?.Invoke(this, timeTravelBlock);
             timeTravelBlock = null;
-        }
-
-        private void Grow (IBlockModel block)
-        {
-            TimeToMove += block.MoveCost;
-            AttachBlock(block, Position, block.HasBenefit);
         }
 
         private void HandleAttachedBlockPositionChanged (INodeModel block, Vector2Int value)

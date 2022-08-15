@@ -47,7 +47,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         public void Enable (IPlayerInputModel input) => model.Enable(input);
 
-        public void Enable (ISnakeModel snake) => model.Enable(snake);
+        public void Enable (ISnakeModel snake, IPlayerInputModel input) => model.Enable(snake, input);
 
         public void ShowNextSnake () => model.ShowNextSnake();
 
