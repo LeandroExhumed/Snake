@@ -10,7 +10,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 {
     public class SnakeModel : ISnakeModel
     {
-        public event Action<IGameInput> OnInitialized;
+        public event Action<IGameInputModel> OnInitialized;
         public event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnBlockAttached;
         public event Action<ISnakeModel, IBlockModel> OnHit;
@@ -32,16 +32,16 @@ namespace LeandroExhumed.SnakeGame.Snake
         private readonly SnakeData data;
 
         private readonly BlockFactory blockFactory;
-        private readonly IGridModel<INode> levelGrid;
+        private readonly IGridModel<INodeModel> levelGrid;
 
-        public SnakeModel (SnakeData data, BlockFactory blockFactory, IGridModel<INode> levelGrid)
+        public SnakeModel (SnakeData data, BlockFactory blockFactory, IGridModel<INodeModel> levelGrid)
         {
             this.data = data;
             this.blockFactory = blockFactory;
             this.levelGrid = levelGrid;
         }
 
-        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input)
+        public void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInputModel input)
         {
             Direction = startDirection;
             TimeToMove = data.BaseMoveRate;
@@ -57,7 +57,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             OnInitialized.Invoke(input);
         }
 
-        public void Initialize (SnakePersistentData persistentData, IGameInput input)
+        public void Initialize (SnakePersistentData persistentData, IGameInputModel input)
         {
             Direction = persistentData.Direction;
             TimeToMove = persistentData.TimeToMove;
@@ -201,7 +201,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleDestination (Vector2Int value)
         {
-            INode targetNode = levelGrid.GetNode(value);
+            INodeModel targetNode = levelGrid.GetNode(value);
             if (targetNode != null && targetNode is IBlockModel block)
             {
                 if (block.IsAttached)
@@ -250,7 +250,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             AttachBlock(block, Position, block.HasBenefit);
         }
 
-        private void HandleAttachedBlockPositionChanged (INode block, Vector2Int value)
+        private void HandleAttachedBlockPositionChanged (INodeModel block, Vector2Int value)
         {
             levelGrid.SetNode(value, block);
         }

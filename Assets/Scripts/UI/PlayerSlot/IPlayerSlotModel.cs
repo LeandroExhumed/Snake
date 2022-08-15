@@ -8,13 +8,13 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
     {
         SlotState State { get; }
 
-        event Action<IPlayerInput> OnEnabled;
+        event Action<IPlayerInputModel> OnEnabled;
         event Action<int[]> OnSnakeShown;
-        event Action<int, int, IPlayerInput> OnSnakeSelected;
+        event Action<int, int, IPlayerInputModel> OnSnakeSelected;
         event Action OnDisabled;
 
         void Initialize (int playerNumber);
-        void Enable (IPlayerInput input);
+        void Enable (IPlayerInputModel input);
         void Enable (ISnakeModel snake);
         void ShowPreviousSnake ();
         void ShowNextSnake ();

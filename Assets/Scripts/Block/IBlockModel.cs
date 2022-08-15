@@ -6,7 +6,7 @@ using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Block
 {
-    public interface IBlockModel : INode
+    public interface IBlockModel : INodeModel
     {
         event Action<IBlockModel> OnCollected;
         event Action<Transform> OnAttached;
@@ -19,7 +19,7 @@ namespace LeandroExhumed.SnakeGame.Block
         bool IsAttached { get; }
         bool HasBenefit { get; }
 
-        void Initialize (Vector2Int startPosition, bool hasBenefit, ICollector owner = null);
+        void Initialize (Vector2Int startPosition, bool hasBenefit, ICollectorModel owner = null);
         void BeCollected ();
         void ApplyEffect ();
         void Attach (Transform owner);

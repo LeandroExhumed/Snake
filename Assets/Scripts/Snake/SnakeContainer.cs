@@ -13,7 +13,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         {
             ResolveMVC();
             Container.BindInstance(data).AsSingle();
-            Container.BindFactory<ISimulatedInput, ISimulatedInput.Factory>()
+            Container.BindFactory<IAIInputModel, IAIInputModel.Factory>()
                 .FromComponentInNewPrefabResource("SimulatedInput");
         }
 

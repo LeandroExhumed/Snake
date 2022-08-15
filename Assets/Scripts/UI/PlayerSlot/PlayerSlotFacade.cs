@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 {
     public class PlayerSlotFacade : MonoBehaviour, IPlayerSlotModel
     {
-        public event Action<IPlayerInput> OnEnabled
+        public event Action<IPlayerInputModel> OnEnabled
         {
             add => model.OnEnabled += value;
             remove => model.OnEnabled -= value;
@@ -18,7 +18,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             add => model.OnSnakeShown += value;
             remove => model.OnSnakeShown -= value;
         }
-        public event Action<int, int, IPlayerInput> OnSnakeSelected
+        public event Action<int, int, IPlayerInputModel> OnSnakeSelected
         {
             add => model.OnSnakeSelected += value;
             remove => model.OnSnakeSelected -= value;
@@ -45,7 +45,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 
         public void Initialize (int playerNumber) => model.Initialize(playerNumber);
 
-        public void Enable (IPlayerInput input) => model.Enable(input);
+        public void Enable (IPlayerInputModel input) => model.Enable(input);
 
         public void Enable (ISnakeModel snake) => model.Enable(snake);
 

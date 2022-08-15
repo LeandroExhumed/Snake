@@ -24,7 +24,7 @@ namespace LeandroExhumed.SnakeGame.Block
             model.OnDestroyed += HandleDestroyed;
         }
 
-        private void HandlePositionChanged (INode model, Vector2Int value)
+        private void HandlePositionChanged (INodeModel model, Vector2Int value)
         {
             view.Position = value;
         }

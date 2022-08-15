@@ -24,18 +24,18 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public bool IsRunning { get; private set; }
 
-        private readonly MatchData data;
-        private readonly IGridModel<INode> levelGrid;
+        private readonly GameData data;
+        private readonly IGridModel<INodeModel> levelGrid;
 
         private const float END_MATCH_DELAY = 4F;
 
         private bool isOnRewindProcess = false;
         private IBlockModel currentRewindResponsible;
 
-        private readonly Dictionary<ISnakeModel, Player> players = new();
+        private readonly Dictionary<ISnakeModel, PlayerValues> players = new();
         private readonly List<ISnakeModel> snakes = new();
         private readonly List<IBlockModel> blocks = new();
-        private readonly Dictionary<ISnakeModel, ISimulatedInput> simulatedInputs = new();
+        private readonly Dictionary<ISnakeModel, IAIInputModel> aiInputs = new();
 
         private readonly Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
 
@@ -43,17 +43,17 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private readonly SnakeFactory snakeFactory;
         private readonly BlockFactory blockFactory;
-        private readonly ISimulatedInput.Factory simulatedInputFactory;
+        private readonly IAIInputModel.Factory aiInputFactory;
         
         private readonly MonoBehaviour monoBehaviour;
 
         public MatchModel (
-            MatchData data,
-            IGridModel<INode> levelGrid,
+            GameData data,
+            IGridModel<INodeModel> levelGrid,
             IPlayerSlotModel[] playerSlots,
             SnakeFactory snakeFactory,
             BlockFactory blockFactory,
-            ISimulatedInput.Factory simulatedInputFactory,
+            IAIInputModel.Factory aiInputFactory,
             MonoBehaviour monoBehaviour)
         {
             this.data = data;
@@ -61,7 +61,7 @@ namespace LeandroExhumed.SnakeGame.Match
             this.playerSlots = playerSlots;
             this.snakeFactory = snakeFactory;
             this.blockFactory = blockFactory;
-            this.simulatedInputFactory = simulatedInputFactory;
+            this.aiInputFactory = aiInputFactory;
             this.monoBehaviour = monoBehaviour;
         }
 
@@ -90,22 +90,22 @@ namespace LeandroExhumed.SnakeGame.Match
                 PlayerPersistentData player = data.Players.FirstOrDefault(x => x.Snake == data.Snakes[i].Position);
                 if (player != null)
                 {
-                    IPlayerInput input = new PlayerInput(
+                    IPlayerInputModel input = new PlayerInputModel(
                         player.Input.LeftKey, player.Input.RightKey);
                     input.Initialize();
                     playerSlots[player.Number - 1].Enable(snake);
                     snake.Initialize(data.Snakes[i], input);
                     snake.OnPositionChanged += HandleSnakePositionChanged;
 
-                    players.Add(snake, new Player(player.Number, input));
+                    players.Add(snake, new PlayerValues(player.Number, input));
 
                     OnPlayerReturned?.Invoke(input.LeftKey, input.RightKey);
                 }
                 else
                 {
-                    ISimulatedInput simulatedInput = simulatedInputFactory.Create();
+                    IAIInputModel simulatedInput = aiInputFactory.Create();
                     simulatedInput.Initialize(snake);
-                    simulatedInputs.Add(snake, simulatedInput);
+                    aiInputs.Add(snake, simulatedInput);
                     snake.Initialize(data.Snakes[i], simulatedInput);
                 }
 
@@ -136,7 +136,7 @@ namespace LeandroExhumed.SnakeGame.Match
             OnRestarted?.Invoke();
         }
 
-        private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IGameInput input)
+        private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IGameInputModel input)
         {
             ISnakeModel snake = snakeFactory.Create(id);
             snake.Initialize(position, direction, input);
@@ -150,20 +150,20 @@ namespace LeandroExhumed.SnakeGame.Match
             IPlayerSlotModel slot = playerSlots.FirstOrDefault(x => x.State == SlotState.Waiting);
             if (slot != null)
             {
-                PlayerInput input = new(leftKey, rightKey);
+                PlayerInputModel input = new(leftKey, rightKey);
                 input.Initialize();
                 slot.Enable(input);
             }
         }
 
-        private void GenerateSnake (int playableSnakeID, int playerNumber, IPlayerInput input)
+        private void GenerateSnake (int playableSnakeID, int playerNumber, IPlayerInputModel input)
         {
             for (int i = 0; i < data.AISnakesPerPlayer + 1; i++)
             {
                 ISnakeModel snake;
                 Vector2Int startPosition;
                 Vector2Int startDirection;
-                IGameInput _input;
+                IGameInputModel _input;
                 if (i == 0)
                 {
                     snake = snakeFactory.Create(playableSnakeID);
@@ -172,16 +172,16 @@ namespace LeandroExhumed.SnakeGame.Match
                     startDirection = Vector2Int.right;
                     _input = input;
 
-                    players.Add(snake, new Player(playerNumber, input));
+                    players.Add(snake, new PlayerValues(playerNumber, input));
                 }
                 else
                 {
                     snake = snakeFactory.Create(4);
                     startPosition = GetSafeSpawnPosition(new Vector2Int(levelGrid.Width - 3, levelGrid.Height - 2));
                     startDirection = Vector2Int.left;
-                    ISimulatedInput simulatedInput = simulatedInputFactory.Create();
+                    IAIInputModel simulatedInput = aiInputFactory.Create();
                     simulatedInput.Initialize(snake);
-                    simulatedInputs.Add(snake, simulatedInput);
+                    aiInputs.Add(snake, simulatedInput);
                     _input = simulatedInput;
                 }
                 snake.Initialize(startPosition, startDirection, _input);
@@ -215,13 +215,13 @@ namespace LeandroExhumed.SnakeGame.Match
             OnBlockGenerated?.Invoke(block);
         }
 
-        private void Play (int selectedSnakeID, int playerNumber, IPlayerInput input)
+        private void Play (int selectedSnakeID, int playerNumber, IPlayerInputModel input)
         {
             GenerateSnake(selectedSnakeID, playerNumber, input);
             GenerateRandomBlock();
         }
 
-        private void HandleSelectionConfirmed (int selectedSnakeID, int playerNumber, IPlayerInput input)
+        private void HandleSelectionConfirmed (int selectedSnakeID, int playerNumber, IPlayerInputModel input)
         {
             Play(selectedSnakeID, playerNumber, input);
         }
@@ -270,7 +270,7 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             if (players.ContainsKey(snake))
             {
-                Player player = players[snake];
+                PlayerValues player = players[snake];
                 playerSlots[player.Number - 1].Disable();
                 players.Remove(snake);
 
@@ -280,8 +280,8 @@ namespace LeandroExhumed.SnakeGame.Match
             }
             else
             {
-                simulatedInputs[snake].Destroy();
-                simulatedInputs.Remove(snake);
+                aiInputs[snake].Destroy();
+                aiInputs.Remove(snake);
             }
 
             snake.OnHit -= HandleSnakeHit;
@@ -300,11 +300,11 @@ namespace LeandroExhumed.SnakeGame.Match
 
             players.Clear();
 
-            foreach (var item in simulatedInputs)
+            foreach (var item in aiInputs)
             {
                 item.Value.Destroy();
             }
-            simulatedInputs.Clear();
+            aiInputs.Clear();
 
             for (int i = 0; i < blocks.Count; i++)
             {
@@ -356,7 +356,7 @@ namespace LeandroExhumed.SnakeGame.Match
                 Save(block);
             }
 
-            foreach (var item in simulatedInputs)
+            foreach (var item in aiInputs)
             {
                 item.Value.HandleBlockCollected(block);
             }
@@ -370,22 +370,10 @@ namespace LeandroExhumed.SnakeGame.Match
             yield return new WaitForSeconds(END_MATCH_DELAY);
             IsRunning = false;
 
-            int playerNumber = players.TryGetValue(snakes[0], out Player player) ? player.Number : 0;
+            int playerNumber = players.TryGetValue(snakes[0], out PlayerValues player) ? player.Number : 0;
             OnOver?.Invoke(playerNumber);
 
             Clear();
-        }
-    }
-
-    public struct Player
-    {
-        public int Number { get; private set; }
-        public IPlayerInput Input { get; private set; }
-
-        public Player (int number, IPlayerInput input)
-        {
-            Number = number;
-            Input = input;
         }
     }
 }

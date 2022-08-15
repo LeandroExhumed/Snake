@@ -19,6 +19,10 @@ namespace LeandroExhumed.SnakeGame.Match
         private Vector2 guideOffset;
 
         [SerializeField]
+        private Transform canvas;
+
+        [Header("Camera")]
+        [SerializeField]
         private float cameraSizeDiffOnFocus = 15f;
         [SerializeField]
         private float cameraMovementSpeed = 0.05f;
@@ -31,13 +35,11 @@ namespace LeandroExhumed.SnakeGame.Match
         [SerializeField]
         private CameraShake cameraShake;
 
+        [Header("Rewind")]
         [SerializeField]
         private float rewindScreenDuration = 3f;
         [SerializeField]
         private GameObject rewindScreen;
-
-        [SerializeField]
-        private Transform canvas;
 
         private readonly Dictionary<int, TextMeshProUGUI> guides = new();
 

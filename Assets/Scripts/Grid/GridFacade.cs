@@ -4,9 +4,9 @@ using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
-    public class GridFacade : MonoBehaviour, IGridModel<INode>
+    public class GridFacade : MonoBehaviour, IGridModel<INodeModel>
     {
-        public event Action<INode[,]> OnInitialized
+        public event Action<INodeModel[,]> OnInitialized
         {
             add => model.OnInitialized += value;
             remove => model.OnInitialized -= value;
@@ -20,11 +20,11 @@ namespace LeandroExhumed.SnakeGame.Grid
         public int Width => model.Width;
         public int Height => model.Height;
 
-        private IGridModel<INode> model;
+        private IGridModel<INodeModel> model;
         private GridController controller;
 
         [Inject]
-        public void Constructor (IGridModel<INode> model, GridController controller)
+        public void Constructor (IGridModel<INodeModel> model, GridController controller)
         {
             this.model = model;
             this.controller = controller;
@@ -36,9 +36,9 @@ namespace LeandroExhumed.SnakeGame.Grid
             model.Initialize();
         }
 
-        public INode GetNode (Vector2Int position) => model.GetNode(position);
+        public INodeModel GetNode (Vector2Int position) => model.GetNode(position);
 
-        public void SetNode (Vector2Int position, INode node) => model.SetNode(position, node);
+        public void SetNode (Vector2Int position, INodeModel node) => model.SetNode(position, node);
 
         public void Clear () => model.Clear();
 

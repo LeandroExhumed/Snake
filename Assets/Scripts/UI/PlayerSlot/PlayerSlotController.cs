@@ -5,7 +5,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 {
     public class PlayerSlotController : IDisposable
     {
-        private IPlayerInput Input
+        private IPlayerInputModel Input
         {
             get => input;
             set
@@ -25,7 +25,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private readonly IPlayerSlotModel model;
         private readonly PlayerSlotView view;
 
-        private IPlayerInput input;
+        private IPlayerInputModel input;
 
         public PlayerSlotController (IPlayerSlotModel model, PlayerSlotView view)
         {
@@ -42,7 +42,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             view.OnConfirmationKeyPressed += HandleConfirmationKeyPressed;
         }
 
-        private void HandleEnabled (IPlayerInput input)
+        private void HandleEnabled (IPlayerInputModel input)
         {
             Input = input;
 
@@ -66,7 +66,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
             view.ShowSnake(blockIDs);
         }
 
-        private void HandleSnakeSelected (int selectedSnakeID, int playerNumber, IGameInput input)
+        private void HandleSnakeSelected (int selectedSnakeID, int playerNumber, IGameInputModel input)
         {
             view.SetArrowsActive(false);
             view.SetSelectSnakeTextActive(false);

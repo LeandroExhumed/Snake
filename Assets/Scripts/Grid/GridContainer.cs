@@ -6,7 +6,7 @@ namespace LeandroExhumed.SnakeGame.Grid
     public class GridContainer : MonoInstaller
     {
         [Inject]
-        private readonly MatchData matchData;
+        private readonly GameData matchData;
 
         public override void InstallBindings ()
         {
@@ -15,7 +15,7 @@ namespace LeandroExhumed.SnakeGame.Grid
 
         private void ResolveMVC ()
         {
-            Container.Bind<IGridModel<INode>>().FromInstance(new GridModel<INode>(
+            Container.Bind<IGridModel<INodeModel>>().FromInstance(new GridModel<INodeModel>(
                 matchData.BoardSize.x, matchData.BoardSize.y)).AsSingle();
             Container.Bind<GridController>().AsSingle();
             Container.BindInstance(GetComponent<GridView>()).AsSingle();

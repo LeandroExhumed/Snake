@@ -14,7 +14,7 @@ namespace LeandroExhumed.SnakeGame.Grid
 
         private const float GRID_HALF_SIZE = 0.5F;
 
-        public void Initialize (INode[,] array)
+        public void Initialize (INodeModel[,] array)
         {
             for (int x = 0; x < array.GetLength(0); x++)
             {
@@ -35,7 +35,7 @@ namespace LeandroExhumed.SnakeGame.Grid
             CenterizeCamera(array);
         }
 
-        private void CenterizeCamera (INode[,] array)
+        private void CenterizeCamera (INodeModel[,] array)
         {
             float xCenter = GetCellCenter(array.GetLength(0));
             float yCenter = GetCellCenter(array.GetLength(1));

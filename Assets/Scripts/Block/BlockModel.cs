@@ -7,7 +7,7 @@ namespace LeandroExhumed.SnakeGame.Block
 {
     public class BlockModel : IBlockModel
     {
-        public event Action<INode, Vector2Int> OnPositionChanged;
+        public event Action<INodeModel, Vector2Int> OnPositionChanged;
         public event Action<IBlockModel> OnCollected;
         public event Action<Transform> OnAttached;
         public event Action OnBenefitRemoved;
@@ -40,7 +40,7 @@ namespace LeandroExhumed.SnakeGame.Block
             }
         }
 
-        protected ICollector owner;
+        protected ICollectorModel owner;
 
         private readonly BlockData data;
 
@@ -52,7 +52,7 @@ namespace LeandroExhumed.SnakeGame.Block
             this.data = data;
         }
 
-        public virtual void Initialize (Vector2Int startPosition, bool hasBenefit, ICollector owner = null)
+        public virtual void Initialize (Vector2Int startPosition, bool hasBenefit, ICollectorModel owner = null)
         {
             Position = startPosition;
             HasBenefit = hasBenefit;

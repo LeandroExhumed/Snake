@@ -6,9 +6,9 @@ using Zenject;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    public interface ISnakeModel : ICollector
+    public interface ISnakeModel : ICollectorModel
     {
-        event Action<IGameInput> OnInitialized;
+        event Action<IGameInputModel> OnInitialized;
         event Action<ISnakeModel, Vector2Int> OnPositionChanged;
         event Action<IBlockModel> OnBlockAttached;
         event Action<ISnakeModel, IBlockModel> OnHit;
@@ -19,8 +19,8 @@ namespace LeandroExhumed.SnakeGame.Snake
         Vector2Int Direction { get; }
         float TimeToMove { get; }
 
-        void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInput input);
-        void Initialize (SnakePersistentData persistentData, IGameInput input);
+        void Initialize (Vector2Int startPosition, Vector2Int startDirection, IGameInputModel input);
+        void Initialize (SnakePersistentData persistentData, IGameInputModel input);
         void LookTo (int direction);
         void Tick ();
         void Save (SnakePersistentData persistentData);

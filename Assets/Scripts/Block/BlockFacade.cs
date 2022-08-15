@@ -8,7 +8,7 @@ namespace LeandroExhumed.SnakeGame.Block
 {
     public class BlockFacade : MonoBehaviour, IBlockModel
     {
-        public event Action<INode, Vector2Int> OnPositionChanged
+        public event Action<INodeModel, Vector2Int> OnPositionChanged
         {
             add => model.OnPositionChanged += value;
             remove => model.OnPositionChanged -= value;
@@ -55,7 +55,7 @@ namespace LeandroExhumed.SnakeGame.Block
             this.controller = controller;
         }
 
-        public void Initialize (Vector2Int initialPosition, bool hasBenefit, ICollector owner = null)
+        public void Initialize (Vector2Int initialPosition, bool hasBenefit, ICollectorModel owner = null)
         {
             controller.Setup();
             model.Initialize(initialPosition, hasBenefit, owner);

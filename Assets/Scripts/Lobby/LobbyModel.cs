@@ -16,11 +16,11 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly List<char> unavailableKeys = new();
         private readonly List<char> currentHeldKeys = new();
 
-        private readonly MatchData data;
+        private readonly GameData data;
 
-        private readonly IGridModel<INode> levelGrid;
+        private readonly IGridModel<INodeModel> levelGrid;
 
-        public LobbyModel (MatchData data, IGridModel<INode> levelGrid)
+        public LobbyModel (GameData data, IGridModel<INodeModel> levelGrid)
         {
             this.data = data;
             this.levelGrid = levelGrid;

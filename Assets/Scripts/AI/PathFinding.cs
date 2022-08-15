@@ -1,6 +1,5 @@
 ﻿using LeandroExhumed.SnakeGame.Block;
 using LeandroExhumed.SnakeGame.Grid;
-using LeandroExhumed.SnakeGame.Snake;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,52 +7,48 @@ namespace LeandroExhumed.SnakeGame.AI
 {
     public class PathFinding
     {
-        private const int MOVE_STRAIGHT_COST = 10;
-
-        private List<PathNode> openList;
-        private List<PathNode> closedList;
+        private List<PathNodeModel> openList;
+        private List<PathNodeModel> closedList;
 
         private readonly AIData data;
 
-        private readonly IGridModel<INode> levelGrid;
-        private readonly GridModel<PathNode> grid;
+        private readonly IGridModel<INodeModel> levelGrid;
+        private readonly GridModel<PathNodeModel> grid;
 
-        public PathFinding (AIData data, IGridModel<INode> levelGrid)
+        public PathFinding (AIData data, IGridModel<INodeModel> levelGrid)
         {
             this.data = data;
             this.levelGrid = levelGrid;
 
-            grid = new GridModel<PathNode>(levelGrid.Width, levelGrid.Height);
+            grid = new GridModel<PathNodeModel>(levelGrid.Width, levelGrid.Height);
         }
 
-        public List<PathNode> FindPath (Vector2Int start, Vector2Int end)
+        public List<PathNodeModel> FindPath (Vector2Int start, Vector2Int end)
         {
             UpdateGridBasedOnLevel(levelGrid);
 
-            PathNode startNode = grid.GetNode(start);
-            PathNode endNode = grid.GetNode(end);
+            PathNodeModel startNode = grid.GetNode(start);
+            PathNodeModel endNode = grid.GetNode(end);
 
-            openList = new List<PathNode>() { startNode };
-            closedList = new List<PathNode>();
+            openList = new List<PathNodeModel>() { startNode };
+            closedList = new List<PathNodeModel>();
 
             for (int x = 0; x < grid.Width; x++)
             {
                 for (int y = 0; y < grid.Height; y++)
                 {
-                    PathNode node = grid.GetNode(new(x, y));
+                    PathNodeModel node = grid.GetNode(new(x, y));
                     node.GCost = int.MaxValue;
-                    node.CalculateFCost();
                     node.CameFromNode = null;
                 }
             }
 
             startNode.GCost = 0;
             startNode.HCost = CalculateDistanceCost(startNode, endNode);
-            startNode.CalculateFCost();
 
             while (openList.Count > 0)
             {
-                PathNode currentNode = GetLowestFCostNode(openList);
+                PathNodeModel currentNode = GetLowestFCostNode(openList);
                 if (currentNode == endNode)
                 {
                     return CalculatePath(endNode);
@@ -62,7 +57,7 @@ namespace LeandroExhumed.SnakeGame.AI
                 openList.Remove(currentNode);
                 closedList.Add(currentNode);
 
-                List<PathNode> neighbourList = GetNeighbourList(currentNode);
+                List<PathNodeModel> neighbourList = GetNeighbourList(currentNode);
                 for (int i = 0; i < neighbourList.Count; i++)
                 {
                     if (closedList.Contains(neighbourList[i]))
@@ -82,7 +77,6 @@ namespace LeandroExhumed.SnakeGame.AI
                         neighbourList[i].CameFromNode = currentNode;
                         neighbourList[i].GCost = tentativeGCost;
                         neighbourList[i].HCost = CalculateDistanceCost(neighbourList[i], endNode);
-                        neighbourList[i].CalculateFCost();
 
                         if (!openList.Contains(neighbourList[i]))
                         {
@@ -97,7 +91,7 @@ namespace LeandroExhumed.SnakeGame.AI
             return null;
         }
 
-        private void UpdateGridBasedOnLevel (IGridModel<INode> levelGrid)
+        private void UpdateGridBasedOnLevel (IGridModel<INodeModel> levelGrid)
         {
             for (int x = 0; x < grid.Width; x++)
             {
@@ -109,12 +103,12 @@ namespace LeandroExhumed.SnakeGame.AI
                     {
                         isWalkable = !block.IsAttached;
                     }
-                    grid.SetNode(position, new PathNode(new(x, y), isWalkable));
+                    grid.SetNode(position, new PathNodeModel(new(x, y), isWalkable));
                 }
             }
         }
 
-        private int CalculateDistanceCost (PathNode a, PathNode b)
+        private int CalculateDistanceCost (PathNodeModel a, PathNodeModel b)
         {
             int xDistance = Mathf.Abs(a.Position.x - b.Position.x);
             int yDistance = Mathf.Abs(a.Position.y - b.Position.y);
@@ -137,9 +131,9 @@ namespace LeandroExhumed.SnakeGame.AI
             }            
         }
 
-        private PathNode GetLowestFCostNode (List<PathNode> pathNodeList)
+        private PathNodeModel GetLowestFCostNode (List<PathNodeModel> pathNodeList)
         {
-            PathNode lowestFCostNode = pathNodeList[0];
+            PathNodeModel lowestFCostNode = pathNodeList[0];
             for (int i = 0; i < pathNodeList.Count; i++)
             {
                 if (pathNodeList[i].FCost < lowestFCostNode.FCost)
@@ -151,11 +145,11 @@ namespace LeandroExhumed.SnakeGame.AI
             return lowestFCostNode;
         }
 
-        private List<PathNode> CalculatePath (PathNode endNode)
+        private List<PathNodeModel> CalculatePath (PathNodeModel endNode)
         {
-            List<PathNode> path = new();
+            List<PathNodeModel> path = new();
             path.Add(endNode);
-            PathNode currentNode = endNode;
+            PathNodeModel currentNode = endNode;
             while (currentNode.CameFromNode != null)
             {
                 path.Add(currentNode.CameFromNode);
@@ -166,9 +160,9 @@ namespace LeandroExhumed.SnakeGame.AI
             return path;
         }
 
-        private List<PathNode> GetNeighbourList (PathNode currentNode)
+        private List<PathNodeModel> GetNeighbourList (PathNodeModel currentNode)
         {
-            List<PathNode> neighbourList = new();
+            List<PathNodeModel> neighbourList = new();
 
             if (currentNode.Position.x -1 >= 0)
             {
@@ -194,7 +188,7 @@ namespace LeandroExhumed.SnakeGame.AI
             return neighbourList;
         }
 
-        private PathNode GetNode (Vector2Int position)
+        private PathNodeModel GetNode (Vector2Int position)
         {
             return grid.GetNode(position);
         }

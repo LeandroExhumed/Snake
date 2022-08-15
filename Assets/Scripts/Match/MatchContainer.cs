@@ -15,6 +15,9 @@ namespace LeandroExhumed.SnakeGame.Match
         [SerializeField]
         private PlayerSlotFacade[] playerSlots;
 
+        [SerializeField]
+        private AIInputFacade aiInputPrefab;
+
         [Inject]
         private readonly SnakeData[] snakes;
 
@@ -36,8 +39,8 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void ResolveFactories ()
         {
-            Container.BindFactory<ISimulatedInput, ISimulatedInput.Factory>()
-                .FromComponentInNewPrefabResource("SimulatedInput");
+            Container.BindFactory<IAIInputModel, IAIInputModel.Factory>()
+                .FromComponentInNewPrefab(aiInputPrefab);
             for (int i = 0; i < snakes.Length; i++)
             {
                 string resource = string.Concat("Snakes/", snakes[i].ID);
