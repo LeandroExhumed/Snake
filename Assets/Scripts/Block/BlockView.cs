@@ -4,6 +4,11 @@ namespace LeandroExhumed.SnakeGame.Block
 {
     public class BlockView : MonoBehaviour
     {
+        public AudioClip CollectedSound => collectedSound;
+
+        [SerializeField]
+        private AudioClip collectedSound;
+
         [SerializeField]
         private SpriteRenderer spriteRenderer;
         [SerializeField]

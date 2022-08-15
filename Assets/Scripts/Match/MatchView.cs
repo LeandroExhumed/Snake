@@ -13,10 +13,15 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action OnRewindEffectOver;
         public event Action OnRestarted;
 
+        public AudioClip RewindEffectSound => rewindEffectSound;
+
         [SerializeField]
         private TextMeshProUGUI winnerMessageText;
         [SerializeField]
         private Vector2 guideOffset;
+
+        [SerializeField]
+        private AudioClip rewindEffectSound;
 
         [SerializeField]
         private Transform canvas;

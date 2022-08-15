@@ -1,5 +1,6 @@
 ﻿using LeandroExhumed.SnakeGame.Block;
 using LeandroExhumed.SnakeGame.Input;
+using LeandroExhumed.SnakeGame.Services;
 using System;
 
 namespace LeandroExhumed.SnakeGame.Snake
@@ -8,6 +9,8 @@ namespace LeandroExhumed.SnakeGame.Snake
     {
         private readonly ISnakeModel model;
         private readonly SnakeView view;
+
+        private readonly AudioProvider audioProvider;
 
         private IGameInputModel Input
         {
@@ -26,10 +29,11 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private IGameInputModel input;
 
-        public SnakeController (ISnakeModel model, SnakeView view)
+        public SnakeController (ISnakeModel model, SnakeView view, AudioProvider audioProvider)
         {
             this.model = model;
             this.view = view;
+            this.audioProvider = audioProvider;
         }
 
         public void Setup ()
@@ -54,6 +58,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         private void HandleHit (ISnakeModel model, IBlockModel timeTravelBlock)
         {
             view.PlayBlinkingEffect();
+            audioProvider.PlayOneShot(view.HitSound);
         }
 
         private void HandleDestroyed ()
@@ -68,7 +73,6 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private void HandleMovementInputPerformed (int value)
         {
-
             model.LookTo(value);
         }
 

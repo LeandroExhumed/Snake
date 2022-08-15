@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Services;
+using System;
 using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Match
@@ -12,11 +13,14 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private readonly ILobbyModel lobby;
 
-        public MatchController (IMatchModel model, MatchView view, ILobbyModel lobby)
+        private readonly AudioProvider audioProvider;
+
+        public MatchController (IMatchModel model, MatchView view, ILobbyModel lobby, AudioProvider audioProvider)
         {
             this.model = model;
             this.view = view;
             this.lobby = lobby;
+            this.audioProvider = audioProvider;
         }
 
         public void Setup ()
@@ -76,12 +80,15 @@ namespace LeandroExhumed.SnakeGame.Match
         private void HandleBlockFocusOver ()
         {
             view.PlayRewindEffect();
+            audioProvider.PauseMusic();
+            audioProvider.PlayOneShot(view.RewindEffectSound);
         }
 
         private void HandleRewindEffectOver ()
         {
             Time.timeScale = 1;
             view.LeaveFocus();
+            audioProvider.ResumeMusic();
             model.Rewind();
         }
 

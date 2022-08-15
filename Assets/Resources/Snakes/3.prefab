@@ -65,7 +65,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724bc8c870fdb3d49b1a604e1d7074cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAI: 0
   data: {fileID: 11400000, guid: 530085532e4e7754d9c0ef44991a3298, type: 2}
 --- !u!114 &2782504903655805551
 MonoBehaviour:
@@ -91,3 +90,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c8266817ae7784e9aa8545cd365adf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitSound: {fileID: 8300000, guid: fb5ea96a679b43c41a75a60030659987, type: 3}

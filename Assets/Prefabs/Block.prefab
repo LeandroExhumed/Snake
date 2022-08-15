@@ -77,7 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abfe4ae83e7af341be2c1d271bad8a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attachedSound: {fileID: 8300000, guid: 1819ed09cc7ae5d4aa91ecb3518b26fe, type: 3}
   spriteRenderer: {fileID: 8038483655363640402}
+  brokenSprite: {fileID: 0}
   explosionVFX: {fileID: 57340176338537957}
 --- !u!1 &7658470512545777431
 GameObject:
