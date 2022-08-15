@@ -15,17 +15,7 @@ namespace LeandroExhumed.SnakeGame.AI
             remove => model.OnDestroyed -= value;
         }
 
-        private IAIInputModel model;
-        private AIInputController controller;
-
-        [Inject]
-        public void Constructor (IAIInputModel model, AIInputController controller)
-        {
-            this.model = model;
-            this.controller = controller;
-        }
-
-        public event Action<List<PathNodeModel>> OnPathChanged
+        public event Action<List<IPathNodeModel>> OnPathChanged
         {
             add => model.OnPathChanged += value;
             remove => model.OnPathChanged -= value;
@@ -37,6 +27,16 @@ namespace LeandroExhumed.SnakeGame.AI
             remove => model.OnMovementRequested -= value;
         }
 
+        private IAIInputModel model;
+        private IController controller;
+
+        [Inject]
+        public void Constructor (IAIInputModel model, IController controller)
+        {
+            this.model = model;
+            this.controller = controller;
+        }
+
         public void Initialize (ISnakeModel snake)
         {
             controller.Setup();
@@ -46,6 +46,8 @@ namespace LeandroExhumed.SnakeGame.AI
         public void Initialize () => model.Initialize();
 
         public void HandleGridNodeChanged (Vector2Int nodePosition) => model.HandleGridNodeChanged(nodePosition);
+
+        public void HandleBlockGenerated (IBlockModel block) => model.HandleBlockGenerated(block);
 
         public void HandleBlockCollected (IBlockModel block) => model.HandleBlockCollected(block);
 

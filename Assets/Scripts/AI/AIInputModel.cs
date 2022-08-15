@@ -11,10 +11,10 @@ namespace LeandroExhumed.SnakeGame.AI
     public class AIInputModel : IAIInputModel
     {
         public event Action<int> OnMovementRequested;
-        public event Action<List<PathNodeModel>> OnPathChanged;
+        public event Action<List<IPathNodeModel>> OnPathChanged;
         public event Action OnDestroyed;
 
-        private List<PathNodeModel> Path
+        private List<IPathNodeModel> Path
         {
             get => path;
             set
@@ -27,7 +27,7 @@ namespace LeandroExhumed.SnakeGame.AI
         private const float MIN_INPUT_SPEED = 0.5F;
         private const float MAX_INPUT_SPEED = 2F;
 
-        private List<PathNodeModel> path;
+        private List<IPathNodeModel> path;
         private int targetNode = 0;
         private IBlockModel targetBlock;
         private bool reasonedAboutNewBlock = false;
@@ -35,17 +35,14 @@ namespace LeandroExhumed.SnakeGame.AI
         private readonly AIData data;
         private ISnakeModel snake;
 
-        private readonly PathFinding pathFinding;
+        private readonly IPathFindingModel pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
-        private readonly IMatchModel match;
-
-        public AIInputModel (AIData data, PathFinding pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
+        public AIInputModel (AIData data, IPathFindingModel pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
         {
             this.data = data;            
             this.pathFinding = pathFinding;
             this.monoBehaviour = monoBehaviour;
-            this.match = match;
         }
 
         public void Initialize (ISnakeModel snake)
@@ -57,7 +54,7 @@ namespace LeandroExhumed.SnakeGame.AI
         public void Initialize ()
         {
             snake.OnPositionChanged += HandlePositionChanged;
-            match.OnBlockGenerated += HandleBlockGenerated;
+            
         }
 
         public void HandleGridNodeChanged (Vector2Int nodePosition)
@@ -76,6 +73,25 @@ namespace LeandroExhumed.SnakeGame.AI
                     data.MaxReasoningTimeToPlanPathAfterObstruction);
                 monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
             }
+        }
+
+        public void HandleBlockGenerated (IBlockModel block)
+        {
+            if (targetBlock != null)
+            {
+                float currentDistance = Vector2Int.Distance(snake.Position, targetBlock.Position);
+                if (currentDistance < Vector2Int.Distance(snake.Position, block.Position))
+                {
+                    return;
+                }
+            }
+
+            targetBlock = block;
+            reasonedAboutNewBlock = false;
+            float reasoningTime = UnityEngine.Random.Range(
+                data.MinReasoningTimeToPlanPathToBlock,
+                data.MaxReasoningTimeToPlanPathToBlock);
+            monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
         }
 
         public void HandleBlockCollected (IBlockModel block)
@@ -159,29 +175,10 @@ namespace LeandroExhumed.SnakeGame.AI
             monoBehaviour.StartCoroutine(RequestMovementInput(input));
         }
 
-        private void HandleBlockGenerated (IBlockModel block)
-        {
-            if (targetBlock != null)
-            {
-                float currentDistance = Vector2Int.Distance(snake.Position, targetBlock.Position);
-                if (currentDistance < Vector2Int.Distance(snake.Position, block.Position))
-                {
-                    return;
-                }
-            }
-
-            targetBlock = block;
-            reasonedAboutNewBlock = false;
-            float reasoningTime = UnityEngine.Random.Range(
-                data.MinReasoningTimeToPlanPathToBlock,
-                data.MaxReasoningTimeToPlanPathToBlock);
-            monoBehaviour.StartCoroutine(ThinkAboutNewPath(reasoningTime));
-        }
-
         public void Dispose ()
         {
             snake.OnPositionChanged -= HandlePositionChanged;
-            match.OnBlockGenerated -= HandleBlockGenerated;
+            
         }
     }
 }

@@ -46,10 +46,10 @@ namespace LeandroExhumed.SnakeGame.Block
         public bool HasBenefit => model.HasBenefit;
 
         private IBlockModel model;
-        private BlockController controller;
+        private IController controller;
 
         [Inject]
-        public void Constructor (IBlockModel model, BlockController controller)
+        public void Constructor (IBlockModel model, IController controller)
         {
             this.model = model;
             this.controller = controller;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
-    public class MatchController : IDisposable
+    public class MatchController : IController
     {
         private const string AI_NAME = "AI";
 

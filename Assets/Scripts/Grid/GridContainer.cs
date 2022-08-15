@@ -17,7 +17,7 @@ namespace LeandroExhumed.SnakeGame.Grid
         {
             Container.Bind<IGridModel<INodeModel>>().FromInstance(new GridModel<INodeModel>(
                 matchData.BoardSize.x, matchData.BoardSize.y)).AsSingle();
-            Container.Bind<GridController>().AsSingle();
+            Container.Bind<IController>().To<GridController>().AsSingle();
             Container.BindInstance(GetComponent<GridView>()).AsSingle();
         }
     }

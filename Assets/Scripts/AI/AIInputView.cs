@@ -7,9 +7,9 @@ namespace LeandroExhumed.SnakeGame.AI
         [SerializeField]
         private bool debug;
 
-        private PathNodeModel[] path;
+        private IPathNodeModel[] path;
 
-        public void SetPath (PathNodeModel[] path)
+        public void SetPath (IPathNodeModel[] path)
         {
             this.path = path;
         }

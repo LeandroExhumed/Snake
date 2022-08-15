@@ -12,7 +12,7 @@ namespace LeandroExhumed.SnakeGame.Match
         private void ResolveMVC ()
         {
             Container.Bind<ILobbyModel>().To<LobbyModel>().AsSingle();
-            Container.Bind<LobbyController>().AsSingle();
+            Container.Bind<IController>().To<LobbyController>().AsSingle();
             Container.BindInstance(GetComponent<LobbyView>()).AsSingle();
         }
     } 

@@ -33,7 +33,7 @@ namespace LeandroExhumed.SnakeGame.Match
         private void ResolveMVC ()
         {
             Container.Bind<IMatchModel>().To<MatchModel>().AsSingle();
-            Container.Bind<MatchController>().AsSingle();
+            Container.Bind<IController>().To<MatchController>().AsSingle();
             Container.BindInstance(GetComponent<MatchView>()).AsSingle();
         }
 

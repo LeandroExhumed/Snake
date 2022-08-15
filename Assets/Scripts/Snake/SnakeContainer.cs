@@ -20,7 +20,7 @@ namespace LeandroExhumed.SnakeGame.Snake
         private void ResolveMVC ()
         {
             Container.Bind<ISnakeModel>().To<SnakeModel>().AsSingle();
-            Container.Bind<SnakeController>().AsSingle();
+            Container.Bind<IController>().To<SnakeController>().AsSingle();
             Container.BindInstance(GetComponent<SnakeView>()).AsSingle();
         }
     }

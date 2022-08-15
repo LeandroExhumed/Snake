@@ -13,13 +13,13 @@ namespace LeandroExhumed.SnakeGame.AI
             ResolveMVC();
             Container.BindInstance(GetComponent<MonoBehaviour>()).AsSingle();
             Container.BindInstance(data).AsSingle();
-            Container.Bind<PathFinding>().AsSingle();
+            Container.Bind<IPathFindingModel>().To<PathFindingModel>().AsSingle();
         }
 
         private void ResolveMVC ()
         {
             Container.Bind<IAIInputModel>().To<AIInputModel>().AsSingle();
-            Container.Bind<AIInputController>().AsSingle();
+            Container.Bind<IController>().To<AIInputController>().AsSingle();
             Container.BindInstance(GetComponent<AIInputView>()).AsSingle();
         }
     }

@@ -18,18 +18,13 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private readonly GameData data;
 
-        private readonly IGridModel<INodeModel> levelGrid;
-
-        public LobbyModel (GameData data, IGridModel<INodeModel> levelGrid)
+        public LobbyModel (GameData data)
         {
             this.data = data;
-            this.levelGrid = levelGrid;
         }
 
         public void Initialize ()
         {
-            levelGrid.Initialize();
-
             char[] qwertyKeys =
             {
                 '1','2','3','4','5','6','7','8','9','0',

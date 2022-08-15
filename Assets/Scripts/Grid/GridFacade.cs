@@ -21,10 +21,10 @@ namespace LeandroExhumed.SnakeGame.Grid
         public int Height => model.Height;
 
         private IGridModel<INodeModel> model;
-        private GridController controller;
+        private IController controller;
 
         [Inject]
-        public void Constructor (IGridModel<INodeModel> model, GridController controller)
+        public void Constructor (IGridModel<INodeModel> model, IController controller)
         {
             this.model = model;
             this.controller = controller;

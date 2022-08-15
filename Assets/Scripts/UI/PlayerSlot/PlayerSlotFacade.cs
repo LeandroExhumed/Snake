@@ -32,10 +32,10 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         public SlotState State => model.State;
 
         private IPlayerSlotModel model;
-        private PlayerSlotController controller;
+        private IController controller;
 
         [Inject]
-        public void Constructor (IPlayerSlotModel model, PlayerSlotController controller)
+        public void Constructor (IPlayerSlotModel model, IController controller)
         {
             this.model = model;
             this.controller = controller;

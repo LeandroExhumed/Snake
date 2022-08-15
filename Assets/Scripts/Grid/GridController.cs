@@ -2,7 +2,7 @@
 
 namespace LeandroExhumed.SnakeGame.Grid
 {
-    public class GridController : IDisposable
+    public class GridController : IController
     {
         private readonly IGridModel<INodeModel> model;
         private readonly GridView view;

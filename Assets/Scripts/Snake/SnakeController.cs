@@ -5,7 +5,7 @@ using System;
 
 namespace LeandroExhumed.SnakeGame.Snake
 {
-    public class SnakeController : IDisposable
+    public class SnakeController : IController
     {
         private readonly ISnakeModel model;
         private readonly SnakeView view;

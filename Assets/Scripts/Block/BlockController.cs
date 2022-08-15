@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.Block
 {
-    public class BlockController : IDisposable
+    public class BlockController : IController
     {
         private readonly IBlockModel model;
         private readonly BlockView view;
