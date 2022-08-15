@@ -16,7 +16,7 @@ namespace LeandroExhumed.SnakeGame.Block
 
         protected virtual void ResolveMVC ()
         {
-            Container.Bind<BlockController>().AsSingle();
+            Container.Bind<IController>().To<BlockController>().AsSingle();
             Container.BindInstance(GetComponent<BlockView>()).AsSingle();
         }
     }

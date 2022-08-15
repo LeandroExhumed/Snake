@@ -12,7 +12,7 @@ namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
         private void ResolveMVC ()
         {
             Container.Bind<IPlayerSlotModel>().To<PlayerSlotModel>().AsSingle();
-            Container.Bind<PlayerSlotController>().AsSingle();
+            Container.Bind<IController>().To<PlayerSlotController>().AsSingle();
             Container.BindInstance(GetComponent<PlayerSlotView>()).AsSingle();
         }
     } 

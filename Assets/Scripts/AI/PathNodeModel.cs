@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
-    public class PathNodeModel : INodeModel
+    public class PathNodeModel : IPathNodeModel
     {
         public event Action<INodeModel, Vector2Int> OnPositionChanged;
 
@@ -23,7 +23,7 @@ namespace LeandroExhumed.SnakeGame.AI
         public int FCost => GCost + HCost;
         public bool IsWalkable { get; }
 
-        public PathNodeModel CameFromNode { get; set; }
+        public IPathNodeModel CameFrom { get; set; }
 
         private Vector2Int position;
 

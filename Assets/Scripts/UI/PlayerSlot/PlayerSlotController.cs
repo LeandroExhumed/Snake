@@ -3,7 +3,7 @@ using System;
 
 namespace LeandroExhumed.SnakeGame.UI.PlayerSlot
 {
-    public class PlayerSlotController : IDisposable
+    public class PlayerSlotController : IController
     {
         private IPlayerInputModel Input
         {

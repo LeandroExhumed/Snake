@@ -2,7 +2,7 @@
 
 namespace LeandroExhumed.SnakeGame.Match
 {
-    public class LobbyController : IDisposable
+    public class LobbyController : IController
     {
         private int holdDuration;
         private const string JOIN_MATCH_MESSAGE_TEXT = "Hold any letter or number for {0} seconds to join the match.";

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LeandroExhumed.SnakeGame.AI
 {
-    public class AIInputController : IDisposable
+    public class AIInputController : IController
     {
         private readonly IAIInputModel model;
         private readonly AIInputView view;
@@ -26,7 +26,7 @@ namespace LeandroExhumed.SnakeGame.AI
             model.OnDestroyed += HandleDestroyed;
         }
 
-        private void HandlePathChanged (List<PathNodeModel> path)
+        private void HandlePathChanged (List<IPathNodeModel> path)
         {
             view.SetPath(path?.ToArray());
         }

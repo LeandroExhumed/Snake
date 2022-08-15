@@ -40,10 +40,10 @@ namespace LeandroExhumed.SnakeGame.Snake
         public float TimeToMove => model.TimeToMove;
 
         private ISnakeModel model;
-        private SnakeController controller;
+        private IController controller;
 
         [Inject]
-        public void Constructor (ISnakeModel model, SnakeController controller)
+        public void Constructor (ISnakeModel model, IController controller)
         {
             this.model = model;
             this.controller = controller;

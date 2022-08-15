@@ -46,10 +46,10 @@ namespace LeandroExhumed.SnakeGame.Match
         public bool IsRunning => model.IsRunning;
 
         private IMatchModel model;
-        private MatchController controller;
+        private IController controller;
 
         [Inject]
-        public void Constructor (IMatchModel model, MatchController controller)
+        public void Constructor (IMatchModel model, IController controller)
         {
             this.model = model;
             this.controller = controller;

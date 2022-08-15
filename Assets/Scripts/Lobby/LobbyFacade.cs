@@ -18,10 +18,10 @@ namespace LeandroExhumed.SnakeGame.Match
         }
 
         private ILobbyModel model;
-        private LobbyController controller;
+        private IController controller;
 
         [Inject]
-        public void Constructor (ILobbyModel model, LobbyController controller)
+        public void Constructor (ILobbyModel model, IController controller)
         {
             this.model = model;
             this.controller = controller;

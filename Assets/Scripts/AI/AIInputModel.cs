@@ -11,10 +11,10 @@ namespace LeandroExhumed.SnakeGame.AI
     public class AIInputModel : IAIInputModel
     {
         public event Action<int> OnMovementRequested;
-        public event Action<List<PathNodeModel>> OnPathChanged;
+        public event Action<List<IPathNodeModel>> OnPathChanged;
         public event Action OnDestroyed;
 
-        private List<PathNodeModel> Path
+        private List<IPathNodeModel> Path
         {
             get => path;
             set
@@ -27,7 +27,7 @@ namespace LeandroExhumed.SnakeGame.AI
         private const float MIN_INPUT_SPEED = 0.5F;
         private const float MAX_INPUT_SPEED = 2F;
 
-        private List<PathNodeModel> path;
+        private List<IPathNodeModel> path;
         private int targetNode = 0;
         private IBlockModel targetBlock;
         private bool reasonedAboutNewBlock = false;
@@ -35,12 +35,12 @@ namespace LeandroExhumed.SnakeGame.AI
         private readonly AIData data;
         private ISnakeModel snake;
 
-        private readonly PathFinding pathFinding;
+        private readonly IPathFindingModel pathFinding;
         private readonly MonoBehaviour monoBehaviour;
 
         private readonly IMatchModel match;
 
-        public AIInputModel (AIData data, PathFinding pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
+        public AIInputModel (AIData data, IPathFindingModel pathFinding, MonoBehaviour monoBehaviour, IMatchModel match)
         {
             this.data = data;            
             this.pathFinding = pathFinding;

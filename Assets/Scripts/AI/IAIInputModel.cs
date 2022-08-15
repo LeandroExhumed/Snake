@@ -10,7 +10,7 @@ namespace LeandroExhumed.SnakeGame.AI
 {
     public interface IAIInputModel : IGameInputModel, IDisposable
     {
-        event Action<List<PathNodeModel>> OnPathChanged;
+        event Action<List<IPathNodeModel>> OnPathChanged;
         event Action OnDestroyed;
 
         void Initialize (ISnakeModel snake);
