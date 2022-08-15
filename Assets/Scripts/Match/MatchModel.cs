@@ -5,6 +5,7 @@ using LeandroExhumed.SnakeGame.Input;
 using LeandroExhumed.SnakeGame.Snake;
 using LeandroExhumed.SnakeGame.UI.PlayerSlot;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,16 +14,20 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchModel : IMatchModel
     {
-        public event Action OnInitialized;
         public event Action<IBlockModel> OnBlockGenerated;
         public event Action<int, Vector2Int> OnSnakePositionChanged;
         public event Action<Vector2Int?> OnSnakeHit;
         public event Action<int, char, char> OnPlayerLeft;
         public event Action<char, char> OnPlayerReturned;
         public event Action<int> OnOver;
+        public event Action OnRestarted;
+
+        public bool IsRunning { get; private set; }
 
         private readonly MatchData data;
         private readonly IGridModel<INode> levelGrid;
+
+        private const float END_MATCH_DELAY = 4F;
 
         private bool isOnRewindProcess = false;
         private IBlockModel currentRewindResponsible;
@@ -39,6 +44,8 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly SnakeFactory snakeFactory;
         private readonly BlockFactory blockFactory;
         private readonly ISimulatedInput.Factory simulatedInputFactory;
+        
+        private readonly MonoBehaviour monoBehaviour;
 
         public MatchModel (
             MatchData data,
@@ -46,7 +53,8 @@ namespace LeandroExhumed.SnakeGame.Match
             IPlayerSlotModel[] playerSlots,
             SnakeFactory snakeFactory,
             BlockFactory blockFactory,
-            ISimulatedInput.Factory simulatedInputFactory)
+            ISimulatedInput.Factory simulatedInputFactory,
+            MonoBehaviour monoBehaviour)
         {
             this.data = data;
             this.levelGrid = levelGrid;
@@ -54,6 +62,7 @@ namespace LeandroExhumed.SnakeGame.Match
             this.snakeFactory = snakeFactory;
             this.blockFactory = blockFactory;
             this.simulatedInputFactory = simulatedInputFactory;
+            this.monoBehaviour = monoBehaviour;
         }
 
         public void Initialize ()
@@ -63,7 +72,11 @@ namespace LeandroExhumed.SnakeGame.Match
                 playerSlots[i].Initialize(i + 1);
                 playerSlots[i].OnSnakeSelected += HandleSelectionConfirmed;
             }
-            OnInitialized?.Invoke();
+        }
+
+        public void Begin ()
+        {
+            IsRunning = true;
         }
 
         public void Rewind ()
@@ -115,6 +128,12 @@ namespace LeandroExhumed.SnakeGame.Match
 
             isOnRewindProcess = false;
             persistentData.Remove(currentRewindResponsible);
+        }
+
+        public void Restart ()
+        {
+            Begin();
+            OnRestarted?.Invoke();
         }
 
         private void GenerateSnake (int id, Vector2Int position, Vector2Int direction, IGameInput input)
@@ -321,8 +340,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
             if (snakes.Count == 1)
             {
-                int playerNumber = players.TryGetValue(snakes[0], out Player player) ? player.Number : 0;
-                OnOver?.Invoke(playerNumber);
+                monoBehaviour.StartCoroutine(EndMatchDelayRoutine());
             }
         }
 
@@ -345,6 +363,17 @@ namespace LeandroExhumed.SnakeGame.Match
             levelGrid.SetNode(block.Position, null);
             blocks.Remove(block);
             GenerateRandomBlock();
+        }
+
+        private IEnumerator EndMatchDelayRoutine ()
+        {
+            yield return new WaitForSeconds(END_MATCH_DELAY);
+            IsRunning = false;
+
+            int playerNumber = players.TryGetValue(snakes[0], out Player player) ? player.Number : 0;
+            OnOver?.Invoke(playerNumber);
+
+            Clear();
         }
     }
 

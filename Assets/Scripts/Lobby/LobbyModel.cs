@@ -11,6 +11,8 @@ namespace LeandroExhumed.SnakeGame.Match
         public event Action<char, char> OnNewPlayerJoined;
 
         private int KeyHoldDuration => data.KeyHoldDuration;
+
+        private InputAction[] actions;
         private readonly List<char> unavailableKeys = new();
         private readonly List<char> currentHeldKeys = new();
 
@@ -27,11 +29,7 @@ namespace LeandroExhumed.SnakeGame.Match
         public void Initialize ()
         {
             levelGrid.Initialize();
-            OnInitialized?.Invoke(KeyHoldDuration);
-        }
 
-        public void StartListeningToInput ()
-        {
             char[] qwertyKeys =
             {
                 '1','2','3','4','5','6','7','8','9','0',
@@ -40,19 +38,33 @@ namespace LeandroExhumed.SnakeGame.Match
                 'z','x','c','v','b','n','m'
             };
 
-            InputAction[] actions = new InputAction[qwertyKeys.Length];
+            actions = new InputAction[qwertyKeys.Length];
             for (int i = 0; i < qwertyKeys.Length; i++)
             {
                 actions[i] = new InputAction();
                 actions[i].AddBinding($"<Keyboard>/{qwertyKeys[i]}")
                     .WithInteraction($"hold(duration={KeyHoldDuration})");
-                actions[i].Enable();
 
                 actions[i].performed += HandleAnyKeyHeld;
                 actions[i].canceled += HandleAnyKeyReleased;
             }
 
-            OnInitialized?.Invoke(data.KeyHoldDuration);
+            OnInitialized?.Invoke(KeyHoldDuration);
+        }
+
+        public void SetInputListeningActive (bool value)
+        {
+            for (int i = 0; i < actions.Length; i++)
+            {
+                if (value)
+                {
+                    actions[i].Enable();
+                }
+                else
+                {
+                    actions[i].Disable();
+                }
+            }
         }
 
         public void ReturnKeys (char leftKey, char rightKey)
@@ -65,6 +77,11 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             unavailableKeys.Add(leftKey);
             unavailableKeys.Add(rightKey);
+        }
+
+        public void FreeAllKeys ()
+        {
+            unavailableKeys.Clear();
         }
 
         private void HandleAnyKeyHeld (InputAction.CallbackContext obj)

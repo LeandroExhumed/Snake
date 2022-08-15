@@ -25,15 +25,11 @@ namespace LeandroExhumed.SnakeGame.Match
             model.OnSnakeHit += HandleSnakeHit;
             model.OnPlayerLeft += HandlePlayerLeft;
             model.OnOver += HandleOver;
+            model.OnRestarted += HandleRestarted;
             view.OnBlockFocusOver += HandleBlockFocusOver;
             view.OnRewindEffectOver += HandleRewindEffectOver;
+            view.OnRestarted += HandleRestartButtonClicked;
             lobby.OnNewPlayerJoined += HandleNewPlayerJoined;
-        }
-
-        private void HandleOver (int playerNumber)
-        {
-            view.SetWinnerMessageActive(true);
-            view.SetWinnerMessage(playerNumber != 0 ? $"P{playerNumber}" : AI_NAME);
         }
 
         private void HandleSnakePositionChanged (int player, Vector2Int position)
@@ -59,6 +55,17 @@ namespace LeandroExhumed.SnakeGame.Match
             view.RemoveGuide(playerNumber);
         }
 
+        private void HandleOver (int playerNumber)
+        {
+            view.SetWinnerMessageActive(true);
+            view.SetWinnerMessage(playerNumber != 0 ? $"P{playerNumber}" : AI_NAME);
+        }
+
+        private void HandleRestarted ()
+        {
+            view.SetWinnerMessageActive(false);
+        }
+
         private void HandleBlockFocusOver ()
         {
             view.PlayRewindEffect();
@@ -69,6 +76,16 @@ namespace LeandroExhumed.SnakeGame.Match
             Time.timeScale = 1;
             view.LeaveFocus();
             model.Rewind();
+        }
+
+        private void HandleRestartButtonClicked ()
+        {
+            if (model.IsRunning)
+            {
+                return;
+            }
+
+            model.Restart();
         }
 
         private void HandleNewPlayerJoined (char leftKey, char rightKey)
@@ -82,8 +99,10 @@ namespace LeandroExhumed.SnakeGame.Match
             model.OnSnakeHit -= HandleSnakeHit;
             model.OnPlayerLeft -= HandlePlayerLeft;
             model.OnOver -= HandleOver;
+            model.OnRestarted -= HandleRestarted;
             view.OnBlockFocusOver -= HandleBlockFocusOver;
             view.OnRewindEffectOver -= HandleRewindEffectOver;
+            view.OnRestarted -= HandleRestartButtonClicked;
             lobby.OnNewPlayerJoined -= HandleNewPlayerJoined;
         }
     }

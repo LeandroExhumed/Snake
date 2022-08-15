@@ -29,15 +29,17 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize ()
         {
-            model.Initialize();
             controller.Setup();
+            model.Initialize();
         }
 
         public void RecoverKeys (char leftKey, char rightKey) => model.RecoverKeys(leftKey, rightKey);
 
         public void ReturnKeys (char leftKey, char rightKey) => model.ReturnKeys(leftKey, rightKey);
 
-        public void StartListeningToInput () => model.StartListeningToInput();
+        public void SetInputListeningActive (bool value) => model.SetInputListeningActive(value);
+
+        public void FreeAllKeys () => model.FreeAllKeys();
 
         private void OnDestroy ()
         {

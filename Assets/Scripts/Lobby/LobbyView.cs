@@ -12,21 +12,22 @@ namespace LeandroExhumed.SnakeGame.Match
         [SerializeField]
         private Animator intro;
         [SerializeField]
-        private TextMeshProUGUI joinMatchMessage;
-
-        private const string JOIN_MATCH_MESSAGE_TEXT = "Hold any letter or number for {0} seconds to join the match.";
+        private TextMeshProUGUI lobbyMessage;
 
         private void Awake ()
         {
             StartCoroutine(WaitingForIntroOverRoutine());
         }
 
-        public void SetJoinMatchMessageText (int holdDuration)
+        public void SetLobbyMessageText (string message)
         {
-            joinMatchMessage.text = string.Format(JOIN_MATCH_MESSAGE_TEXT, holdDuration);
+            lobbyMessage.text = message;
         }
 
-        public void SetJoinMatchMessageActive (bool value) => joinMatchMessage.gameObject.SetActive(value);
+        public void ShowLobbyMessage ()
+        {
+            lobbyMessage.gameObject.SetActive(true);
+        }
 
         private IEnumerator WaitingForIntroOverRoutine ()
         {

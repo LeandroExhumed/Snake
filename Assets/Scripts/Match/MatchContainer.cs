@@ -21,6 +21,7 @@ namespace LeandroExhumed.SnakeGame.Match
         public override void InstallBindings ()
         {
             ResolveMVC();
+            Container.BindInstance(GetComponent<MonoBehaviour>()).AsSingle();
             
             ResolveFactories();
             Container.Bind<IPlayerSlotModel[]>().FromInstance(playerSlots).AsSingle();

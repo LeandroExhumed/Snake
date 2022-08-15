@@ -11,6 +11,7 @@ namespace LeandroExhumed.SnakeGame.Match
     {
         public event Action OnBlockFocusOver;
         public event Action OnRewindEffectOver;
+        public event Action OnRestarted;
 
         [SerializeField]
         private TextMeshProUGUI winnerMessageText;
@@ -107,6 +108,14 @@ namespace LeandroExhumed.SnakeGame.Match
         {
             camera.transform.position = originalCameraPosition;
             camera.orthographicSize = originalCameraSize;
+        }
+
+        private void Update ()
+        {
+            if (Keyboard.current.enterKey.wasPressedThisFrame)
+            {
+                OnRestarted?.Invoke();
+            }
         }
 
         private TextMeshProUGUI GetNewGuide ()

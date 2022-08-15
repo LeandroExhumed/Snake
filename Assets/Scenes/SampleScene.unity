@@ -4474,7 +4474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   intro: {fileID: 1907747194}
-  joinMatchMessage: {fileID: 1828987769}
+  lobbyMessage: {fileID: 1828987769}
 --- !u!114 &1724131151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5671,7 +5671,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2938108638310971893, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
       propertyPath: m_text
-      value: Press and hold any [letter] + [number] for 2 seconds to join.
+      value: Press and hold any [letter] + [number] for X seconds to join.
       objectReference: {fileID: 0}
     - target: {fileID: 2938108638310971893, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
       propertyPath: m_fontSize
@@ -5691,7 +5691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3427444647833074246, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
       propertyPath: m_Name
-      value: JoinMatchText
+      value: LobbyMessageText
       objectReference: {fileID: 0}
     - target: {fileID: 3427444647833074246, guid: 461730cef7c6eb146bef66be45437fea, type: 3}
       propertyPath: m_IsActive

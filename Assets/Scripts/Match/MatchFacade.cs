@@ -7,10 +7,10 @@ namespace LeandroExhumed.SnakeGame.Match
 {
     public class MatchFacade : MonoBehaviour, IMatchModel
     {
-        public event Action OnInitialized
+        public event Action OnRestarted
         {
-            add => model.OnInitialized += value;
-            remove => model.OnInitialized -= value;
+            add => model.OnRestarted += value;
+            remove => model.OnRestarted -= value;
         }
         public event Action<IBlockModel> OnBlockGenerated
         {
@@ -43,6 +43,8 @@ namespace LeandroExhumed.SnakeGame.Match
             remove => model.OnOver -= value;
         }
 
+        public bool IsRunning => model.IsRunning;
+
         private IMatchModel model;
         private MatchController controller;
 
@@ -57,9 +59,13 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void Initialize () => model.Initialize();
 
+        public void Begin () => model.Begin();
+
         public void AddPlayer (char leftKey, char rightKey) => model.AddPlayer(leftKey, rightKey);
 
         public void Rewind () => model.Rewind();
+
+        public void Restart () => model.Restart();
 
         private void OnDestroy ()
         {
