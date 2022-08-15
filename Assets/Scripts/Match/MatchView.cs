@@ -34,7 +34,7 @@ namespace LeandroExhumed.SnakeGame.Match
         [SerializeField]
         private float shakeDuration = 0.15f;
         [SerializeField]
-        private Vector3 shakeMagnitude = new(0.1f, 0.1f);
+        private Vector3 shakeMagnitude = new Vector3(0.1f, 0.1f);
         [SerializeField]
         private new Camera camera;
         [SerializeField]
@@ -46,7 +46,7 @@ namespace LeandroExhumed.SnakeGame.Match
         [SerializeField]
         private GameObject rewindScreen;
 
-        private readonly Dictionary<int, TextMeshProUGUI> guides = new();
+        private readonly Dictionary<int, TextMeshProUGUI> guides = new Dictionary<int, TextMeshProUGUI>();
 
         private const float SLOW_MOTION_TIME_SCALE = 0.1F;
         private const float SLOW_MOTION_DURATION = 2F;
@@ -70,7 +70,7 @@ namespace LeandroExhumed.SnakeGame.Match
                 guides.Add(player, guide);
             }
 
-            Vector3 fixedPosition = new(targetPosition.x + guideOffset.x, targetPosition.y + guideOffset.y, 0);
+            Vector3 fixedPosition = new Vector3(targetPosition.x + guideOffset.x, targetPosition.y + guideOffset.y, 0);
             guides[player].transform.position = Camera.main.WorldToScreenPoint(fixedPosition);
         }
 
@@ -102,7 +102,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         public void FocusBlockHit (Vector2Int position)
         {
-            Vector3 targetPosition = new(position.x, position.y, camera.transform.position.z);
+            Vector3 targetPosition = new Vector3(position.x, position.y, camera.transform.position.z);
             float targetCameraSize = camera.orthographicSize - cameraSizeDiffOnFocus;
             StartCoroutine(SmoothLerp(targetPosition, targetCameraSize, cameraMovementSpeed));
         }

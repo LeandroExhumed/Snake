@@ -13,8 +13,8 @@ namespace LeandroExhumed.SnakeGame.Match
         private int KeyHoldDuration => data.KeyHoldDuration;
 
         private InputAction[] actions;
-        private readonly List<char> unavailableKeys = new();
-        private readonly List<char> currentHeldKeys = new();
+        private readonly List<char> unavailableKeys = new List<char>();
+        private readonly List<char> currentHeldKeys = new List<char>();
 
         private readonly GameData data;
 
