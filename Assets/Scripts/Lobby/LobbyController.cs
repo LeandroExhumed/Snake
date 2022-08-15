@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeandroExhumed.SnakeGame.Grid;
+using System;
 
 namespace LeandroExhumed.SnakeGame.Match
 {
@@ -12,12 +13,14 @@ namespace LeandroExhumed.SnakeGame.Match
         private readonly LobbyView view;
 
         private readonly IMatchModel match;
+        private readonly IGridModel<INodeModel> levelGrid;
 
-        public LobbyController (ILobbyModel model, LobbyView view, IMatchModel match)
+        public LobbyController (ILobbyModel model, LobbyView view, IMatchModel match, IGridModel<INodeModel> levelGrid)
         {
             this.model = model;
             this.view = view;
             this.match = match;
+            this.levelGrid = levelGrid;
         }
 
         public void Setup ()
@@ -33,7 +36,8 @@ namespace LeandroExhumed.SnakeGame.Match
         private void HandleInitialized (int holdDuration)
         {
             this.holdDuration = holdDuration;
-            
+
+            levelGrid.Initialize();
             match.Initialize();
         }
 

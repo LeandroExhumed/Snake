@@ -15,6 +15,7 @@ namespace LeandroExhumed.SnakeGame.AI
 
         void Initialize (ISnakeModel snake);
         void HandleGridNodeChanged (Vector2Int nodePosition);
+        void HandleBlockGenerated (IBlockModel block);
         void HandleBlockCollected (IBlockModel block);
         void Destroy ();
 

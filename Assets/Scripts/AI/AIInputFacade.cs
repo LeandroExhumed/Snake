@@ -47,6 +47,8 @@ namespace LeandroExhumed.SnakeGame.AI
 
         public void HandleGridNodeChanged (Vector2Int nodePosition) => model.HandleGridNodeChanged(nodePosition);
 
+        public void HandleBlockGenerated (IBlockModel block) => model.HandleBlockGenerated(block);
+
         public void HandleBlockCollected (IBlockModel block) => model.HandleBlockCollected(block);
 
         public void Destroy () => model.Destroy();
