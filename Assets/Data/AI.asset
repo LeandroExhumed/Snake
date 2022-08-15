@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AI
   m_EditorClassIdentifier: 
   bestPathFindingRate: 1
-  luck: 0.5
+  luck: 0.885
   reasoningTimeToPlanPathToBlock:
     Min: 0.1
     Max: 0.5

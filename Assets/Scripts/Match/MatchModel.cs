@@ -368,7 +368,12 @@ namespace LeandroExhumed.SnakeGame.Match
             yield return new WaitForSeconds(END_MATCH_DELAY);
             IsRunning = false;
 
-            int playerNumber = players.TryGetValue(snakes[0], out PlayerValues player) ? player.Number : 0;
+            int playerNumber = 0;
+            if (players.Count > 0)
+            {
+                playerNumber = players.First().Value.Number;
+            }
+            
             OnOver?.Invoke(playerNumber);
 
             Clear();

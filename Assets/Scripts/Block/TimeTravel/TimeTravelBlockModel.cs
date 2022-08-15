@@ -1,6 +1,6 @@
 ﻿namespace LeandroExhumed.SnakeGame.Block
 {
-    public class TimeTravelBlockModel : BlockModel
+    public class TimeTravelBlockModel : BlockModel, ITimeTravelBlockModel
     {
         public TimeTravelBlockModel (BlockData data) : base(data) { }
 

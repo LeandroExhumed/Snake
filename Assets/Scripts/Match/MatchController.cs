@@ -58,7 +58,14 @@ namespace LeandroExhumed.SnakeGame.Match
         private void HandleOver (int playerNumber)
         {
             view.SetWinnerMessageActive(true);
-            view.SetWinnerMessage(playerNumber != 0 ? $"P{playerNumber}" : AI_NAME);
+            string name = AI_NAME;
+            if (playerNumber != 0)
+            {
+                name = $"P{playerNumber}";
+                view.RemoveGuide(playerNumber);
+            }
+
+            view.SetWinnerMessage(name);
         }
 
         private void HandleRestarted ()

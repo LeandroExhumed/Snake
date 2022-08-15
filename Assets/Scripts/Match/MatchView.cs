@@ -61,6 +61,7 @@ namespace LeandroExhumed.SnakeGame.Match
             {
                 TextMeshProUGUI guide = Instantiate(GetNewGuide(), canvas);
                 guide.text = $"P{player}";
+                guide.transform.SetAsFirstSibling();
                 guides.Add(player, guide);
             }
 
