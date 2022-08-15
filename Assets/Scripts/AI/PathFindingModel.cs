@@ -37,7 +37,7 @@ namespace LeandroExhumed.SnakeGame.AI
             {
                 for (int y = 0; y < grid.Height; y++)
                 {
-                    IPathNodeModel node = grid.GetNode(new(x, y));
+                    IPathNodeModel node = grid.GetNode(new Vector2Int(x, y));
                     node.GCost = int.MaxValue;
                     node.CameFrom = null;
                 }
@@ -97,13 +97,13 @@ namespace LeandroExhumed.SnakeGame.AI
             {
                 for (int y = 0; y < grid.Height; y++)
                 {
-                    Vector2Int position = new(x, y);
+                    Vector2Int position = new Vector2Int(x, y);
                     bool isWalkable = true;
                     if (levelGrid.GetNode(position) is IBlockModel block)
                     {
                         isWalkable = !block.IsAttached;
                     }
-                    grid.SetNode(position, new PathNodeModel(new(x, y), isWalkable));
+                    grid.SetNode(position, new PathNodeModel(new Vector2Int(x, y), isWalkable));
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private List<IPathNodeModel> CalculatePath (IPathNodeModel endNode)
         {
-            List<IPathNodeModel> path = new();
+            List<IPathNodeModel> path = new List<IPathNodeModel>();
             path.Add(endNode);
             IPathNodeModel currentNode = endNode;
             while (currentNode.CameFrom != null)
@@ -162,24 +162,24 @@ namespace LeandroExhumed.SnakeGame.AI
 
         private List<IPathNodeModel> GetNeighbourList (IPathNodeModel currentNode)
         {
-            List<IPathNodeModel> neighbourList = new();
+            List<IPathNodeModel> neighbourList = new List<IPathNodeModel>();
 
             if (currentNode.Position.x - 1 >= 0)
             {
-                Vector2Int leftNeighbour = new(currentNode.Position.x - 1, currentNode.Position.y);
+                Vector2Int leftNeighbour = new Vector2Int(currentNode.Position.x - 1, currentNode.Position.y);
                 neighbourList.Add(GetNode(leftNeighbour));
             }
             if (currentNode.Position.x + 1 < grid.Width)
             {
-                Vector2Int rightNeighbour = new(currentNode.Position.x + 1, currentNode.Position.y);
+                Vector2Int rightNeighbour = new Vector2Int(currentNode.Position.x + 1, currentNode.Position.y);
                 neighbourList.Add(GetNode(rightNeighbour));
             }
-            Vector2Int downNeighbour = new(currentNode.Position.x, currentNode.Position.y - 1);
+            Vector2Int downNeighbour = new Vector2Int(currentNode.Position.x, currentNode.Position.y - 1);
             if (currentNode.Position.y - 1 >= 0)
             {
                 neighbourList.Add(GetNode(downNeighbour));
             }
-            Vector2Int upNeighbour = new(currentNode.Position.x, currentNode.Position.y + 1);
+            Vector2Int upNeighbour = new Vector2Int(currentNode.Position.x, currentNode.Position.y + 1);
             if (currentNode.Position.y + 1 < grid.Height)
             {
                 neighbourList.Add(GetNode(upNeighbour));

@@ -20,7 +20,7 @@ namespace LeandroExhumed.SnakeGame.Services
 
         private Transform container;
 
-        private readonly Dictionary<Object, Queue<Object>> pools = new();
+        private readonly Dictionary<Object, Queue<Object>> pools = new Dictionary<Object, Queue<Object>>();
 
         public void AddPool (Object prefab, int size, Transform parent = null)
         {
@@ -29,7 +29,7 @@ namespace LeandroExhumed.SnakeGame.Services
                 return;
             }
 
-            Queue<Object> queue = new();
+            Queue<Object> queue = new Queue<Object>();
 
             for (int i = 0; i < size; ++i)
             {

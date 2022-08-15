@@ -23,7 +23,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
         private IBlockModel Head => attachedBlocks.Peek();
 
-        private readonly Stack<IBlockModel> attachedBlocks = new();
+        private readonly Stack<IBlockModel> attachedBlocks = new Stack<IBlockModel>();
 
         private float timer = 0f;
         private bool isAlive = true;
@@ -48,7 +48,7 @@ namespace LeandroExhumed.SnakeGame.Snake
 
             for (int i = 0; i < data.StartingBlocks.Length; i++)
             {
-                Vector2Int blockPosition = new(
+                Vector2Int blockPosition = new Vector2Int(
                     startPosition.x - ((data.StartingBlocks.Length - 1) - i) * startDirection.x,
                     startPosition.y);
                 Grow(blockFactory.Create(data.StartingBlocks[i].ID), blockPosition, true);
@@ -123,7 +123,7 @@ namespace LeandroExhumed.SnakeGame.Snake
             persistentData.Direction = Direction;
             persistentData.TimeToMove = TimeToMove;
 
-            List<BlockPersistentData> blocks = new ();
+            List<BlockPersistentData> blocks = new List<BlockPersistentData>();
             foreach (IBlockModel item in attachedBlocks.ToList())
             {
                 blocks.Add(new BlockPersistentData(item.ID, item.Position, !item.IsEqual(timeTravelBlock) && item.HasBenefit));

@@ -32,12 +32,13 @@ namespace LeandroExhumed.SnakeGame.Match
         private bool isOnRewindProcess = false;
         private IBlockModel currentRewindResponsible;
 
-        private readonly Dictionary<ISnakeModel, PlayerValues> players = new();
-        private readonly List<ISnakeModel> snakes = new();
-        private readonly List<IBlockModel> blocks = new();
-        private readonly Dictionary<ISnakeModel, IAIInputModel> aiInputs = new();
+        private readonly Dictionary<ISnakeModel, PlayerValues> players = new Dictionary<ISnakeModel, PlayerValues>();
+        private readonly List<ISnakeModel> snakes = new List<ISnakeModel>();
+        private readonly List<IBlockModel> blocks = new List<IBlockModel>();
+        private readonly Dictionary<ISnakeModel, IAIInputModel> aiInputs = new Dictionary<ISnakeModel, IAIInputModel>();
 
-        private readonly Dictionary<IBlockModel, MatchPersistentData> persistentData = new();
+        private readonly Dictionary<IBlockModel, MatchPersistentData> persistentData
+            = new Dictionary<IBlockModel, MatchPersistentData>();
 
         private readonly IPlayerSlotModel[] playerSlots;
 
@@ -84,7 +85,7 @@ namespace LeandroExhumed.SnakeGame.Match
             IPlayerSlotModel slot = playerSlots.FirstOrDefault(x => x.State == SlotState.Waiting);
             if (slot != null)
             {
-                PlayerInputModel input = new(leftKey, rightKey);
+                PlayerInputModel input = new PlayerInputModel(leftKey, rightKey);
                 input.Initialize();
                 slot.Enable(input);
             }
@@ -221,7 +222,7 @@ namespace LeandroExhumed.SnakeGame.Match
 
         private void Save (IBlockModel timeTravelBlock)
         {
-            MatchPersistentData data = new();
+            MatchPersistentData data = new MatchPersistentData();
             for (int i = 0; i < blocks.Count; i++)
             {
                 if (blocks[i].IsEqual(timeTravelBlock))
@@ -229,20 +230,22 @@ namespace LeandroExhumed.SnakeGame.Match
                     continue;
                 }
 
-                BlockPersistentData block = new(blocks[i].ID, blocks[i].Position, blocks[i].HasBenefit);
+                BlockPersistentData block = new BlockPersistentData(
+                    blocks[i].ID, blocks[i].Position, blocks[i].HasBenefit);
                 data.Blocks.Add(block);
             }
 
             for (int i = 0; i < snakes.Count; i++)
             {
-                SnakePersistentData snakeData = new();
+                SnakePersistentData snakeData = new SnakePersistentData();
                 snakes[i].Save(snakeData);
                 data.Snakes.Add(snakeData);
             }
 
             foreach (var item in players)
             {
-                InputPersistentData input = new(item.Value.Input.LeftKey, item.Value.Input.RightKey);
+                InputPersistentData input = new InputPersistentData(
+                    item.Value.Input.LeftKey, item.Value.Input.RightKey);
                 data.Players.Add(new PlayerPersistentData(item.Value.Number, input, item.Key.Position));
             }
 
@@ -254,7 +257,8 @@ namespace LeandroExhumed.SnakeGame.Match
             Vector2Int spawnPosition;
             do
             {
-                spawnPosition = new(UnityEngine.Random.Range(0, levelGrid.Width), UnityEngine.Random.Range(0, levelGrid.Height));
+                spawnPosition = new Vector2Int(
+                    UnityEngine.Random.Range(0, levelGrid.Width), UnityEngine.Random.Range(0, levelGrid.Height));
             } while (levelGrid.GetNode(spawnPosition) != null);
             GenerateBlock(blockFactory.CreateRandomly(1), spawnPosition);
         }

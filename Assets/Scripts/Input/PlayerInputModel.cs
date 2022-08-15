@@ -17,7 +17,7 @@ namespace LeandroExhumed.SnakeGame.Input
             LeftKey = leftKey;
             RightKey = rightKey;
 
-            action = new("Move");
+            action = new InputAction("Move");
             action.AddCompositeBinding("1DAxis")
                 .With("Negative", $"<Keyboard>/{leftKey}")
                 .With("Positive", $"<Keyboard>/{rightKey}");
